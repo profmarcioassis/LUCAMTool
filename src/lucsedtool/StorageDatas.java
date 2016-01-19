@@ -22,10 +22,29 @@ public class StorageDatas {
     private static List<Classe> classesFronteira = new ArrayList<>();
     private static List<Mensagem> mensagemList = new ArrayList<>();
     private static List<Condicao> listCondicoes = new ArrayList<>();
+    private static List<Loop> listLoop = new ArrayList<>();
     private static List<Atributo> listAtributos = new ArrayList<>();
     private static List<String> listMetodosClasseFronteira = new ArrayList<>();
     private static List<String> listEstadoDiagram = new ArrayList<>();
 
+    /**
+     * @return the listCondicoes
+     */
+    public List<Condicao> getListCondicoes() {
+        return listCondicoes;
+    }
+
+    /**
+     * @return the listLoop
+     */
+    public List<Loop> getListLoop() {
+        return listLoop;
+    }
+
+    
+    public void addLoop(Loop loop){
+        getListLoop().add(loop);
+    }
     /**
      * @return the listEstadoDiagram
      */
@@ -108,7 +127,7 @@ public class StorageDatas {
     }
     
     public void addCondicao(Condicao condicao){
-        listCondicoes.add(condicao);
+        getListCondicoes().add(condicao);
     }
 
     public Classe getClasseFronteira(){

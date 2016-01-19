@@ -19,6 +19,7 @@ import com.change_vision.jude.api.inf.exception.InvalidUsingException;
 import com.change_vision.jude.api.inf.exception.LicenseNotFoundException;
 import com.change_vision.jude.api.inf.model.IAssociation;
 import com.change_vision.jude.api.inf.model.IClass;
+import com.change_vision.jude.api.inf.model.ICombinedFragment;
 import com.change_vision.jude.api.inf.model.IDependency;
 import com.change_vision.jude.api.inf.model.IDiagram;
 import com.change_vision.jude.api.inf.model.ILifeline;
@@ -50,8 +51,14 @@ public class GenerateArtifacts {
         }
     }
     
+    public static final int MedidaEspacoEntreMensagens = 20;
+    public static final int MedidaMensagemReturn = 20;
     public static final int MedidaAutoMensagem = 80;
     public static final int MedidaMensagemDireta = 50;
+    public static final int MedidaEspacoEntreLifeLines = 250;
+    public static final int MedidaEspacoLoop = 40;
+    public static final int MedidaEspacoAposIf = 40;
+    public static final int MedidaEspacoAposElse = 10;
     
     StorageDatas storageDatas = new StorageDatas();
     ProjectAccessor projectAccessor;
@@ -65,7 +72,11 @@ public class GenerateArtifacts {
     List<INodePresentation> iNodeEntityList = new ArrayList<INodePresentation>();
     List<IClass> iClassEntityList = new ArrayList<IClass>();
     
+    List<String> listClasseCobertaOrdenada = new ArrayList<>();
+
+    
     SequenceDiagramEditor diagramEditor;
+    
     
     List<INodePresentation> listNode;
     
@@ -214,7 +225,7 @@ public class GenerateArtifacts {
             classe.addStereotype(classesEntidade.get(i).getTipo());
             listClassesIClass.add(classe);
 
-            classA = bme.createClass(packClassDiagram, "<<" + classesEntidade.get(i).getTipo() + ">> " + classesEntidade.get(i).getNome() + " ");
+            classA = bme.createClass(packClassDiagram, "<<" + classesEntidade.get(i).getTipo() + ">> " + classesEntidade.get(i).getNome().replace("Entity", "") + " ");
             p1.setLocation(posx, posy);
             posx = posx + 200;
 
@@ -227,7 +238,7 @@ public class GenerateArtifacts {
             for (int j = 0; j < iClassEntityList.size(); j++) {
                 IDependency dep = bme.createDependency(iClassEntityList.get(j), iClassControllerList.get(i), "");
                 cde.createLinkPresentation(dep, iNodeEntityList.get(j), iNodeControllerList.get(i));
-                bme.createAttribute(iClassControllerList.get(i), classesEntidade.get(j).getNome(), classesEntidade.get(j).getNome());
+                bme.createAttribute(iClassControllerList.get(i), classesEntidade.get(j).getNome().replace("Entity", ""), classesEntidade.get(j).getNome().replace("Entity", ""));
             }
         }
 
@@ -278,9 +289,12 @@ public class GenerateArtifacts {
                     if (listClassesIClass.get(j).getName().equals(listClassesCobertas.get(k).getNome())){
                         INodePresentation obj = diagramEditor.createLifeline("", posicao);
 
+                        
+                        listClasseCobertaOrdenada.add(listClassesCobertas.get(k).getNome());
+                        
                         listNode.add(obj);
                         //System.out.println(obj.getLabel());
-                        posicao += 250;
+                        posicao += MedidaEspacoEntreLifeLines;
 
                         ILifeline lifeline = (ILifeline) obj.getModel();
                         lifeline.setBase(listClassesIClass.get(j));
@@ -296,13 +310,23 @@ public class GenerateArtifacts {
                     case "MD":
                         createMessageDireta();
                         break;
+                    
+                    case "MDR":
+                        createMessageReturn();
+                        break;
+                        
                     case "MA":
                         createMessageDireta();
                         break;
                     
                     case "If":
+                        criarBlocoIf();
                         break;
-                        
+                    
+                    case "Loop":
+                        criarBlocoLoop();
+                        break;    
+                    
                     case "Alternative":
                         sair = true;
                         break;
@@ -313,6 +337,8 @@ public class GenerateArtifacts {
             for (int k = 0; k < listNode.size(); k++) {
                 diagramEditor.createTermination(listNode.get(k));
             }
+            
+            listClasseCobertaOrdenada.clear();
         }
     }
     
@@ -321,6 +347,29 @@ public class GenerateArtifacts {
     public Mensagem getMensagem(){
         contMensagens++;
         return listMensagens.get(contMensagens);
+    }
+    
+    public void createMessageReturn() throws InvalidEditingException{
+        
+//        Mensagem mensagem = getMensagem();
+        
+        createMessageDireta();
+        
+        Mensagem mensagem = getMensagem();
+        
+        try{
+            linkPresentationAtual = diagramEditor.createReturnMessage(mensagem.getMensagem(), linkPresentationAtual);
+        } catch (Exception e) {
+
+            INodePresentation obj1 = FindNodeByLabel(mensagem.getClasseOrigem().getNome());
+            INodePresentation obj2 = FindNodeByLabel(mensagem.getClasseDestino().getNome());
+            posicao -= 25;
+            diagramEditor.createMessage(mensagem.getMensagem(), obj1, obj2, posicao);
+            posicao += 40;
+        
+        }
+        
+        posicao += MedidaMensagemReturn;
     }
     public void createMessageDireta() throws InvalidEditingException {
         Mensagem mensagem = getMensagem();
@@ -341,15 +390,15 @@ public class GenerateArtifacts {
         } else if ((tipoOrigem.equals("control") && tipoDestino.equals("actor"))) {
             INodePresentation obj3 = FindNodeByLabel(storageDatas.getClasseFronteira().getNome());
             linkPresentationAtual = diagramEditor.createMessage(mensagem.getMensagem(), obj1, obj3, posicao);
-            linkPresentationAtual = diagramEditor.createMessage(mensagem.getMensagem(), linkPresentationAtual.getTarget(), obj2, posicao);
+            //linkPresentationAtual = diagramEditor.createMessage(mensagem.getMensagem(), linkPresentationAtual.getTarget(), obj2, posicao);
         } else {
             linkPresentationAtual = diagramEditor.createMessage(mensagem.getMensagem(), obj1, obj2, posicao);
         }
 
         if (obj1 == obj2) {
-            posicao += MedidaAutoMensagem;
+            posicao += MedidaAutoMensagem +MedidaEspacoEntreMensagens;
         } else {
-            posicao += MedidaMensagemDireta;
+            posicao += MedidaMensagemDireta + MedidaEspacoEntreMensagens;
         }
         
 
@@ -363,5 +412,236 @@ public class GenerateArtifacts {
             }
         }
         return null;
+    }
+    
+    public void calcularMedidasDoBlocoLoop(Loop loop){
+        int tamanhoLoop = 0;
+        for (int i = 0; i < loop.getListMensagensCobertas().size(); i++) {
+            Mensagem mensagem = loop.getListMensagensCobertas().get(i);
+            tamanhoLoop+=calculaMedidaMensagem(mensagem);
+            if (isUltimaClasse(mensagem.getClasseDestino(), loop.getClassesCobertas()) && contemAutoMensagem){
+                loop.setContemAutoMessagem(true);
+            }
+            contemAutoMensagem = false;
+        }
+        
+        tamanhoLoop+=MedidaEspacoLoop;
+        
+        loop.setMedidaBlocoLoop(tamanhoLoop);
+        
+        calculaPosicaoInicialFinalBlocoLoop(loop);
+    }
+    
+    boolean contemAutoMensagem = false;
+    public void calcularMedidasDoBlocoCondicional(Condicao condicao){
+        List<Mensagem> mensagensIfCobertas = condicao.getTiposMensagensIf();
+        List<Mensagem> mensagensElseCobertas = condicao.getTiposMensagensElse();
+        
+        
+        int tamanhoIf = 0;
+        for (int i = 0; i < mensagensIfCobertas.size(); i++) {
+            Mensagem mensagem = mensagensIfCobertas.get(i);
+            tamanhoIf+=calculaMedidaMensagem(mensagem);
+            
+            if (isUltimaClasse(mensagem.getClasseDestino(), condicao.getClassesCobertas()) && contemAutoMensagem){
+                condicao.setContemAutoMessagem(true);
+            }
+            contemAutoMensagem = false;
+        }
+        
+        tamanhoIf+=MedidaEspacoAposIf;
+        tamanhoIf+= condicao.getNumIfCobertoPeloIf()*MedidaEspacoAposIf + condicao.getNumElseCobertoPeloIf()*MedidaEspacoAposElse;
+        tamanhoIf+= condicao.getNumIfCobertoPeloIf()*10;
+
+        if (condicao.isContemElse()){
+            int tamanhoElse = 0;
+            tamanhoIf-=5;
+            for (int i = 0; i < mensagensElseCobertas.size(); i++) {
+                Mensagem mensagem = mensagensElseCobertas.get(i);
+                tamanhoElse+=calculaMedidaMensagem(mensagem);
+                
+                if (isUltimaClasse(mensagem.getClasseDestino(), condicao.getClassesCobertas()) && contemAutoMensagem){
+                    condicao.setContemAutoMessagem(true);
+                }
+                contemAutoMensagem = false;
+            }
+            
+            tamanhoElse+= condicao.getNumIfCobertoPeloElse()*MedidaEspacoAposIf + condicao.getNumElseCobertoPeloElse()*MedidaEspacoAposElse;
+            
+
+            condicao.setMedidaBlocoElse(tamanhoElse);
+        }
+        
+        condicao.setMedidaBlocoIf(tamanhoIf);
+
+        
+        calculaPosicaoInicialFinalBlocoCondicional(condicao);
+    }
+    
+    private int calculaMedidaMensagem(Mensagem mensagem){
+        int tamanhoMensagem = 0;
+        switch (mensagem.getTipo()){
+                case "MD":
+                    tamanhoMensagem=MedidaMensagemDireta + MedidaEspacoEntreMensagens;
+                    break;
+                case "MDR":
+                    tamanhoMensagem= MedidaMensagemDireta + MedidaMensagemReturn + MedidaEspacoEntreMensagens;
+                    break;
+                    
+                case "MA":
+                    tamanhoMensagem=MedidaAutoMensagem + MedidaEspacoEntreMensagens;
+                    contemAutoMensagem = true;
+                    break;
+            };
+            return tamanhoMensagem;
+    }
+    
+    public boolean isUltimaClasse(Classe classe, List<Classe> listClasses){
+        //Apenas se a automensagem for na ultima classe necessitamos aumentar o tamanho finaldo bloco
+        
+        
+        List <Classe> listClasseProvisoria = new ArrayList<>();
+        listClasseProvisoria.add(classe);
+        listClasseProvisoria.add(classe);
+        
+        List <Integer> listPosicoesClasse = calculaPosicaoXoXf(listClasseProvisoria);
+        List <Integer> listPosicoes = calculaPosicaoXoXf(listClasses);
+        int x1 = listPosicoes.get(1);
+        int x2 = listPosicoesClasse.get(1);
+        
+        if (x1 == x2){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public List<Integer> calculaPosicaoXoXf(List<Classe> listClassesCobertas){
+        int poso = -1;
+        int posf = 0;
+
+        for (int i = 0; i < listClasseCobertaOrdenada.size(); i++) {
+            for (int j = 0; j < listClassesCobertas.size(); j++) {
+                if (listClasseCobertaOrdenada.get(i).equals(listClassesCobertas.get(j).getNome())) {
+                    if (poso == -1) {
+                        poso = i;
+                    } else {
+                        posf = i;
+                    }
+                }
+            }
+        }
+        
+        List<Integer> listReturn = new ArrayList<>();
+        listReturn.add(poso);
+        listReturn.add(posf);
+
+        return listReturn;
+    }
+    
+    public void calculaPosicaoInicialFinalBlocoLoop(Loop loop){
+        List<Integer> listPosicoes = calculaPosicaoXoXf(loop.getClassesCobertas());
+        int poso = listPosicoes.get(0);
+        int posf = listPosicoes.get(1);
+        
+        loop.setMedidaPosicaoInicial(poso*MedidaEspacoEntreLifeLines);
+        loop.setMedidaPosicaoFinal((posf-poso)*MedidaEspacoEntreLifeLines+80);
+    
+        if (loop.isContemAutoMessagem()){
+            loop.setMedidaPosicaoFinal(loop.getMedidaPosicaoFinal()+80);
+        }
+    }
+    
+    public void calculaPosicaoInicialFinalBlocoCondicional(Condicao condicao) {
+        
+        List<Integer> listPosicoes = calculaPosicaoXoXf(condicao.getClassesCobertas());
+        int poso = listPosicoes.get(0);
+        int posf = listPosicoes.get(1);
+        
+        condicao.setMedidaPosicaoInicial((poso*MedidaEspacoEntreLifeLines) - (condicao.getNumCondicoesCobertas()*10));
+        condicao.setMedidaPosicaoFinal(((posf-poso)*MedidaEspacoEntreLifeLines+80) + (condicao.getNumCondicoesCobertas()*20));
+        
+        if (condicao.isContemAutoMessagem()){
+            condicao.setMedidaPosicaoFinal(condicao.getMedidaPosicaoFinal()+40);
+        }
+    }
+    
+    List<Loop> listLoop = storageDatas.getListLoop();
+    public void criarBlocoLoop() throws InvalidEditingException {
+        
+        Loop loop = listLoop.get(0);
+        listLoop.remove(0);
+        
+        calcularMedidasDoBlocoLoop(loop);
+        
+        //PosX //PosY   //Larg     //Altura 
+        INodePresentation combFragPs = diagramEditor.createCombinedFragment("", "loop", new Point2D.Double(loop.getMedidaPosicaoInicial(), (posicao-MedidaEspacoEntreMensagens)), loop.getMedidaPosicaoFinal(), loop.getMedidaBlocoLoop());
+        ICombinedFragment combFrag = (ICombinedFragment) combFragPs.getModel();
+        combFrag.getInteractionOperands()[0].setGuard(loop.getDescricao());
+        
+        posicao += MedidaEspacoLoop;
+        
+    }
+    
+    List<Condicao> listCondicoes = storageDatas.getListCondicoes();
+    public void criarBlocoIf() throws InvalidEditingException {
+        
+        Condicao condicao = listCondicoes.get(0);
+        listCondicoes.remove(0);
+        
+        calcularMedidasDoBlocoCondicional(condicao);
+        
+        //PosX //PosY   //Larg     //Altura 
+        INodePresentation combFragPs = diagramEditor.createCombinedFragment("", "alt", new Point2D.Double(condicao.getMedidaPosicaoInicial(), (posicao-MedidaEspacoEntreMensagens)), condicao.getMedidaPosicaoFinal(), condicao.getMedidaBlocoIf()+condicao.getMedidaBlocoElse());
+        ICombinedFragment combFrag = (ICombinedFragment) combFragPs.getModel();
+        combFrag.getInteractionOperands()[0].setGuard(condicao.getDescricao());
+        //combFrag.getInteractionOperands()[0].set(sc.getCondicao());
+        //combFragPs.setProperty("operand.1.length", "100");
+        if (condicao.isContemElse()) {
+            combFrag.addInteractionOperand("", "else");
+            String larg = ""+condicao.getMedidaBlocoIf();
+            combFragPs.setProperty("operand.1.length", larg);
+        }
+        posicao += MedidaEspacoAposIf;
+        
+        
+        
+        
+        
+        
+        
+        /*
+         INodePresentation combFragPs = de.createCombinedFragment("", "alt", new Point2D.Double(180, 150), 750, 200);
+         ICombinedFragment combFrag = (ICombinedFragment) combFragPs.getModel();
+         combFrag.getInteractionOperands()[0].setGuard("condition > 60");
+         combFrag.addInteractionOperand("", "else");
+         combFragPs.setProperty("operand.1.length", "150");
+         */
+        //Storage_Conditions sc = new Storage_Conditions();
+        //sc = condicoesList.get(0);
+        //condicoesList.remove(0);
+
+        //int posx = (calculaPosicaoX(sc).get(0) * 199) - (sc.getQtdEstruturasCobertas() * 10);
+        //int largura = ((calculaPosicaoX(sc).get(1) - calculaPosicaoX(sc).get(0)) * 199) + 100 + (sc.getQtdEstruturasCobertas() * 20);
+        //int largura = sc.getNumClassesCobertas()*160;
+        /*
+        int altura = 0;
+        if (sc.getNumLinhasElse() > 0) {
+            if (sc.getNumLinhasIf() > sc.getNumLinhasElse()) {
+                altura = sc.getMeasureIf() + sc.getMeasureElse() - 50;
+                sc.setMeasureIf(sc.getMeasureIf() - 50);
+            } else if (sc.getNumLinhasIf() == sc.getNumLinhasElse()) {
+                altura = sc.getMeasureElse() + sc.getMeasureIf() - 20;
+            } else {
+                altura = sc.getMeasureElse();
+            }
+        } else {
+            altura = sc.getMeasureIf() + 40 - (sc.getNumLinhasIf() * 26);
+        }
+
+        altura += sc.getQtdEstruturasCobertas() * 15;
+*/
+        //PosX //PosY   //Larg     //Altura 
+        
     }
 }

@@ -21,7 +21,7 @@ public class Oracao {
     private Classe classeEntidade= null;
     private String preposicao2="";
     private Classe classeFronteira=null;
-    private String preposicao="";
+   // private String preposicao="";
     private String ator="";
     private List<Atributo> atributtesList = new ArrayList<>();
     
@@ -132,17 +132,17 @@ public class Oracao {
 
     /**
      * @return the preposicao
-     */
+     
     public String getPreposicao() {
         return preposicao;
-    }
+    }*/
 
     /**
      * @param preposicao the preposicao to set
-     */
+     
     public void setPreposicao(String preposicao) {
         this.preposicao = preposicao;
-    }
+    }*/
 
     /**
      * @return the ator

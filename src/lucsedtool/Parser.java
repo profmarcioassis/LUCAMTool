@@ -5,6 +5,7 @@
  */
 package lucsedtool;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,14 +98,14 @@ public class Parser {
             symbolTab.insertSimb(token.getLexema(), SymbolTab.ACTORS);
 
             getToken();//POINT
-
+            getToken(); //MAIN
         }
 
     }
 
     public void mainFlow() {
 
-        getToken(); //MAIN
+        
         getToken(); //FLOW
         getToken(); //-
 
@@ -119,7 +120,7 @@ public class Parser {
     }
 
     int sair = -1;
-    String situacaoCondicao="";
+    //String situacaoCondicao="";
     public void useCases() {
 
         getToken();
@@ -137,10 +138,13 @@ public class Parser {
                     storageDatas.addEstado("If");
                 } else if (token.getLexema().equals("Else")) {
                     identificaElse();
-                } else if (token.getLexema().equals("Loop")) {
-
                 } else if (token.getLexema().equals("EndIf")){
                     identificaEndIf();
+                } else if (token.getLexema().equals("Loop")) {
+                    storageDatas.addEstado("Loop");
+                    identificaLoop();
+                } else if (token.getLexema().equals("EndLoop")){
+                    identificaEndLoop();
                 }else if (token.getLexema().equals("Alternative")){
                     storageDatas.addEstado("Alternative");
                     getToken();
@@ -307,10 +311,11 @@ public class Parser {
                 }
             }
             
-            if (oracao.getPreposicao1().equals("of"))
+            if (oracao.getClasseEntidade() != null){
                 mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
-            else
+            }else{
                 mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+            }
             
             mensagem.setTipo("MD");
         }else {
@@ -379,23 +384,45 @@ public class Parser {
                     classeDestino.setNome(oracao.getAtor()+"Entity");
                     classeDestino.setTipo("entity");
                     mensagem.setClasseDestino(classeDestino);
-                    
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtor());
                 }else{
                     mensagem.setClasseDestino(oracao.getClasseEntidade());
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
                 }
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtor());
-                mensagem.setTipo("MD");
+                
+                mensagem.setTipo("MDR");
                 
             }else {
                 mensagem.setClasseOrigem(storageDatas.getClasseController());
                 mensagem.setClasseDestino(oracao.getClasseFronteira());
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                if (oracao.getClasseEntidade() != null){
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }else{
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                }
+                
                 mensagem.setTipo("MD");
             }
         }
         
         storageDatas.addMensagem(mensagem);
         adicionaMensagemCondicao(mensagem);
+        
+        if (mensagem.getTipo().equals("MDR")){
+            Mensagem mensagemReturn = new Mensagem();
+            mensagemReturn.setClasseOrigem(mensagem.getClasseDestino());
+            mensagemReturn.setClasseDestino(storageDatas.getClasseController());
+                
+            if (oracao.getClasseEntidade() != null){
+                mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", "")));
+            }else{
+                mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getAtor()));
+            }
+            mensagemReturn.setTipo("MR");
+            
+            storageDatas.addMensagem(mensagemReturn);
+            adicionaMensagemCondicao(mensagemReturn);
+        }
         
     }
     
@@ -426,7 +453,7 @@ public class Parser {
 
     List<Condicao> listCondicoes = new ArrayList<>();
     public void identificaIf() {
-        situacaoCondicao = "If";
+        //situacaoCondicao = "If";
         getToken(); //" Abre aspas
         getToken(); //Inicio da condicao
 
@@ -442,25 +469,80 @@ public class Parser {
         listCondicoes.add(condicaoIf);
     }
     
+    List<Loop> listLoop = new ArrayList<>();
+    public void identificaLoop() {
+        //situacaoCondicao = "If";
+        getToken(); //" Abre aspas
+        getToken(); //Inicio da condicao
+
+        String condicao = "";
+        do {
+            condicao += token.getLexema();
+            getToken();
+        } while (!token.getLexema().equals("\""));
+
+        Loop condicaoLoop = new Loop();
+        condicaoLoop.setDescricao(condicao);
+
+        listLoop.add(condicaoLoop);
+    }
+    
+    public void identificaEndLoop(){
+        storageDatas.addLoop(listLoop.get(listLoop.size()-1));
+        listLoop = new ArrayList<>();
+    }
+    
     public void identificaElse(){
-        situacaoCondicao = "Else";
+        //situacaoCondicao = "Else";
         listCondicoes.get(listCondicoes.size()-1).setContemElse(true);
     }
     
     List<Condicao> listCondicoesProvisoria = new ArrayList<>();
     public void identificaEndIf(){
-        situacaoCondicao="";
+       // situacaoCondicao="";
         if(listCondicoes.size()>1){
             
             
             if(listCondicoes.get(listCondicoes.size()-2).isContemElse()){
                 listCondicoes.get(listCondicoes.size()-2).addMensagemElse(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensIf());
-                listCondicoes.get(listCondicoes.size()-2).addMensagemElse(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensElse());
+                listCondicoes.get(listCondicoes.size()-2).addMensagemElse(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensElse());                
+            
             }else{
                 listCondicoes.get(listCondicoes.size()-2).addMensagemIf(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensIf());
                 listCondicoes.get(listCondicoes.size()-2).addMensagemIf(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensElse());
             }
             
+            
+            // Inicio Parte do código que é importante para o gerador de artefatos calcular o tamanho do bloco
+            int numIfCobertoPeloIf = listCondicoes.get(listCondicoes.size()-1).getNumIfCobertoPeloIf();
+            int numElseCobertoPeloIf = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloIf();
+            int numIfCobertoPeloElse=0, numElseCobertoPeloElse=0;
+            
+            int numIfCobertoPeloIf2     = listCondicoes.get(listCondicoes.size()-2).getNumIfCobertoPeloIf();
+            int numElseCobertoPeloIf2   = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloIf();
+            int numIfCobertoPeloElse2   = listCondicoes.get(listCondicoes.size()-1).getNumIfCobertoPeloElse();
+            int numElseCobertoPeloElse2 = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloElse();
+            
+            int contemElse=0;
+            if (listCondicoes.get(listCondicoes.size()-1).isContemElse()){
+                numIfCobertoPeloElse = listCondicoes.get(listCondicoes.size()-1).getNumIfCobertoPeloElse();
+                numElseCobertoPeloElse = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloElse();
+                contemElse = 1;
+                
+            }
+            
+            if(listCondicoes.get(listCondicoes.size()-2).isContemElse()){
+                listCondicoes.get(listCondicoes.size()-2).setNumIfCobertoPeloElse(numIfCobertoPeloElse2+numIfCobertoPeloIf+numIfCobertoPeloElse+1);
+                listCondicoes.get(listCondicoes.size()-2).setNumElseCobertoPeloElse(numElseCobertoPeloElse2 + numElseCobertoPeloElse + numElseCobertoPeloIf +contemElse);
+            }else{
+                listCondicoes.get(listCondicoes.size()-2).setNumIfCobertoPeloIf(numIfCobertoPeloIf2+numIfCobertoPeloIf+numIfCobertoPeloElse+1);
+                listCondicoes.get(listCondicoes.size()-2).setNumElseCobertoPeloIf(numElseCobertoPeloIf2 + numElseCobertoPeloElse + numElseCobertoPeloIf  + contemElse);
+            }
+            // FIM calcular o tamanho do bloco
+            
+            int numCondicoesCobertas = listCondicoes.get(listCondicoes.size()-2).getNumCondicoesCobertas();
+            listCondicoes.get(listCondicoes.size()-2).setNumCondicoesCobertas(numCondicoesCobertas+1);
+                    
             listCondicoesProvisoria.add(listCondicoes.get(listCondicoes.size()-1));
             listCondicoes.remove(listCondicoes.size()-1);
         }else {
@@ -484,6 +566,10 @@ public class Parser {
             }else{
                 listCondicoes.get(listCondicoes.size()-1).addMensagemIf(mensagem);
             }
+        }
+        
+        if (listLoop.size()>0){
+            listLoop.get(listLoop.size()-1).addMensagemLoop(mensagem);
         }
     }
 

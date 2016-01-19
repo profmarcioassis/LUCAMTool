@@ -23,8 +23,8 @@ public class LUCSEDTool {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        diretorio = "D:\\Documents\\GitHub\\comp_lucsed\\arq_test\\Diagramas\\Locadora\\";
-        String nomeArquivo = "CRUDLocacao.txt";
+        diretorio = "D:\\Documents\\NetBeansProjects\\LUCSEDTool\\CasosDeTeste\\Diagramas\\Banco\\";
+        String nomeArquivo = "CRUDConta.txt";
         /*
         LexicalAnalyzer lexical = new LexicalAnalyzer(diretorio+nomeArquivo);
         

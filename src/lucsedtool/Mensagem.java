@@ -5,6 +5,8 @@
  */
 package lucsedtool;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 /**
  *
  * @author Marcos
@@ -47,7 +49,7 @@ public class Mensagem {
      * @return the mensagem
      */
     public String getMensagem() {
-        return mensagem;
+        return StringUtils.capitalize(mensagem);
     }
 
     /**
