@@ -1,30 +1,30 @@
-Use Case - CRUDMatricula.
+Use Case: CRUDMatricula.
 Brief Description 
 "Allows the inclusion, editing, deleting and searching a Matricula".
 System: System.
 Primary and Secondary Actors 
 Primary Actors: Secretary.
 Secondary Actors: Cliente.
-Main Flow - EfetuarMatricula.
+Main Flow: EfetuarMatricula.
 Secretary starts Use Case.
 
 Secretary  selects "ConsultarCursos" on MainForm.
-System  searches the informations of Curso.
+System  searches the informations  of Curso.
 System  displays attributes (String nome, String  descricao) of Curso on MainForm.
 
-Secretary appears the informations of Curso for the Cliente.
+Secretary appears the informations  of Curso for the Cliente.
 
 If ["Cliente Interessar"]
 	Secretary  selects "ConcultarTurmas" on MainForm.
 EndIf
 
-System  searches the informations of Turma.
+System  searches the informations  of Turma.
 System  displays the informations (String nome, Time horario, int numVagas) of Turma on MainForm.
-Secretary appears the informations of Turma for the Cliente.	
+Secretary appears the informations  of Turma for the Cliente.	
 
 If ["Cliente Interessar"]
 	Secretary enters the attributes (CPF) of Cliente on MainForm.
-	System  retrieves the informations of Cliente.
+	System  retrieves the informations  of Cliente.
 	
 	If ["Cliente Não Cadastrado"]
 		System  displays "Usuário não cadastrado" on MainForm.
@@ -32,7 +32,7 @@ If ["Cliente Interessar"]
 		System  saves the informations (String nome, Date  dataNasc, String CPF) of Cliente.
 		System  returns "Cliente cadastrado com sucesso" to Secretary.
 	Else
-		System  displays the informations of Cliente on MainForm.	
+		System  displays the informations  of Cliente on MainForm.	
 		Secretary  selects "EfetuarMatricula" on MainForm.
 		System  saves the informations (Cliente  cliente, Date  data, Double valorPago) of Matricula.
 		System  returns "Matricula efetuada com sucesso" to Secretary.

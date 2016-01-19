@@ -5,6 +5,7 @@
  */
 package lucsedtool;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Condicao {
     }
     
     public String getDescricao (){
-        return descricao;
+        return StringUtils.capitalize(descricao);
     }
     
     public void addClasseCoberta(Mensagem mensagem){

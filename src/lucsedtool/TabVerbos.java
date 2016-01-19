@@ -40,6 +40,9 @@ public class TabVerbos {
         verbList.add(new Verbo("selects",ClasseVerbosPrecedemMetodos));
                 
         //Analisar se os verbos sem retorno precisam ser especificados
+        //Se ele não pertence a classe de verbos de validação ou verbos que exigem retorno, consquentemente
+        //A sua respectivia classe seria as dos verbos que manipulam entidades e não necessitam de retorno.
+        
         //Verbos que precedem metodos nÃ£o precisam ser identificados, pois metodos vem entre aspas
     }
     

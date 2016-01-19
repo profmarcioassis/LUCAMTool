@@ -5,6 +5,7 @@
  */
 package lucsedtool;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class Loop {
      * @return the descricao
      */
     public String getDescricao() {
-        return descricao;
+        return StringUtils.capitalize(descricao);
     }
 
     /**

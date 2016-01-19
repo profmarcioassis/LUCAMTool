@@ -1,25 +1,25 @@
-Use Case - CRUDConta.
+Use Case: CRUDConta.
 Brief Description 
 "Allows the inclusion, editing, deleting and searching a student".
 System: System.
 Primary and Secondary Actors
 Primary Actors: Bancario.
 Secondary Actors: Cliente.
-Main Flow - AddConta.
+Main Flow: AddConta.
 Bancario starts Use Case.
-	Cliente informs the attributes to the Bancario.
+	Cliente informs the attributes  to the Bancario.
 	Bancario enters attributes (String nome, String CPF, Date  dataNasc) of Cliente on MainForm.
 	Bancario enters attributes (int agencia, int numConta) of Conta on MainForm.
 	Bancario  selects "CadastrarConta" on MainForm.
-	System validates attributes of Cliente.
-	System validates attributes of Conta.
+	System validates attributes  of Cliente.
+	System validates attributes  of Conta.
 
 	
 	If ["Inconsistência"]
 		System  returns "Dados incorretos" to Bancario.
 	Else
-		System  saves attributes of Cliente.
-		System  saves attributes of Conta.
+		System  saves attributes  of Cliente.
+		System  saves attributes  of Conta.
 		System  returns "Cadastro efetuado com sucesso" to Bancario.
 	EndIf
 
@@ -28,7 +28,7 @@ Bancario finishes Use Case.
 
 
 Alternative Flows 
-Alternative Flow 01 - DeletarConta.
+Alternative Flow 01: DeletarConta.
 
 	Cliente informs the attributes (CPF) for the Bancario.
 	Bancario  selects "EncerrarConta" on MainForm.
@@ -37,16 +37,17 @@ Alternative Flow 01 - DeletarConta.
 	If ["Cpf Inválido"]
 		System  returns "CPF Inválido" to Bancario.
 	Else
-		System  retrieves the informations of Cliente.
+		System  retrieves the informations  of Cliente.
 	EndIf 
 
 	If ["Cliente Inexistente"] 
 		System  returns "Cliente inexistente" to Bancario.
 	Else
-		System  displays the attributes of cliente on MainForm.
+		System  displays the attributes  of cliente on MainForm.
 	EndIf
 	
-	Cliente informs the attributes (Senha) for Bancario.	
+	Cliente informs the attributes (Senha) for Bancario.
+	Bancario enters the attributes (Senha)  of Cliente on MainForm.
 	System validates the attributes (Senha) of Conta.
 
 
@@ -54,25 +55,25 @@ Alternative Flow 01 - DeletarConta.
 		System  returns "Senha inválida" to Bancario.
 	Else
 		Bancario  selects "ConfirmAction" on MainForm.
-		System  deletes the informations of Cliente.
+		System  deletes the informations  of Cliente.
 		System  returns "Cliente deletado com sucesso" to Bancario.
 	EndIf
 
-Alternative Flow 02 - Sacar.
+Alternative Flow 02: Sacar.
 	Cliente  selects "EfetuarSaque" on MainForm.
 	Cliente  informs the attributes (numConta, String  senha) of Conta on MainForm.
 	System  searches  for Cliente.
 
 	If ["Cliente inexistente"]
 		System  returns  "Cliente inexistente" to Cliente.
+	Else
+		System validates the attributes (senha) of Cliente.
 	EndIf
-
-	System validates the attributes (senha) of Cliente.
 
 	If ["Senha incorreta"] 
 		System  returns "Senha Incorreta" to Cliente.
 	Else
-		Cliente informs the attributes (Quantia) on MainForm.
+		Cliente informs the attributes (Quantia) of Transacao on MainForm.
 		Cliente  selects "EfetuarSaque" on MainForm.
 		System  retrieves the attributes (saldo) of Conta.
 	EndIf
@@ -85,22 +86,24 @@ Alternative Flow 02 - Sacar.
 		System  returns "Saque efetuado com sucesso" to Cliente.
 	EndIf
 
-Alternative Flow 03 - Transferencia.
+Alternative Flow 03: Transferencia.
 	Cliente  selects "EfetuarTransferência" on MainForm.
 	Cliente enters the informations (Conta ContaCredito, Conta ContaDebito, Double Valor) of Transferencia on MainForm.
 	Cliente informs the attributes (Senha) of Conta.
-	System  retrieves the informations of Conta.
+	System  retrieves the informations  of Conta.
 	System validates the attributes (senha) of Conta.
 	
 	If ["Senha inválida"]
 		System  returns "senha inválida" to Cliente.
 	EndIf
-
+	
 	If ["Saldo Indisponível"]
 		System  returns "Saldo indisponível" to Cliente.
+	Else
+		System  displays the informations  of Transferencia on MainForm.
 	EndIf
 
-	System  displays the informations of Transferencia on MainForm.
+
 	Cliente  selects "confirmAction" on MainForm.
 	System deducts the attributes (valor) of Conta.
 	System credits the attributes (valor) of Conta.
@@ -109,8 +112,8 @@ Alternative Flow 03 - Transferencia.
 
 
 Key Scenario
-	Key Scenario 01 - AddStudent.
-	Key Scenario 02 - DeleteStudent.
+	Key Scenario 01: AddStudent.
+	Key Scenario 02: DeleteStudent.
 Pre Conditions 
 	"Before this use case begins the Secretary has logged onto the system".
 Pos Conditions 

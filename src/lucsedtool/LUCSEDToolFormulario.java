@@ -181,7 +181,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
             
         String dados = new String(Files.readAllBytes(arq.toPath()));
 
-        System.out.println(arq.getParent());
+        
         jtUseCase.setText(dados);
         
         }catch (Exception e ){

@@ -1,27 +1,28 @@
-Use Case - CRUDLocacao.
+Use Case: CRUDLocacao.
 Brief Description 
 "Allows the inclusion, editing, deleting and searching a Locacao".
 System: System.
 Primary and Secondary Actors 
 Primary Actors: Atendente.
 Secondary Actors: Cliente.
-Main Flow - LocarFilme.
+Main Flow: LocarFilme.
 Secretary starts Use Case.
 
-Cliente informs the attributes for the Atendente.
+Cliente informs the attributes  for the Atendente.
 Atendente  enters the attributes (CPF) of Cliente on MainForm.
 Atendente enters the attributes (Exemplar) of Filme on MainForm.
 Atendente  selects "RealizarLocação" on MainForm.
-System  retrieves the informations of Cliente.
+System  retrieves the informations  of Cliente.
 If ["Cliente Inexistente"]
     System  returns  "Cliente Inexistente" to Atendente.
     Atendente  selects "CadastrarCliente" on MainForm.
 	Atendente enters the attributes (String nome, String CPF, Date  dataNasc, String endereco) of Cliente.
-	System  saves the informations of Cliente.
+	System  saves the informations  of Cliente.
 	System  returns "Cliente Cadastrado com sucesso" to Atendente.
+Else
+	System validates the attributes (status) of Cliente.
 EndIf
 
-System validates the attributes (status) of Cliente.
 If ["Cliente Bloqueado"]
 	System  returns "Cliente Bloqueado" to Atendente.
 Else
@@ -41,8 +42,8 @@ Atendente finishes Use Case.
 
 
 Key Scenario
-	Key Scenario 01 - AddStudent.
-	Key Scenario 02 - DeleteStudent.
+	Key Scenario 01: AddStudent.
+	Key Scenario 02: DeleteStudent.
 Pre Conditions 
 	"Before this use case begins the Secretary has logged onto the system".
 Pos Conditions 
