@@ -19,8 +19,11 @@ public class Parser {
     private Token token;
     private StorageDatas storageDatas;
     private SymbolTab symbolTab;
-
+    
+    
     public Parser(String name) {
+
+        
         lexical = new LexicalAnalyzer(name);
         token = new Token();
         storageDatas = new StorageDatas();
@@ -33,6 +36,7 @@ public class Parser {
     }
 
     public void start() {
+        
         cabecalho();
         primaryAndSecondaryActors();
         mainFlow();
@@ -116,6 +120,7 @@ public class Parser {
 
         useCases();
         
+
         GenerateArtifacts generate = new GenerateArtifacts();
     }
 

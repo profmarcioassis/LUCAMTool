@@ -23,6 +23,8 @@ public class LexicalAnalyzer {
         stack = "";
         buffer = "";
         byt=0;
+        
+        
     }//end construtor
     
     

@@ -96,10 +96,10 @@ public class GenerateArtifacts {
             createSequenceDiagram();
             TransactionManager.endTransaction();
 
-            LUCSEDTool lUCSEDTool = new LUCSEDTool();
-            
-            projectAccessor.exportXMI(lUCSEDTool.getDiretorio() + storageDatas.getNameArquivo() + ".xmi"); //nome
-
+            //LUCSEDTool lUCSEDTool = new LUCSEDTool();
+            LUCSEDToolFormulario lucsedTool = new LUCSEDToolFormulario();
+            projectAccessor.exportXMI(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".xmi"); //nome
+            System.out.println("Camiho:"+lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".xmi");
             System.out.println("Create SeqSample.asta Project done.");
         } catch (InvalidUsingException e) {
             e.printStackTrace();
