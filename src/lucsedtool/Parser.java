@@ -98,6 +98,7 @@ public class Parser {
         classeActors.setNome(token.getLexema());
         classeActors.setTipo("actor");
         storageDatas.addClasseActor(classeActors);
+        storageDatas.addActorsPrimario(classeActors);
         symbolTab.insertSimb(token.getLexema(), SymbolTab.ACTORS);
 
         getToken(); //POINT
@@ -148,57 +149,54 @@ public class Parser {
         getToken(); //PONTO
 
         while (sair == -1){
-            while (sair == -1) {
-                getToken(); //AtorSystem ou If ou Else Ou LOOP Ou Alternative
+            getToken(); //AtorSystem ou If ou Else Ou LOOP Ou Alternative
 
-                if (token.getLexema().equals("If")) {
-                    identificaIf();
-                    storageDatas.addEstado("If");
-                } else if (token.getLexema().equals("Else")) {
-                    identificaElse();
-                } else if (token.getLexema().equals("EndIf")){
-                    identificaEndIf();
-                } else if (token.getLexema().equals("Loop")) {
-                    storageDatas.addEstado("Loop");
-                    identificaLoop();
-                } else if (token.getLexema().equals("EndLoop")){
-                    identificaEndLoop();
-                }else if (token.getLexema().equals("Alternative")){
-                    storageDatas.addEstado("Alternative");
-                    getToken();
-                    if(token.getLexema().equals("Flows")){
-                        identificaFluxosAlternativo();
-                    }else{
-                        identificaFluxoAlternativo();
-                    }
-                }else if (token.getLexema().equals("Key")){
-                    sair = 2;
-                }else {
-                    identificaOracoes();
-                }
+            if (token.getLexema().equals("If")) {
+                identificaIf();
+            } else if (token.getLexema().equals("Else")) {
+                identificaElse();
+            } else if (token.getLexema().equals("EndIf")){
+                identificaEndIf();
+            } else if (token.getLexema().equals("Loop")) {
+                identificaLoop();
+            } else if (token.getLexema().equals("EndLoop")){
+                identificaEndLoop();
+            }else if (token.getLexema().equals("Alternative")){
+                identificaFluxosAlternativo();
+            }else if (token.getLexema().equals("Key")){
+                sair = 1;
+            }else {
+                identificaOracoes();
             }
-
-            if (sair == 1){
-                getToken(); //Use
-                getToken(); //Case
-                getToken(); //.
-                sair = -1;
-            }
+            
         }
     }
     
     public void identificaFluxosAlternativo(){
-        getToken(); //Alternative
-        getToken(); //Flow
+        
+        getToken(); //Flows ou Flow
+        if(token.getLexema().equals("Flows")){
+            getToken(); //Alternative
+            getToken(); //Flow
+        }
+
         identificaFluxoAlternativo();
     }
     
     public void identificaFluxoAlternativo(){
+        storageDatas.addEstado("Alternative");
+        
         getToken(); //Numero
         getToken(); //- HYPHEN
         getToken(); //Nome
         storageDatas.addNameSequenceDiagram(token.getLexema());
         getToken(); //PONTO
+    }
+    
+    public void ignoraOracao(){
+        getToken(); //Use
+        getToken(); //Case
+        getToken(); //.
     }
 
     //1 - Sair por Usuario Finishes user case
@@ -210,8 +208,9 @@ public class Parser {
         oracao.setTokenSujeito(token);
         oracao.setSujeito(token.getLexema());
         oracao.setVerbo(getToken().getLexema());
-        if (oracao.getVerbo().equals("finishes")) {
-            sair = 1;
+        if (oracao.getVerbo().equals("finishes") ||oracao.getVerbo().equals("starts")) {
+            ignoraOracao();
+            //sair = 1;
             return;
         }
 
@@ -423,7 +422,11 @@ public class Parser {
                     mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtor());
                 }else{
                     mensagem.setClasseDestino(oracao.getClasseEntidade());
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    if (oracao.getAtributtesList().size() == 1){
+                        mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    }else{
+                        mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    }
                 }
                 
                 mensagem.setTipo("MDR");
@@ -440,7 +443,11 @@ public class Parser {
                 
                 mensagem.setClasseOrigem(classeOrigem);
                 mensagem.setClasseDestino(classeDestino);
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                if (oracao.getClasseEntidade() != null){
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }else{
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                }
                 mensagem.setTipo("MD");
             }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosProcessamentoController){
                 Classe classeOrigemDestino = storageDatas.getClasseController();
@@ -471,7 +478,12 @@ public class Parser {
             mensagemReturn.setClasseDestino(storageDatas.getClasseController());
                 
             if (oracao.getClasseEntidade() != null){
-                mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", "")));
+                if (oracao.getAtributtesList().size() == 1){
+                    mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", "")));
+                }else{
+                    mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", "")));
+                }
+
             }else{
                 mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getAtor()));
             }
@@ -511,6 +523,7 @@ public class Parser {
     List<Condicao> listCondicoes = new ArrayList<>();
     public void identificaIf() {
         //situacaoCondicao = "If";
+        storageDatas.addEstado("If");
         getToken(); //" Abre aspas
         getToken(); //Inicio da condicao
 
@@ -529,6 +542,7 @@ public class Parser {
     List<Loop> listLoop = new ArrayList<>();
     public void identificaLoop() {
         //situacaoCondicao = "If";
+        storageDatas.addEstado("Loop");
         getToken(); //" Abre aspas
         getToken(); //Inicio da condicao
 

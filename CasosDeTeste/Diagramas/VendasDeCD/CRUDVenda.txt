@@ -6,31 +6,31 @@ Primary and Secondary Actors
 Primary Actors: Atendente.
 Main Flow: Venda.
 Atendente starts Use Case.
-	Atendente  selects "EfetuarVenda"  of CD on MainForm.
-	System  retrieves the informations  of CD.
-	System  displays the informations  of CD on MainForm.
+	Atendente selects "EfetuarVenda" of CD on MainForm.
+	System retrieves the informations of CD.
+	System displays the informations of CD on MainForm.
 	Atendente informs the attributes (CD, quantidade) of Venda.
-	System  retrieves the informations  of Cliente.
-	System  displays the informations  of Cliente on MainForm.
+	System retrieves the informations of Cliente.
+	System displays the informations of Cliente on MainForm.
 
 	If ["Cliente não cadastrado"]
-		Atendente  selects "CadastrarCliente" on MainForm.
+		Atendente selects "CadastrarCliente" on MainForm.
 	Else
-		Atendente  selects the informations (Cliente) of Venda.
+		Atendente selects the informations (Cliente) of Venda.
 	EndIf
 
-	Atendente  selects "Vender Cd" on MainForm.
-	System  displays the informations  of Venda on MainForm.
+	Atendente selects "Vender Cd" on MainForm.
+	System displays the informations of Venda on MainForm.
 
-	Atendente  selects "ConfirmAction" on MainForm.
-	System  requests the informations (tipoVenda) of Venda to the Atendente.
+	Atendente selects "ConfirmAction" on MainForm.
+	System requests the informations (tipoVenda) of Venda to the Atendente.
 
 	Atendente informs the informations (tipoVenda) of Venda on MainForm.
-	System  saves the informations  of Venda.
-	System  updates the attributes (quantidade) of Estoque.
+	System saves the informations of Venda.
+	System updates the attributes (quantidade) of Estoque.
 
-	System  returns "Venda Efetuada com sucesso" to Atendente. 
-	System  returns the informations (notaFiscal) of Venda to Atendente.
+	System returns "Venda Efetuada com sucesso" to Atendente. 
+	System returns the informations (notaFiscal) of Venda to Atendente.
 
 Atendente finishes Use Case.
 

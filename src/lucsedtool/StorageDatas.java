@@ -28,7 +28,18 @@ public class StorageDatas {
     private static List<Atributo> listAtributos = new ArrayList<>();
     private static List<String> listMetodosClasseFronteira = new ArrayList<>();
     private static List<String> listEstadoDiagram = new ArrayList<>();
+    private static List<Classe> classesActorsPrimario = new ArrayList<>();
 
+    /**
+     * @return the classesActorsPrimario
+     */
+    public  List<Classe> getClassesActorsPrimario() {
+        return classesActorsPrimario;
+    }
+
+    public  void addActorsPrimario(Classe classe) {
+        classesActorsPrimario.add(classe);
+    }
     /**
      * @return the listCondicoes
      */
@@ -103,7 +114,7 @@ public class StorageDatas {
             boolean igual = false;
             
             for (int j = 0; j < listAtributos.size(); j++) {
-                if (AtributosList.get(i).getDescricao().equalsIgnoreCase(listAtributos.get(j).getDescricao())){
+                if (AtributosList.get(i).getDescricao().equalsIgnoreCase(listAtributos.get(j).getDescricao()) && AtributosList.get(i).getClasse().getNome().equalsIgnoreCase(listAtributos.get(j).getClasse().getNome())){
                     igual = true;
                 }
             }

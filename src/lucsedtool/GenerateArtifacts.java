@@ -51,7 +51,7 @@ public class GenerateArtifacts {
         }
     }
     
-    public static final int MedidaEspacoEntreMensagens = 20;
+    public static final int MedidaEspacoEntreMensagens = 30;
     public static final int MedidaMensagemReturn = 20;
     public static final int MedidaAutoMensagem = 80;
     public static final int MedidaMensagemDireta = 50;
@@ -143,9 +143,10 @@ public class GenerateArtifacts {
         Point2D.Double p1 = new Point2D.Double();
         List<INodePresentation> iNodeActorList = new ArrayList<INodePresentation>();
         List<IClass> iClassActorList = new ArrayList<IClass>();
-        for (int i = 0; i < classesActors.size(); i++) {
+        List<Classe> classesActorsPrimarios = storageDatas.getClassesActorsPrimario();
+        for (int i = 0; i < classesActorsPrimarios.size(); i++) {
             p1.setLocation(posx, posy);
-            IClass actor = uce.createActor(packUseCase, classesActors.get(i).getNome());
+            IClass actor = uce.createActor(packUseCase, classesActorsPrimarios.get(i).getNome());
             iClassActorList.add(actor);
 
             INodePresentation inode = ucde.createNodePresentation(actor, p1);

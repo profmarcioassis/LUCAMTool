@@ -8,35 +8,35 @@ Secondary Actors: AcademicSecretary.
 Main Flow: MakeEnrollment.
 Student starts Use Case.
 Student enters the attributes (numberEnrollment) of Student on MainForm.
-System validates the informations  of Student.
-System  retrieves the attributes (name, nationality,  socialSecurity, number,  code,  sex) of Student.
-Student  selects "Make enrollment" on MainForm.
-System  searches the informations (course, period,  shift, group) of Discipline.
-System  displays the informations  of Discipline on MainForm.
+System validates the informations of Student.
+System retrieves the attributes (name, nationality,  socialSecurity, number,  code,  sex) of Student.
+Student selects "Make enrollment" on MainForm.
+System searches the informations (course, period,  shift, group) of Discipline.
+System displays the informations of Discipline on MainForm.
 System enables "Confirm enrollment" on MainForm.
-System  requests "Confirmation"  of Enrollment.
-Student  selects "Confirm enrollment" on MainForm.
-System validates the informations  of Enrollment.
-System  returns "Enrollment Confirmed" to Student.
-System generates the request  of Enrollment.
-System  sends the informations (date, id number) of Enrollment by "e-Mail".
-System  sends the request  to AcademicSecretary.
+System requests "Confirmation" of Enrollment.
+Student selects "Confirm enrollment" on MainForm.
+System validates the informations of Enrollment.
+System returns "Enrollment Confirmed" to Student.
+System generates the request of Enrollment.
+System sends the informations (date, id number) of Enrollment by "e-Mail".
+System sends the request to AcademicSecretary.
 Student finishes Use Case.
 Alternative Flows
 Alternative Flow 01: ValidateEnrollmentNumber.
-System  returns "The enrollment number does not exist" to Student.
+System returns "The enrollment number does not exist" to Student.
 
 Alternative Flow 02: CheckEnrollmentEffected.
-System  returns "You are already enrolled" to Student.
+System returns "You are already enrolled" to Student.
 
 Alternative Flow 03: CheckDependenciesfromPreviousSemesters.
-System  shows the dependencies  of Student on MainForm.
+System shows the dependencies of Student on MainForm.
 System enables "Enroll in Dependency" on MainForm.
 System enables "Confirm enrollment" on MainForm.
-System  requests "Confirmation"  of Enrollment.
-Student  selects "Confirm enrollment" on MainForm.
-System validates the informations  of Enrollment.
-System  returns "Enrollment of Dependency Confirmed" to Student.
+System requests "Confirmation" of Enrollment.
+Student selects "Confirm enrollment" on MainForm.
+System validates the informations of Enrollment.
+System returns "Enrollment of Dependency Confirmed" to Student.
 
 Key Scenario
 Key Scenario 01: MakeEnrollment.

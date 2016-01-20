@@ -5,7 +5,7 @@
 package lucsedtool;
 
 public class LexicalAnalyzer {
-    
+    //Quando insere Ponto (.) no final da descrição da Brief Description da erro.
     
     private static SymbolTab symbolTab;
     //private static Token token;

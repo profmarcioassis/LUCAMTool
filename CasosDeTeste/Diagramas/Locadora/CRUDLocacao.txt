@@ -8,31 +8,31 @@ Secondary Actors: Cliente.
 Main Flow: LocarFilme.
 Secretary starts Use Case.
 
-Cliente informs the attributes  for the Atendente.
+Cliente informs the attributes for the Atendente.
 Atendente  enters the attributes (CPF) of Cliente on MainForm.
 Atendente enters the attributes (Exemplar) of Filme on MainForm.
-Atendente  selects "RealizarLocação" on MainForm.
-System  retrieves the informations  of Cliente.
+Atendente selects "RealizarLocação" on MainForm.
+System retrieves the informations of Cliente.
 If ["Cliente Inexistente"]
-    System  returns  "Cliente Inexistente" to Atendente.
-    Atendente  selects "CadastrarCliente" on MainForm.
+    System returns  "Cliente Inexistente" to Atendente.
+    Atendente selects "CadastrarCliente" on MainForm.
 	Atendente enters the attributes (String nome, String CPF, Date  dataNasc, String endereco) of Cliente.
-	System  saves the informations  of Cliente.
-	System  returns "Cliente Cadastrado com sucesso" to Atendente.
+	System saves the informations of Cliente.
+	System returns "Cliente Cadastrado com sucesso" to Atendente.
 Else
 	System validates the attributes (status) of Cliente.
 EndIf
 
 If ["Cliente Bloqueado"]
-	System  returns "Cliente Bloqueado" to Atendente.
+	System returns "Cliente Bloqueado" to Atendente.
 Else
 	System  validates the attributes (faixaEtaria) of Filme.
 	If ["Abaixo da censura"]
-		System  returns "Idade do cliente abaixo da censura indicada" to Atendente.
+		System returns "Idade do cliente abaixo da censura indicada" to Atendente.
 	Else
-		System  saves the informations (Cliente  cliente, Filme  filmes, Date  data, Time horario) of Locacao.
+		System saves the informations (Cliente  cliente, Filme  filmes, Date  data, Time horario) of Locacao.
     		System  modifies the attributes (String  status) of Filme.
-    		System  returns "Locação efetuada com sucesso" to Atendente. 
+    		System returns "Locação efetuada com sucesso" to Atendente. 
      	EndIf
 EndIf
 

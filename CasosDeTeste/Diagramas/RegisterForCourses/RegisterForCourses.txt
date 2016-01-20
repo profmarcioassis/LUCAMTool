@@ -6,61 +6,61 @@ Primary and Secondary Actors
 Primary Actors: Student.
 Main Flow: CreateASchedule.
 Student starts Use Case.
-Student  selects "create schedule" on MainForm.
-System  retrieves the list  of Courses.
-Student  informs the attributes (name,  description,  content) of Courses.
-Student  selects "submit schedule" on MainForm.
-System  saves the schedule  of Student.
+Student selects "create schedule" on MainForm.
+System retrieves the list of Courses.
+Student informs the attributes (name,  description,  content) of Courses.
+Student selects "submit schedule" on MainForm.
+System saves the schedule of Student.
 Student finishes Use Case.
 
 Alternative Flows
 Alternative Flow 01: ModifyASchedule.
-Student  selects "modify schedule" on MainForm.
-System  retrieves the schedule  of Student.
-System  displays the schedule  of Student. 
-System  retrieves the list  of Courses.
-System  displays the list  of Student.
-Student  selects the attributes (name) of Courses.
-Student  selects "add course" on MainForm.
-Student  selects the attributes (name) of Courses.
-Student  selects "delete course" on MainForm.
-Student  selects "submit schedule" on MainForm.
-System  saves the schedule  of Student.
+Student selects "modify schedule" on MainForm.
+System retrieves the schedule of Student.
+System displays the schedule of Student. 
+System retrieves the list of Courses.
+System displays the list of Student.
+Student selects the attributes (name) of Courses.
+Student selects "add course" on MainForm.
+Student selects the attributes (name) of Courses.
+Student selects "delete course" on MainForm.
+Student selects "submit schedule" on MainForm.
+System saves the schedule of Student.
 
 Alternative Flow 02: DeleteASchedule.
-Student  selects "delete schedule" on MainForm.
-System  retrieves the schedule  of Student.
-System  displays the schedule  of Student.
-Student  selects "delete schedule" on MainForm.
-System  returns "The schedule will be deleted"  to the Student.
-Student  selects "confirm deletion" on MainForm.
-System  deletes the schedule  of Student.
+Student selects "delete schedule" on MainForm.
+System retrieves the schedule of Student.
+System displays the schedule of Student.
+Student selects "delete schedule" on MainForm.
+System returns "The schedule will be deleted"  to the Student.
+Student selects "confirm deletion" on MainForm.
+System deletes the schedule of Student.
 
 Alternative Flow 03: SaveASchedule.
-Student  selects "save schedule" on MainForm.
-System  saves the schedule  of Student.
+Student selects "save schedule" on MainForm.
+System saves the schedule of Student.
 
 Alternative Flow 04: AddCourseOffering.
-System verifies the prerequisites  of Courses.
-System  saves the attributes (name) of Courses.
-System  returns "Enrollment Confirmed" to Student.
+System verifies the prerequisites of Courses.
+System saves the attributes (name) of Courses.
+System returns "Enrollment Confirmed" to Student.
 
 Alternative Flow 05: UnfulfilledPrerequisites.
-System  returns "The Student has not satisfied the necessary prerequisites" to Student.
+System returns "The Student has not satisfied the necessary prerequisites" to Student.
 
 Alternative Flow 06: CourseFull.
-System  returns "The selected course offering is full"  to the Student.
+System returns "The selected course offering is full" to the Student.
 
 
 Alternative Flow 07: NoScheduleFound.
-System  returns "No schedule was found"  to the Student.
+System returns "No schedule was found" to the Student.
 
 Alternative Flow 08: CourseCatalogSystemUnavailable.
-System  returns "Course Catalog System Unavailable"  to the Student.
+System returns "Course Catalog System Unavailable" to the Student.
 
 Alternative Flow 09: CourseRegistrationClosed.
-Student  selects "maintain schedule" on MainForm.
-System  returns "The registration for the current semester has been closed" on MainForm.
+Student selects "maintain schedule" on MainForm.
+System returns "The registration for the current semester has been closed" on MainForm.
 
 Key Scenario
 Key Scenario 01: CreateaSchedule.
