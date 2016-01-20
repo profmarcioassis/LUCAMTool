@@ -226,7 +226,7 @@ public class GenerateArtifacts {
 
             classA = bme.createClass(packClassDiagram, "<<" + classesEntidade.get(i).getTipo() + ">> " + classesEntidade.get(i).getNome().replace("Entity", "") + " ");
             p1.setLocation(posx, posy);
-            posx = posx + 200;
+            posx = posx + 250;
 
             iClassEntityList.add(classA);
             iNodeEntityList.add(cde.createNodePresentation(classA, p1));

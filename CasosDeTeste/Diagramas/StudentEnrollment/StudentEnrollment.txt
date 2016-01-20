@@ -1,17 +1,17 @@
 Use Case: StudentEnrollment.
 Brief Description 
-"This use case describes how students perform their enrollment.".
+"This use case describes how students perform their enrollment".
 System: System.
 Primary and Secondary Actors
 Primary Actors: Student.
 Secondary Actors: AcademicSecretary.
 Main Flow: MakeEnrollment.
 Student starts Use Case.
-Student enters the attributes (numberEnrollment ) of Student on MainForm.
+Student enters the attributes (numberEnrollment) of Student on MainForm.
 System validates the informations  of Student.
 System  retrieves the attributes (name, nationality,  socialSecurity, number,  code,  sex) of Student.
 Student  selects "Make enrollment" on MainForm.
-Student  searches the informations (course, period,  shift, group) of Discipline.
+System  searches the informations (course, period,  shift, group) of Discipline.
 System  displays the informations  of Discipline on MainForm.
 System enables "Confirm enrollment" on MainForm.
 System  requests "Confirmation"  of Enrollment.
@@ -42,10 +42,10 @@ Key Scenario
 Key Scenario 01: MakeEnrollment.
 Key Scenario 02: CheckDependenciesfromPreviousSemesters.
 Pre Conditions 
-"There is an active network connection to the student enrollment database.".
+"There is an active network connection to the student enrollment database".
 Pos Conditions 
 "There are no post conditions associated with this use case".
 Special Requirements 
-"There are no special requirements associated with this use case.".
+"There are no special requirements associated with this use case".
 Extension Points 
-"There are no extension points associated with this use case.".
+"There are no extension points associated with this use case".

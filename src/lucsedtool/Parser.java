@@ -287,6 +287,7 @@ public class Parser {
             }while(!token.getLexema().equals("\""));
             getToken(); //PONTO
             oracao.setComunication(comunication);
+            oracao.setPreposicao2("by");
         }
         
         identificaMensagem(oracao);
@@ -369,9 +370,9 @@ public class Parser {
                 mensagem.setClasseOrigem(origemDestino);
                 mensagem.setClasseDestino(origemDestino);
                 if (oracao.getAtributtesList().size() == 1){
-                    mensagem.setMensagem(oracao.getVerbo()+"TheAttribute"+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+"TheAttributesOf"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
                 }
                 mensagem.setTipo("MA");
             }else if (tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosEntidadeSemRetorno){
@@ -441,7 +442,7 @@ public class Parser {
                 mensagem.setClasseDestino(classeDestino);
                 mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
                 mensagem.setTipo("MD");
-            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosVerificacao){
+            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosProcessamentoController){
                 Classe classeOrigemDestino = storageDatas.getClasseController();
                 
                 mensagem.setClasseOrigem(classeOrigemDestino);
@@ -656,15 +657,14 @@ public class Parser {
                 if (!token.getLexema().equals(")") && !token.getLexema().equals(",")) {
                     attribute.setTipo(tipoAttribute);
                     attribute.setDescricao(token.getLexema());
+                    token = lexical.getToken(); //Vírgula
                 } else {
                     attribute.setDescricao(tipoAttribute);
                     attribute.setTipo("String");
                 }
-                if (!token.getLexema().equals(")")) {
-                    token = lexical.getToken(); //Vírgula
-                }
+                
 
-                attribute.setDescricao(attribute.getDescricao().toString().trim());
+                attribute.setDescricao(attribute.getDescricao().trim());
                 listAtributes.add(attribute);
             }
 

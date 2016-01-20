@@ -30,7 +30,7 @@ public class LUCSEDTool {
         
         }*/
         
-      //Parser parser = new Parser("D:\\Documents\\NetBeansProjects\\LUCSEDTool\\CasosDeTeste\\Diagramas\\RegisterForCourses\\RegisterForCourses.txt");
+      //Parser parser = new Parser("D:\\Documents\\NetBeansProjects\\LUCSEDTool\\CasosDeTeste\\Diagramas\\StudentEnrollment\\StudentEnrollment.txt");
       
         
         LUCSEDToolFormulario lucsedFormulario = new LUCSEDToolFormulario();
