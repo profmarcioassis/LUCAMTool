@@ -6,6 +6,7 @@ package lucsedtool;
 
 public class LexicalAnalyzer {
     
+    
     private static SymbolTab symbolTab;
     //private static Token token;
     public static Arquivo arq; 

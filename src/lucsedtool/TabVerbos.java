@@ -17,6 +17,8 @@ public class TabVerbos {
     public static final int ClasseVerbosEntidadeComRetorno = 2;
     public static final int ClasseVerbosValidacao = 3;
     public static final int ClasseVerbosPrecedemMetodos = 4;
+    public static final int ClasseVerbosRetornoNaClasseFronteira = 5;
+    public static final int ClasseVerbosVerificacao = 6;
     
     
     private  List<Verbo> verbList = new ArrayList<>();
@@ -38,6 +40,8 @@ public class TabVerbos {
         verbList.add(new Verbo("retrieves",ClasseVerbosEntidadeComRetorno));
         verbList.add(new Verbo("searches",ClasseVerbosEntidadeComRetorno));
         verbList.add(new Verbo("selects",ClasseVerbosPrecedemMetodos));
+        verbList.add(new Verbo("displays",ClasseVerbosRetornoNaClasseFronteira));
+        verbList.add(new Verbo("verifies",ClasseVerbosVerificacao));
                 
         //Analisar se os verbos sem retorno precisam ser especificados
         //Se ele não pertence a classe de verbos de validação ou verbos que exigem retorno, consquentemente

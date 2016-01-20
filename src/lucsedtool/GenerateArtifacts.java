@@ -278,7 +278,7 @@ public class GenerateArtifacts {
         List<String> listEstados = storageDatas.getListEstadoDiagram();
         int contEstados=0;
         for (int i = 0; i < sequenceDiagramList.size(); i++) {
-            diagramEditor.createSequenceDiagram(packSequenceDiagram, sequenceDiagramList.get(i).getNome());    
+            diagramEditor.createSequenceDiagram(packSequenceDiagram, (i+1)+"_"+sequenceDiagramList.get(i).getNome());    
             List<Classe> listClassesCobertas = sequenceDiagramList.get(i).getListClassesCobertas();
             listNode = new ArrayList<>();
             

@@ -174,6 +174,7 @@ public class StorageDatas {
     public void addNameSequenceDiagram(String name){
         SequenceDiagram sd = new SequenceDiagram();
         sd.setNome(name);
+        sd.addClasseCoberta(classeController);
         
         sequenceDiagramList.add(sd);
     }

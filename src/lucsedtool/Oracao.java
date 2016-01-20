@@ -21,6 +21,7 @@ public class Oracao {
     private Classe classeEntidade= null;
     private String preposicao2="";
     private Classe classeFronteira=null;
+    private String comunication="";
    // private String preposicao="";
     private String ator="";
     private List<Atributo> atributtesList = new ArrayList<>();
@@ -177,6 +178,20 @@ public class Oracao {
      */
     public List<Atributo> getAtributtesList() {
         return atributtesList;
+    }
+
+    /**
+     * @return the comunication
+     */
+    public String getComunication() {
+        return comunication;
+    }
+
+    /**
+     * @param comunication the comunication to set
+     */
+    public void setComunication(String comunication) {
+        this.comunication = comunication;
     }
     
     

@@ -19,7 +19,7 @@ public class Parser {
     private Token token;
     private StorageDatas storageDatas;
     private SymbolTab symbolTab;
-    
+    private TabSubstantives tabSubstantives = new TabSubstantives();
     
     public Parser(String name) {
 
@@ -57,16 +57,29 @@ public class Parser {
 
         storageDatas.setClasseController(classe);
         storageDatas.setNameArquivo(token.getLexema());
-        
+        getToken(); //PONTO
     }
 
-    public void primaryAndSecondaryActors() {
-
-        while (token.getIdToken() != SymbolTab.SYSTEM) {
+    public void identificaBriefDescription(){
+        getToken(); //Brief
+        getToken(); //Description
+        getToken(); //Abre Aspas
+        getToken(); //Inicio da breve descrição
+        
+        String briefDescription = "";
+        do{
+            briefDescription+=token.getLexema();
             getToken();
-        }
+        }while (!token.getLexema().equals("\""));
+        getToken(); //PONTO
+    }
+    public void primaryAndSecondaryActors() {
+        identificaBriefDescription();
+        
+        getToken(); //System
         getToken(); //Dois PONTOS
         getToken(); //Nome do sistema
+        
         symbolTab.insertSimb(token.getLexema(), SymbolTab.SYSTEM);
         getToken(); //PONTO
 
@@ -207,12 +220,9 @@ public class Parser {
             getToken(); //Attributes ou informattions
         }
 
-        if (token.getLexema().equals("attributes") || token.getLexema().equals("informations") ) {
-            if(token.getLexema().equals("attributes")){
-                oracao.setMetodo("theAttributes");
-            }else{
-                oracao.setMetodo("theInformations");
-            }
+        
+        if (tabSubstantives.isContem(token.getLexema())) {
+            oracao.setMetodo("The" + StringUtils.capitalize(token.getLexema()));
             
             getToken(); //Preposicao1 ou (
             if (token.getLexema().equals("(")) {
@@ -265,6 +275,18 @@ public class Parser {
             identificaClasses(oracao, token.getLexema());
             
             getToken(); //PONTO
+        }
+        
+        if (token.getLexema().equals("by")){
+            getToken(); //AbreAspas
+            String comunication = "";
+            getToken().getLexema(); //Inicio do nome da comunicação
+            do{
+                comunication+= token.getLexema();
+                getToken().getLexema();
+            }while(!token.getLexema().equals("\""));
+            getToken(); //PONTO
+            oracao.setComunication(comunication);
         }
         
         identificaMensagem(oracao);
@@ -369,17 +391,15 @@ public class Parser {
                 
                 mensagem.setClasseDestino(oracao.getClasseEntidade());
                 if(oracao.getAtributtesList().size()==1){
-                    mensagem.setMensagem(oracao.getVerbo()+"TheAttribute"+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
                 }
                 mensagem.setTipo("MD");
             }else if (oracao.getPreposicao1().equals("to")){ //Verbos de retornos
-                if (storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("boundary")){
-                    mensagem.setClasseOrigem(storageDatas.getClasseFronteira());
-                }else{
-                    mensagem.setClasseOrigem(storageDatas.getClasseController());
-                }
+                
+                mensagem.setClasseOrigem(storageDatas.getClasseController());
+                
                 //Classe classeDestino = new Classe();
                 //classeDestino.setNome(oracao.getAtor());
                 //classeDestino.setTipo("actor");
@@ -407,7 +427,28 @@ public class Parser {
                 
                 mensagem.setTipo("MDR");
                 
-            }else {
+            }else if (oracao.getPreposicao2().equals("by")){
+                Classe classeOrigemDestino = storageDatas.getClasseController();
+                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome()+"By"+oracao.getComunication());
+                mensagem.setClasseOrigem(classeOrigemDestino);
+                mensagem.setClasseDestino(classeOrigemDestino);
+                mensagem.setTipo("MA");
+            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosRetornoNaClasseFronteira){
+                Classe classeOrigem = storageDatas.getClasseController();
+                Classe classeDestino = storageDatas.getClasseFronteira();
+                
+                mensagem.setClasseOrigem(classeOrigem);
+                mensagem.setClasseDestino(classeDestino);
+                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                mensagem.setTipo("MD");
+            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosVerificacao){
+                Classe classeOrigemDestino = storageDatas.getClasseController();
+                
+                mensagem.setClasseOrigem(classeOrigemDestino);
+                mensagem.setClasseDestino(classeOrigemDestino);
+                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                mensagem.setTipo("MD");
+            } else {
                 mensagem.setClasseOrigem(storageDatas.getClasseController());
                 mensagem.setClasseDestino(oracao.getClasseFronteira());
                 if (oracao.getClasseEntidade() != null){
