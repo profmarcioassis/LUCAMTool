@@ -530,6 +530,8 @@ public class GenerateArtifacts {
             }
         }
         
+        
+        
         List<Integer> listReturn = new ArrayList<>();
         listReturn.add(poso);
         listReturn.add(posf);
@@ -558,6 +560,8 @@ public class GenerateArtifacts {
         
         condicao.setMedidaPosicaoInicial((poso*MedidaEspacoEntreLifeLines) - (condicao.getNumCondicoesCobertas()*10));
         condicao.setMedidaPosicaoFinal(((posf-poso)*MedidaEspacoEntreLifeLines+80) + (condicao.getNumCondicoesCobertas()*20));
+        
+        
         
         if (condicao.isContemAutoMessagem()){
             condicao.setMedidaPosicaoFinal(condicao.getMedidaPosicaoFinal()+40);
@@ -588,9 +592,15 @@ public class GenerateArtifacts {
         listCondicoes.remove(0);
         
         calcularMedidasDoBlocoCondicional(condicao);
+        INodePresentation combFragPs;
         
         //PosX //PosY   //Larg     //Altura 
-        INodePresentation combFragPs = diagramEditor.createCombinedFragment("", "alt", new Point2D.Double(condicao.getMedidaPosicaoInicial(), (posicao-MedidaEspacoEntreMensagens)), condicao.getMedidaPosicaoFinal(), condicao.getMedidaBlocoIf()+condicao.getMedidaBlocoElse());
+        try {
+            combFragPs = diagramEditor.createCombinedFragment("", "alt", new Point2D.Double(condicao.getMedidaPosicaoInicial(), (posicao-MedidaEspacoEntreMensagens)), condicao.getMedidaPosicaoFinal(), condicao.getMedidaBlocoIf()+condicao.getMedidaBlocoElse());
+        } catch(Exception e){
+             combFragPs = diagramEditor.createCombinedFragment("", "alt", new Point2D.Double(condicao.getMedidaPosicaoInicial(), (posicao-MedidaEspacoEntreMensagens)), condicao.getMedidaPosicaoFinal()+240, condicao.getMedidaBlocoIf()+condicao.getMedidaBlocoElse());
+        }
+        
         ICombinedFragment combFrag = (ICombinedFragment) combFragPs.getModel();
         combFrag.getInteractionOperands()[0].setGuard(condicao.getDescricao());
         //combFrag.getInteractionOperands()[0].set(sc.getCondicao());
@@ -601,45 +611,6 @@ public class GenerateArtifacts {
             combFragPs.setProperty("operand.1.length", larg);
         }
         posicao += MedidaEspacoAposIf;
-        
-        
-        
-        
-        
-        
-        
-        /*
-         INodePresentation combFragPs = de.createCombinedFragment("", "alt", new Point2D.Double(180, 150), 750, 200);
-         ICombinedFragment combFrag = (ICombinedFragment) combFragPs.getModel();
-         combFrag.getInteractionOperands()[0].setGuard("condition > 60");
-         combFrag.addInteractionOperand("", "else");
-         combFragPs.setProperty("operand.1.length", "150");
-         */
-        //Storage_Conditions sc = new Storage_Conditions();
-        //sc = condicoesList.get(0);
-        //condicoesList.remove(0);
-
-        //int posx = (calculaPosicaoX(sc).get(0) * 199) - (sc.getQtdEstruturasCobertas() * 10);
-        //int largura = ((calculaPosicaoX(sc).get(1) - calculaPosicaoX(sc).get(0)) * 199) + 100 + (sc.getQtdEstruturasCobertas() * 20);
-        //int largura = sc.getNumClassesCobertas()*160;
-        /*
-        int altura = 0;
-        if (sc.getNumLinhasElse() > 0) {
-            if (sc.getNumLinhasIf() > sc.getNumLinhasElse()) {
-                altura = sc.getMeasureIf() + sc.getMeasureElse() - 50;
-                sc.setMeasureIf(sc.getMeasureIf() - 50);
-            } else if (sc.getNumLinhasIf() == sc.getNumLinhasElse()) {
-                altura = sc.getMeasureElse() + sc.getMeasureIf() - 20;
-            } else {
-                altura = sc.getMeasureElse();
-            }
-        } else {
-            altura = sc.getMeasureIf() + 40 - (sc.getNumLinhasIf() * 26);
-        }
-
-        altura += sc.getQtdEstruturasCobertas() * 15;
-*/
-        //PosX //PosY   //Larg     //Altura 
-        
+      
     }
 }

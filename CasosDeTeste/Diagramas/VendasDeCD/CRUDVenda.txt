@@ -1,0 +1,47 @@
+Use Case: CRUDVenda.
+Brief Description 
+"Atendente vende um ou mais CDs ao usuário".
+System: System.
+Primary and Secondary Actors
+Primary Actors: Atendente.
+Main Flow: Venda.
+Atendente starts Use Case.
+	Atendente  selects "EfetuarVenda"  of CD on MainForm.
+	System  retrieves the informations  of CD.
+	System  displays the informations  of CD on MainForm.
+	Atendente informs the attributes (CD, quantidade) of Venda.
+	System  retrieves the informations  of Cliente.
+	System  displays the informations  of Cliente on MainForm.
+
+	If ["Cliente não cadastrado"]
+		Atendente  selects "CadastrarCliente" on MainForm.
+	Else
+		Atendente  selects the informations (Cliente) of Venda.
+	EndIf
+
+	Atendente  selects "Vender Cd" on MainForm.
+	System  displays the informations  of Venda on MainForm.
+
+	Atendente  selects "ConfirmAction" on MainForm.
+	System  requests the informations (tipoVenda) of Venda to the Atendente.
+
+	Atendente informs the informations (tipoVenda) of Venda on MainForm.
+	System  saves the informations  of Venda.
+	System  updates the attributes (quantidade) of Estoque.
+
+	System  returns "Venda Efetuada com sucesso" to Atendente. 
+	System  returns the informations (notaFiscal) of Venda to Atendente.
+
+Atendente finishes Use Case.
+
+Key Scenario
+	Key Scenario 01: VenderCD.
+	
+Pre Conditions 
+	"Before this use case begins the Secretary has logged onto the system".
+Pos Conditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

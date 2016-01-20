@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class StorageDatas {
     
+    
+    
     private static Classe classeController;
     private static String nameArquivo;
     private static List<SequenceDiagram> sequenceDiagramList = new ArrayList<>();

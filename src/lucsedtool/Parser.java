@@ -311,13 +311,17 @@ public class Parser {
                     mensagem.setClasseDestino(oracao.getClasseFronteira());
                 }
                 TabVerbos tabVerbos = new  TabVerbos();
-                if (tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosPrecedemMetodos){
+                if ((tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosPrecedemMetodos)&&oracao.getAtributtesList().isEmpty()){
                     storageDatas.addMetodoFronteira(oracao.getMetodo());
                 }
             }
             
             if (oracao.getClasseEntidade() != null){
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                if (oracao.getAtributtesList().size()==1){
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }else{
+                  mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", "")); 
+                }
             }else{
                 mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
             }
@@ -325,31 +329,29 @@ public class Parser {
             mensagem.setTipo("MD");
         }else {
             TabVerbos tabVerbos = new TabVerbos();
-
+            
+            
             if (tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosValidacao){
+                Classe origemDestino;
                 if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("control")){
-                    Classe origemDestino = storageDatas.getClasseController();
+                    origemDestino = storageDatas.getClasseController();
 
-                    mensagem.setClasseOrigem(origemDestino);
-                    mensagem.setClasseDestino(origemDestino);
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
-                    mensagem.setTipo("MA");
-                    
                 }else if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("entity")){
-                    Classe origemDestino = storageDatas.getUltimaMensagem().getClasseDestino();
-                    mensagem.setClasseOrigem(origemDestino);
-                    mensagem.setClasseDestino(origemDestino);
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
-                    mensagem.setTipo("MA");
+                    origemDestino = storageDatas.getUltimaMensagem().getClasseDestino();
                     
                 }else {
-                    Classe origemDestino = storageDatas.getClasseFronteira();
-
-                    mensagem.setClasseOrigem(origemDestino);
-                    mensagem.setClasseDestino(origemDestino);
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
-                    mensagem.setTipo("MA");
+                    origemDestino = storageDatas.getClasseFronteira();
+                    
                 }
+                
+                mensagem.setClasseOrigem(origemDestino);
+                mensagem.setClasseDestino(origemDestino);
+                if (oracao.getAtributtesList().size() == 1){
+                    mensagem.setMensagem(oracao.getVerbo()+"TheAttribute"+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }else{
+                    mensagem.setMensagem(oracao.getVerbo()+"TheAttributesOf"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }
+                mensagem.setTipo("MA");
             }else if (tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosEntidadeSemRetorno){
                 if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("control")){
                     Classe origemDestino = storageDatas.getClasseController();
@@ -366,8 +368,11 @@ public class Parser {
                 }
                 
                 mensagem.setClasseDestino(oracao.getClasseEntidade());
-
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                if(oracao.getAtributtesList().size()==1){
+                    mensagem.setMensagem(oracao.getVerbo()+"TheAttribute"+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }else{
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                }
                 mensagem.setTipo("MD");
             }else if (oracao.getPreposicao1().equals("to")){ //Verbos de retornos
                 if (storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("boundary")){
@@ -375,12 +380,17 @@ public class Parser {
                 }else{
                     mensagem.setClasseOrigem(storageDatas.getClasseController());
                 }
-                Classe classeDestino = new Classe();
-                classeDestino.setNome(oracao.getAtor());
-                classeDestino.setTipo("actor");
+                //Classe classeDestino = new Classe();
+                //classeDestino.setNome(oracao.getAtor());
+                //classeDestino.setTipo("actor");
+                Classe classeDestino = storageDatas.getClasseFronteira();
                 
                 mensagem.setClasseDestino(classeDestino);
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                if (oracao.getAtributtesList().size() == 1){
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome());
+                }else{
+                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                }
                 mensagem.setTipo("MD");
             }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosEntidadeComRetorno){
                 mensagem.setClasseOrigem(storageDatas.getUltimaMensagem().getClasseDestino());

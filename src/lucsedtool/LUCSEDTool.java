@@ -24,6 +24,7 @@ public class LUCSEDTool {
         // TODO code application logic here
         
       LUCSEDToolFormulario lucsedFormulario = new LUCSEDToolFormulario();
+      //Parser parser = new Parser("D:\\Documents\\NetBeansProjects\\LUCSEDTool\\CasosDeTeste\\Diagramas\\VendasDeCD\\CRUDVenda.txt");
       lucsedFormulario.setVisible(true);
     }
     

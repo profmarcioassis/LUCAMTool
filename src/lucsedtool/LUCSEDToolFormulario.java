@@ -170,25 +170,23 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
         try {
             int res = Arquivo.showOpenDialog(this);
 
-        if (res == JFileChooser.APPROVE_OPTION) {
-            arq = Arquivo.getSelectedFile();
-        }
-
-            
-        str.append("Parsing: " + arq.getAbsolutePath());
-        jtDirectoryArchive.setText(arq.getAbsolutePath());
-            
-            
-        String dados = new String(Files.readAllBytes(arq.toPath()));
-
-        
-        jtUseCase.setText(dados);
+            if (res == JFileChooser.APPROVE_OPTION) {
+                arq = Arquivo.getSelectedFile();
+            }
+            str.append("Parsing: " + arq.getAbsolutePath());
+            jtDirectoryArchive.setText(arq.getAbsolutePath());
+            String dados = new String(Files.readAllBytes(arq.toPath()));
+            jtUseCase.setText(dados);
         
         }catch (Exception e ){
             
         }
 
- 
+        progressoGenerate.setValue(0);
+        jlSituacaoGenerate.setText("");
+        jbLocalDiagramaGerado.setEnabled(false);
+        
+        this.setExtendedState(MAXIMIZED_BOTH); 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public  File getArquivo(){

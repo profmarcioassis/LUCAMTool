@@ -16,7 +16,7 @@ public class Oracao {
     private Token tokenSujeito;
     private String sujeito="";
     private String verbo="";
-    private String metodo="";
+    private String metodo=""; //No parser considerei Métodos e Substantivo como método. Mudar isso posteriormente pois substantivos não irão gerar método no diagrama de classes
     private String preposicao1="";
     private Classe classeEntidade= null;
     private String preposicao2="";
