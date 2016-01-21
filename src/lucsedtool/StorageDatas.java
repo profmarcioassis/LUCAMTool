@@ -30,6 +30,20 @@ public class StorageDatas {
     private static List<String> listEstadoDiagram = new ArrayList<>();
     private static List<Classe> classesActorsPrimario = new ArrayList<>();
 
+    public void clean(){
+        classeController = new Classe();
+        sequenceDiagramList = new ArrayList<>();
+        classesActors = new ArrayList<>();
+        classesEntidade = new ArrayList<>();
+        classesFronteira = new ArrayList<>();
+        mensagemList = new ArrayList<>();
+        listCondicoes = new ArrayList<>();
+        listLoop = new ArrayList<>();
+        listAtributos = new ArrayList<>();
+        listMetodosClasseFronteira = new ArrayList<>();
+        listEstadoDiagram = new ArrayList<>();
+        classesActorsPrimario = new ArrayList<>();
+    }
     /**
      * @return the classesActorsPrimario
      */

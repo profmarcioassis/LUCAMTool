@@ -53,9 +53,13 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jbLocalDiagramaGerado" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jbOpenDiagramAsta" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jbLocalDiagramaGerado" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="126" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -76,6 +80,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="progressoGenerate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jbOpenDiagramAsta" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jbLocalDiagramaGerado" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
@@ -146,7 +151,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="jbLocalDiagramaGerado">
       <Properties>
-        <Property name="text" type="java.lang.String" value="open folder diagram"/>
+        <Property name="text" type="java.lang.String" value="Open Folder Diagram"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbLocalDiagramaGeradoActionPerformed"/>
@@ -156,6 +161,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel2"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbOpenDiagramAsta">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Open Diagram In Astah"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbOpenDiagramAstaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

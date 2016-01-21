@@ -35,6 +35,7 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -45,7 +46,7 @@ public class GenerateArtifacts {
     public GenerateArtifacts() {
 
         try {
-            exec("diagramSequence.asta");
+            exec(storageDatas.getNameArquivo() + ".asta");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +87,7 @@ public class GenerateArtifacts {
     int posicao = 0;
     
     public void exec(String name) throws ClassNotFoundException, LicenseNotFoundException,
-            ProjectNotFoundException, IOException, ProjectLockedException, com.change_vision.jude.api.inf.exception.ProjectNotFoundException, InvalidEditingException {
+            ProjectNotFoundException, IOException, ProjectLockedException, com.change_vision.jude.api.inf.exception.ProjectNotFoundException, InvalidEditingException, com.change_vision.jude.api.inf.exception.ProjectLockedException {
 
         ProjectAccessor projectAccessor = ProjectAccessorFactory.getProjectAccessor();
         try {
@@ -99,6 +100,14 @@ public class GenerateArtifacts {
             //LUCSEDTool lUCSEDTool = new LUCSEDTool();
             LUCSEDToolFormulario lucsedTool = new LUCSEDToolFormulario();
             projectAccessor.exportXMI(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".xmi"); //nome
+            
+            try {
+                projectAccessor.saveAs(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".asta");
+            
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(lucsedTool, "Erro! Verifique se o diagrama anterior está aberto e feche-o");
+            }
+            
             System.out.println("Create SeqSample.asta Project done.");
         } catch (InvalidUsingException e) {
             e.printStackTrace();

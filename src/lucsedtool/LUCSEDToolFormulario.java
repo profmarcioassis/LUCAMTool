@@ -22,15 +22,16 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
     /**
      * Creates new form LUCSEDTool
      */
-
     static File arq = null;
+
     public LUCSEDToolFormulario() {
-        
+
         initComponents();
         jtUseCase.setToolTipText("Enter the use case");
         jlSituacaoGenerate.setText("");
         jbLocalDiagramaGerado.setEnabled(false);
-        this.setExtendedState(MAXIMIZED_BOTH);  
+        jbOpenDiagramAsta.setEnabled(false);
+        this.setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -52,6 +53,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
         jtDirectoryArchive = new javax.swing.JTextField();
         jbLocalDiagramaGerado = new javax.swing.JButton();
         jlSituacaoGenerate = new javax.swing.JLabel();
+        jbOpenDiagramAsta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,7 +84,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
 
         jtDirectoryArchive.setEditable(false);
 
-        jbLocalDiagramaGerado.setText("open folder diagram");
+        jbLocalDiagramaGerado.setText("Open Folder Diagram");
         jbLocalDiagramaGerado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbLocalDiagramaGeradoActionPerformed(evt);
@@ -90,6 +92,13 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
         });
 
         jlSituacaoGenerate.setText("jLabel2");
+
+        jbOpenDiagramAsta.setText("Open Diagram In Astah");
+        jbOpenDiagramAsta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbOpenDiagramAstaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,8 +128,11 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1)
-                            .addComponent(jbLocalDiagramaGerado))
-                        .addContainerGap(126, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jbOpenDiagramAsta)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbLocalDiagramaGerado)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,6 +148,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(progressoGenerate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbOpenDiagramAsta)
                     .addComponent(jbLocalDiagramaGerado))
                 .addGap(4, 4, 4)
                 .addComponent(jlSituacaoGenerate, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -146,23 +159,42 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        jlSituacaoGenerate.setText("Gerando diagramas...");
-        progressoGenerate.setValue(10);
-        
-        Parser parser = new Parser(arq.getAbsolutePath());
-        
-        progressoGenerate.setValue(100);
-        
-        jlSituacaoGenerate.setText("Diagrama Gerado com sucesso.");
-        jbLocalDiagramaGerado.setEnabled(true);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                jbLocalDiagramaGerado.setEnabled(false);
+                jbOpenDiagramAsta.setEnabled(false);
+                
+                progressoGenerate.setValue(10);
+                jlSituacaoGenerate.setText("Gerando diagrama...");
+                
+                Parser parser = new Parser(arq.getAbsolutePath());
+                progressoGenerate.setValue(50);
+                
+                GenerateArtifacts generate = new GenerateArtifacts();
+                progressoGenerate.setValue(100);
+                
+                jlSituacaoGenerate.setText("Diagrama Gerado com sucesso.");
+                jbLocalDiagramaGerado.setEnabled(true);
+                jbOpenDiagramAsta.setEnabled(true);
+                
+                StorageDatas storage = new StorageDatas();
+                storage.clean();
+            }
+        });
+        t.start();
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-        
+
+        jbOpenDiagramAsta.setEnabled(false);
+        jbLocalDiagramaGerado.setEnabled(false);
+
         JFileChooser Arquivo = new JFileChooser(".");
 
         StringBuffer str = new StringBuffer();
@@ -176,22 +208,22 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
             jtDirectoryArchive.setText(arq.getAbsolutePath());
             String dados = new String(Files.readAllBytes(arq.toPath()));
             jtUseCase.setText(dados);
-        
-        }catch (Exception e ){
-            
+
+        } catch (Exception e) {
+
         }
 
         progressoGenerate.setValue(0);
         jlSituacaoGenerate.setText("");
         jbLocalDiagramaGerado.setEnabled(false);
-        
-        this.setExtendedState(MAXIMIZED_BOTH); 
+
+        this.setExtendedState(MAXIMIZED_BOTH);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public  File getArquivo(){
+    public File getArquivo() {
         return arq;
     }
-    
+
     private void jbLocalDiagramaGeradoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLocalDiagramaGeradoActionPerformed
         try {
             // TODO add your handling code here:
@@ -200,6 +232,20 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
             Logger.getLogger(LUCSEDToolFormulario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jbLocalDiagramaGeradoActionPerformed
+
+    private void jbOpenDiagramAstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbOpenDiagramAstaActionPerformed
+        // TODO add your handling code here:
+        StorageDatas storageDatas = new StorageDatas();
+        Process pro;
+        try {
+            //pro = Runtime.getRuntime().exec(getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".asta");
+            //pro.waitFor();
+            java.awt.Desktop.getDesktop().open(new File(getArquivo().getParent() + '\\' + storageDatas.getNameArquivo() + ".asta"));
+        } catch (IOException ex) {
+            Logger.getLogger(LUCSEDToolFormulario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jbOpenDiagramAstaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,6 +289,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton jbLocalDiagramaGerado;
+    private javax.swing.JButton jbOpenDiagramAsta;
     private javax.swing.JLabel jlSituacaoGenerate;
     private javax.swing.JTextField jtDirectoryArchive;
     private javax.swing.JTextArea jtUseCase;

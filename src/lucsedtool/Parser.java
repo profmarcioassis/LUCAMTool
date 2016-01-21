@@ -25,6 +25,7 @@ public class Parser {
 
         
         lexical = new LexicalAnalyzer(name);
+        
         token = new Token();
         storageDatas = new StorageDatas();
         symbolTab = new SymbolTab();
@@ -133,9 +134,7 @@ public class Parser {
         getToken(); //PONTO
 
         useCases();
-        
 
-        GenerateArtifacts generate = new GenerateArtifacts();
     }
 
     int sair = -1;
