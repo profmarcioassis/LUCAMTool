@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -243,6 +244,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
             java.awt.Desktop.getDesktop().open(new File(getArquivo().getParent() + '\\' + storageDatas.getNameArquivo() + ".asta"));
         } catch (IOException ex) {
             Logger.getLogger(LUCSEDToolFormulario.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(rootPane, "Erro! Verifique se o programa Astah está instalado!");
         }
 
     }//GEN-LAST:event_jbOpenDiagramAstaActionPerformed
