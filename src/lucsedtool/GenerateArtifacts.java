@@ -99,10 +99,10 @@ public class GenerateArtifacts {
 
             //LUCSEDTool lUCSEDTool = new LUCSEDTool();
             LUCSEDToolFormulario lucsedTool = new LUCSEDToolFormulario();
-            projectAccessor.exportXMI(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".xmi"); //nome
+            projectAccessor.exportXMI(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getClasseController().getNome() + ".xmi"); //nome
             
             try {
-                projectAccessor.saveAs(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getNameArquivo() + ".asta");
+                projectAccessor.saveAs(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getClasseController().getNome()+ ".asta");
             
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(lucsedTool, "Erro! Verifique se o diagrama anterior está aberto e feche-o");
