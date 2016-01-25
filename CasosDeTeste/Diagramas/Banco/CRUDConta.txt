@@ -1,124 +1,119 @@
-Use Case: CRUDConta.
+Use Case: CRUDBankAccount.
 Brief Description 
-"Allows the inclusion, editing, deleting and searching a student".
+"Allows the inclusion, editing, deleting and searching a customer".
 System: System.
 Primary and Secondary Actors
-Primary Actors: Bancario.
-Secondary Actors: Cliente.
-Main Flow: AddConta.
-Bancario starts Use Case.
-	Cliente informs the attributes to the Bancario.
-	Bancario enters attributes (String nome, String CPF, Date  dataNasc) of Cliente on MainForm.
-	Bancario enters attributes (int agencia, int numConta) of Conta on MainForm.
-	Bancario selects "CadastrarConta" on MainForm.
-	System validates attributes of Cliente.
-	System validates attributes of Conta.
-
+Primary Actors: Banking.
+Secondary Actors: Customer.
+Main Flow: AddAccount.
+Banking starts Use Case.
 	
-	If ["Inconsistência"]
-		System returns "Dados incorretos" to Bancario.
+	Customer informs the attributes to the Banking.
+	Banking enters attributes (Int ID, String name, String  socialSecurity, Date  birthDate) of Customer on MainForm.
+	Banking enters attributes (String agency, String numAccount) of Account on MainForm.
+	Banking selects "InsertAccount" on MainForm.
+	
+	System validates attributes of Customer.
+	System validates attributes of Account.
+	
+	If ["Inconsistency"]
+		System returns "Incorrect data" to Banking.
 	Else
-		System saves attributes of Cliente.
-		System saves attributes of Conta.
-		System returns "Cadastro efetuado com sucesso" to Bancario.
+		System saves attributes of Customer.
+		System saves attributes of Account.
+		System returns "Account successfully inserted" to Banking.
 	EndIf
 
-
-Bancario finishes Use Case.
-
+Banking finishes Use Case.
 
 Alternative Flows 
-Alternative Flow 01: DeletarConta.
+Alternative Flow 01: DeletarAccount.
+	Customer informs the attributes (ID) for the Banking.
+	Banking selects "EncerrarAccount" on MainForm.
+	System validates the attributes (ID) of Customer.
 
-	Cliente informs the attributes (CPF) for the Bancario.
-	Bancario selects "EncerrarConta" on MainForm.
-	System validates the attributes (CPF) of Cliente.
-
-	If ["Cpf Inválido"]
-		System returns "CPF Inválido" to Bancario.
+	If ["Invalid ID"]
+		System returns "Invalid ID" to Banking.
 	Else
-		System retrieves the informations of Cliente.
+		System retrieves the informations of Customer.
 	EndIf 
 
-	If ["Cliente Inexistente"] 
-		System returns "Cliente inexistente" to Bancario.
+	If ["Customer  nonexistent"]
+		System returns "Customer nonexistent" to Banking.
 	Else
-		System displays the attributes of cliente on MainForm.
+		System displays the attributes of customer on MainForm.
 	EndIf
 	
-	Cliente informs the attributes (Senha) for Bancario.
-	Bancario enters the attributes (Senha) of Cliente on MainForm.
-	System validates the attributes (Senha) of Conta.
+	Customer informs the attributes (Password) for Banking.
+	Banking enters the attributes (Password) of Customer on MainForm.
+	System validates the attributes (Password) of Account.
 
-
-	If ["senha inválida"]
-		System returns "Senha inválida" to Bancario.
+	If ["Invalid Password"]
+		System returns "Invalid password" to Banking.
 	Else
-		Bancario selects "ConfirmAction" on MainForm.
-		System  deletes the informations of Cliente.
-		System returns "Cliente deletado com sucesso" to Bancario.
+		Banking selects "ConfirmAction" on MainForm.
+		System deletes the informations of Customer.
+		System returns "Successfully deleted customer" to Banking.
 	EndIf
 
-Alternative Flow 02: Sacar.
-	Cliente selects "EfetuarSaque" on MainForm.
-	Cliente informs the attributes (numConta, String  senha) of Conta on MainForm.
-	System searches for Cliente.
+Alternative Flow 02: Withdraw.
+	Customer selects "MakeWithdrawal" on MainForm.
+	Customer informs the attributes (String numAccount, String  Password) of Account on MainForm.
+	System searches for Customer.
 
-	If ["Cliente inexistente"]
-		System returns  "Cliente inexistente" to Cliente.
+	If ["Customer nonexistent"]
+		System returns  "Customer nonexistent" to Customer.
 	Else
-		System validates the attributes (senha) of Cliente.
+		System validates the attributes (Password) of Customer.
 	EndIf
 
-	If ["Senha incorreta"] 
-		System returns "Senha Incorreta" to Cliente.
+	If ["Invalid Password"] 
+		System returns "Invalid password" to Customer.
 	Else
-		Cliente informs the attributes (Quantia) of Transacao on MainForm.
-		Cliente selects "EfetuarSaque" on MainForm.
-		System retrieves the attributes (saldo) of Conta.
+		Customer informs the attributes (Value) of Transaction on MainForm.
+		Customer selects "MakeWithdrawal" on MainForm.
+		System retrieves the attributes (balance) of Account.
 	EndIf
 
-	If ["Saldo Indisponível"]
-		System returns "Saldo Indisponível" to Cliente.
+	If ["Balance Unavailable"]
+		System returns "Balance unavailable" to Customer.
 	Else
-		System saves the informations (Date  data, Double  saldo, Time horario, String numConta) of Transacao.
-		System deducts the attributes (Double  saldo) of Conta.
-		System returns "Saque efetuado com sucesso" to Cliente.
+System saves the informations (Date  date, Double  balance, Time  time, String numAccount) of Transaction.
+		System deducts the attributes (Double  balance) of Account.
+		System returns "Booty successfully performed" to Customer.
 	EndIf
 
-Alternative Flow 03: Transferencia.
-	Cliente selects "EfetuarTransferência" on MainForm.
-	Cliente enters the informations (Conta ContaCredito, Conta ContaDebito, Double Valor) of Transferencia on MainForm.
-	Cliente informs the attributes (Senha) of Conta.
-	System retrieves the informations of Conta.
-	System validates the attributes (senha) of Conta.
+Alternative Flow 03: MakeTransfer.
+	Customer selects " MakeTransfer" on MainForm.
+Customer enters the informations (Account CreditAccount, Account DebitAccount, Double Value) of Transfer on MainForm.
+	Customer informs the attributes (Password) of Account.
+	System retrieves the informations of Account.
+	System validates the attributes (Password) of Account.
 	
-	If ["Senha inválida"]
-		System returns "senha inválida" to Cliente.
+	If ["Invalid Password"]
+		System returns "Invalid password" to Customer.
 	EndIf
 	
-	If ["Saldo Indisponível"]
-		System returns "Saldo indisponível" to Cliente.
+	If ["Balance Unavailable"]
+		System returns "Balance unavailable" to Customer.
 	Else
-		System displays the informations of Transferencia on MainForm.
+		System displays the informations of Transfer on MainForm.
 	EndIf
 
-
-	Cliente selects "confirmAction" on MainForm.
-	System deducts the attributes (valor) of Conta.
-	System credits the attributes (valor) of Conta.
-	System saves the informations (Conta ContaCredito, Conta ContaDebito, Time hora, Date  data, String Agencia, Double Valor) of Transferencia.
-	System returns "Transferencia efetuada com sucesso" to Cliente.
-
+	Customer selects "confirmAction" on MainForm.
+	System deducts the attributes (Value) of Account.
+	System credits the attributes (Value) of Account.
+	System saves the informations (Account CreditAccount, Conta DebitAccount, Time  time, Date  date, String agency, Double value) of Transfer.
+	System returns "Was successful transfer" to Customer.
 
 Key Scenario
-	Key Scenario 01: AddStudent.
-	Key Scenario 02: DeleteStudent.
+	Key Scenario 01: AddAccount.
+	Key Scenario 02: DeleteAccount.
 Pre Conditions 
-	"Before this use case begins the Secretary has logged onto the system".
+	"Before this use case begins the Baking has logged onto the system".
 Pos Conditions 
-	"There are no post conditions associated with this use case.".
+	"There are no post conditions associated with this use case".
 Special Requirements 
-	"There are no special requirements associated with this use case.".
-Extension Points 
-	"There are no extension points associated with this use case.".
+	"There are no special requirements associated with this use case".
+Extension Points
+     "There are no extension points associated with this use case".
