@@ -1,6 +1,6 @@
 Use Case: CRUDBankAccount.
 Brief Description 
-"Allows the inclusion, editing, deleting and searching a customer".
+"Allows the inclusion, editing, deleting and searching a customer        ".
 System: System.
 Primary and Secondary Actors
 Primary Actors: Banking.
@@ -11,13 +11,13 @@ Banking starts Use Case.
 	Customer informs the attributes to the Banking.
 	Banking enters attributes (Int ID, String name, String  socialSecurity, Date  birthDate) of Customer on MainForm.
 	Banking enters attributes (String agency, String numAccount) of Account on MainForm.
-	Banking selects "InsertAccount" on MainForm.
+	Banking selects "      InsertAccount      " on MainForm.
 	
 	System validates attributes of Customer.
 	System validates attributes of Account.
 	
 	If ["Inconsistency"]
-		System returns "Incorrect data" to Banking.
+		System returns "   Incorrect data      " to Banking.
 	Else
 		System saves attributes of Customer.
 		System saves attributes of Account.

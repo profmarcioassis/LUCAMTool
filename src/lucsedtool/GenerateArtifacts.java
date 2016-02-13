@@ -105,7 +105,7 @@ public class GenerateArtifacts {
                 projectAccessor.saveAs(lucsedTool.getArquivo().getParent()+'\\'+ storageDatas.getClasseController().getNome()+ ".asta");
             
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(lucsedTool, "Erro! Verifique se o diagrama anterior está aberto e feche-o");
+                JOptionPane.showMessageDialog(lucsedTool, "Error! Make sure the previous diagram is open and close it.");
             }
             
             System.out.println("Create SeqSample.asta Project done.");

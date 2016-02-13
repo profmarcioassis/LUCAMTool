@@ -86,7 +86,8 @@ public class LexicalAnalyzer {
             
             //System.out.println("Byte: "+byt);
         
-            while ( (byt != 32 ||(lexema.equals("")))  && (controle != 1) && ((byt != 13)||lexema.equals(""))){ //espaco branco e quebra linha            
+            //32 = espaço em branco
+            while ( (byt != 32 ||(lexema.equals("")||stack!=""))  && (controle != 1) && ((byt != 13)||lexema.equals(""))){ //espaco branco e quebra linha            
             //System.out.println("Byte: "+byt);
                 while (byt == 10 || (byt == 13) || (byt == 32) || (byt == 9)){
                     byt = arq.readByte(); 
@@ -100,6 +101,7 @@ public class LexicalAnalyzer {
                         stack = "";  //esvaziar stack
                         buffer = "\"";  //guardando proximo token
                         controle = 1;  //sair do while
+                        //lexema = "\"";
                     }//end if
                 }
                 else if(isSignLess((char)byt)){ //is sinal de menor
@@ -117,11 +119,21 @@ public class LexicalAnalyzer {
                         }//end if
                     }
                 else if(byt == '.'){
-                    buffer=".";
-                    controle = 1;
+                    if (stack != ""){
+                        lexema+=".";
+                        byt = arq.readByte(); 
+                    }else if (lexema.equals("")){
+                        lexema=".";
+                        controle = 1;
+                    }else{
+                        buffer=".";
+                        controle = 1;
+                    }
+                    
                 }else if (byt == ':'){
-                    buffer=":";
-                    controle = 1;                    
+                    buffer="";
+                    controle = 1; 
+                    lexema+= ":";
                 }
                 else{
                     lexema = lexema + (char)byt;
@@ -190,7 +202,7 @@ public class LexicalAnalyzer {
         else if(buffer == "."){
             lexema = ".";
             buffer="";
-            byt = arq.readByte();
+            //byt = arq.readByte();
         }else if(buffer == ":"){
             lexema = ":";
             buffer="";
@@ -272,7 +284,7 @@ public class LexicalAnalyzer {
      */
     private boolean isQuoteMark (char c){               
         return ( (c == '\'') || (c == '\"') );
-    }//end isQuoteMark
+    }//end isQuoteMark '\"
     
     
     /**

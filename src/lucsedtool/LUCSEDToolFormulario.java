@@ -32,6 +32,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
         jlSituacaoGenerate.setText("");
         jbLocalDiagramaGerado.setEnabled(false);
         jbOpenDiagramAsta.setEnabled(false);
+        jButton2.setEnabled(false);
         this.setExtendedState(MAXIMIZED_BOTH);
     }
 
@@ -170,7 +171,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
                 jbOpenDiagramAsta.setEnabled(false);
                 
                 progressoGenerate.setValue(10);
-                jlSituacaoGenerate.setText("Gerando diagrama...");
+                jlSituacaoGenerate.setText("Generating diagram...");
                 
                 Parser parser = new Parser(arq.getAbsolutePath());
                 progressoGenerate.setValue(50);
@@ -178,7 +179,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
                 GenerateArtifacts generate = new GenerateArtifacts();
                 progressoGenerate.setValue(100);
                 
-                jlSituacaoGenerate.setText("Diagrama Gerado com sucesso.");
+                jlSituacaoGenerate.setText("Diagram successfully generated.");
                 jbLocalDiagramaGerado.setEnabled(true);
                 jbOpenDiagramAsta.setEnabled(true);
                 
@@ -192,7 +193,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-
+        jButton2.setEnabled(false);
         jbOpenDiagramAsta.setEnabled(false);
         jbLocalDiagramaGerado.setEnabled(false);
 
@@ -209,6 +210,8 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
             jtDirectoryArchive.setText(arq.getAbsolutePath());
             String dados = new String(Files.readAllBytes(arq.toPath()));
             jtUseCase.setText(dados);
+            
+            jButton2.setEnabled(true);
 
         } catch (Exception e) {
 
@@ -244,7 +247,7 @@ public class LUCSEDToolFormulario extends javax.swing.JFrame {
             java.awt.Desktop.getDesktop().open(new File(getArquivo().getParent() + '\\' + storageDatas.getNameArquivo() + ".asta"));
         } catch (IOException ex) {
             Logger.getLogger(LUCSEDToolFormulario.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(rootPane, "Erro! Verifique se o programa Astah está instalado!");
+            JOptionPane.showMessageDialog(rootPane, "Error! Make sure the Astah program is installed!");
         }
 
     }//GEN-LAST:event_jbOpenDiagramAstaActionPerformed
