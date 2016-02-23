@@ -155,7 +155,7 @@ public class Parser {
                 identificaLoop();
             } else if (token.getLexema().equals("EndLoop")){
                 identificaEndLoop();
-            }else if (token.getLexema().equals("Alternative")){
+            }else if (token.getLexema().equals("Alternate")){
                 identificaFluxosAlternativo();
             }else if (token.getLexema().equals("Key")){
                 sair = 1;

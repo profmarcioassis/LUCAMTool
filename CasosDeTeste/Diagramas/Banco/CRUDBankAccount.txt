@@ -26,8 +26,8 @@ Banking starts Use Case.
 
 Banking finishes Use Case.
 
-Alternative Flows 
-Alternative Flow 01: DeletarAccount.
+Alternate Flows 
+Alternate Flow 01: DeletarAccount.
 	Customer informs the attributes (ID) for the Banking.
 	Banking selects "EncerrarAccount" on MainForm.
 	System validates the attributes (ID) of Customer.
@@ -56,7 +56,7 @@ Alternative Flow 01: DeletarAccount.
 		System returns "Successfully deleted customer" to Banking.
 	EndIf
 
-Alternative Flow 02: Withdraw.
+Alternate Flow 02: Withdraw.
 	Customer selects "MakeWithdrawal" on MainForm.
 	Customer informs the attributes (String numAccount, String  Password) of Account on MainForm.
 	System searches for Customer.
@@ -83,7 +83,7 @@ System saves the informations (Date  date, Double  balance, Time  time, String n
 		System returns "Booty successfully performed" to Customer.
 	EndIf
 
-Alternative Flow 03: MakeTransfer.
+Alternate Flow 03: MakeTransfer.
 	Customer selects " MakeTransfer" on MainForm.
 Customer enters the informations (Account CreditAccount, Account DebitAccount, Double Value) of Transfer on MainForm.
 	Customer informs the attributes (Password) of Account.

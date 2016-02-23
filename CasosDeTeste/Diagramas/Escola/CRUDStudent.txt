@@ -26,8 +26,8 @@ Secretary starts Use Case.
 
 Secretary finishes Use Case.
 
-Alternative Flows 
-Alternative Flow 01: ModifyStudent.
+Alternate Flows 
+Alternate Flow 01: ModifyStudent.
 	Secretary selects "ModifyStudent" on MainForm.
 	Secretary types the attributes (id number) of Student on MainForm.
 	System retrieves the attributes of Student.
@@ -37,7 +37,7 @@ Alternative Flow 01: ModifyStudent.
 	System updates the informations of Student.
 	System returns "successfully modified" to Secretary.
 
-Alternative Flow 02: DeleteStudent.
+Alternate Flow 02: DeleteStudent.
 	Secretary selects "DeleteStudent" on MainForm.
 	Secretary types the attributes (id number) of Student on MainForm.
 	System retrieves the attributes of Student.
@@ -45,7 +45,7 @@ Alternative Flow 02: DeleteStudent.
 	Secretary selects "ConfirmAction" on MainForm.
 	System returns "successfully deleted" to Secretary.
 
-Alternative Flow 03: ReadStudent.
+Alternate Flow 03: ReadStudent.
 	Secretary selects "ReadStudent" on MainForm.
 	Secretary types the attributes (id number) of Student on MainForm.
 	System retrieves attributes of Student.

@@ -22,14 +22,14 @@ System generates the request of Enrollment.
 System sends the informations (date, id number) of Enrollment by "e-Mail".
 System sends the request to AcademicSecretary.
 Student finishes Use Case.
-Alternative Flows
-Alternative Flow 01: ValidateEnrollmentNumber.
+Alternate Flows
+Alternate Flow 01: ValidateEnrollmentNumber.
 System returns "The enrollment number does not exist" to Student.
 
-Alternative Flow 02: CheckEnrollmentEffected.
+Alternate Flow 02: CheckEnrollmentEffected.
 System returns "You are already enrolled" to Student.
 
-Alternative Flow 03: CheckDependenciesfromPreviousSemesters.
+Alternate Flow 03: CheckDependenciesfromPreviousSemesters.
 System shows the dependencies of Student on MainForm.
 System enables "Enroll in Dependency" on MainForm.
 System enables "Confirm enrollment" on MainForm.
