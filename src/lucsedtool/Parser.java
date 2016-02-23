@@ -47,7 +47,7 @@ public class Parser {
 
         getToken(); //USE
         getToken(); //CASE
-        getToken(); //HYPHEN
+        //getToken(); //HYPHEN
         getToken(); //Nome da classe controller
 
         String nomeClasseController = token.getLexema();
@@ -78,8 +78,9 @@ public class Parser {
         identificaBriefDescription();
         
         getToken(); //System
-        getToken(); //Dois PONTOS
+        //getToken(); //Dois PONTOS
         getToken(); //Nome do sistema
+        
         
         symbolTab.insertSimb(token.getLexema(), SymbolTab.SYSTEM);
         getToken(); //PONTO
@@ -91,7 +92,7 @@ public class Parser {
 
         getToken(); //PRIMARY
         getToken(); //ACTORS
-        getToken(); //HYPHEN
+        //getToken(); //HYPHEN
 
         getToken(); //Nome do Ator Primário
 
@@ -107,7 +108,7 @@ public class Parser {
 
         if (token.getLexema().equals("Secondary")) {
             getToken(); //Actors
-            getToken(); //HYPHEN
+            //getToken(); //HYPHEN
             getToken(); //Nome do atores secundários:
 
             classeActors = new Classe();
@@ -126,7 +127,7 @@ public class Parser {
 
         
         getToken(); //FLOW
-        getToken(); //-
+        //getToken(); //-
 
         getToken(); //Nome do Fluxo principal
         storageDatas.addNameSequenceDiagram(token.getLexema());
@@ -141,12 +142,6 @@ public class Parser {
     //String situacaoCondicao="";
     public void useCases() {
 
-        getToken();
-        getToken(); //STARTS;
-        getToken(); //USE
-        getToken(); //CASE
-        getToken(); //PONTO
-
         while (sair == -1){
             getToken(); //AtorSystem ou If ou Else Ou LOOP Ou Alternative
 
@@ -160,7 +155,7 @@ public class Parser {
                 identificaLoop();
             } else if (token.getLexema().equals("EndLoop")){
                 identificaEndLoop();
-            }else if (token.getLexema().equals("Alternative")){
+            }else if (token.getLexema().equals("Alternate")){
                 identificaFluxosAlternativo();
             }else if (token.getLexema().equals("Key")){
                 sair = 1;
@@ -186,7 +181,7 @@ public class Parser {
         storageDatas.addEstado("Alternative");
         
         getToken(); //Numero
-        getToken(); //- HYPHEN
+        //getToken(); //- HYPHEN
         getToken(); //Nome
         storageDatas.addNameSequenceDiagram(token.getLexema());
         getToken(); //PONTO

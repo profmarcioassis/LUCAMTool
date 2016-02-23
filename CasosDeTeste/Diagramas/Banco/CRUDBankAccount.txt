@@ -1,0 +1,119 @@
+Use Case: CRUDBankAccount.
+Brief Description 
+"Allows the inclusion, editing, deleting and searching a customer        ".
+System: System.
+Primary and Secondary Actors
+Primary Actors: Banking.
+Secondary Actors: Customer.
+Main Flow: AddAccount.
+Banking starts Use Case.
+	
+	Customer informs the attributes to the Banking.
+	Banking enters attributes (Int ID, String name, String  socialSecurity, Date  birthDate) of Customer on MainForm.
+	Banking enters attributes (String agency, String numAccount) of Account on MainForm.
+	Banking selects "      InsertAccount      " on MainForm.
+	
+	System validates attributes of Customer.
+	System validates attributes of Account.
+	
+	If ["Inconsistency"]
+		System returns "   Incorrect data      " to Banking.
+	Else
+		System saves attributes of Customer.
+		System saves attributes of Account.
+		System returns "Account successfully inserted" to Banking.
+	EndIf
+
+Banking finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: DeletarAccount.
+	Customer informs the attributes (ID) for the Banking.
+	Banking selects "EncerrarAccount" on MainForm.
+	System validates the attributes (ID) of Customer.
+
+	If ["Invalid ID"]
+		System returns "Invalid ID" to Banking.
+	Else
+		System retrieves the informations of Customer.
+	EndIf 
+
+	If ["Customer  nonexistent"]
+		System returns "Customer nonexistent" to Banking.
+	Else
+		System displays the attributes of customer on MainForm.
+	EndIf
+	
+	Customer informs the attributes (Password) for Banking.
+	Banking enters the attributes (Password) of Customer on MainForm.
+	System validates the attributes (Password) of Account.
+
+	If ["Invalid Password"]
+		System returns "Invalid password" to Banking.
+	Else
+		Banking selects "ConfirmAction" on MainForm.
+		System deletes the informations of Customer.
+		System returns "Successfully deleted customer" to Banking.
+	EndIf
+
+Alternate Flow 02: Withdraw.
+	Customer selects "MakeWithdrawal" on MainForm.
+	Customer informs the attributes (String numAccount, String  Password) of Account on MainForm.
+	System searches for Customer.
+
+	If ["Customer nonexistent"]
+		System returns  "Customer nonexistent" to Customer.
+	Else
+		System validates the attributes (Password) of Customer.
+	EndIf
+
+	If ["Invalid Password"] 
+		System returns "Invalid password" to Customer.
+	Else
+		Customer informs the attributes (Value) of Transaction on MainForm.
+		Customer selects "MakeWithdrawal" on MainForm.
+		System retrieves the attributes (balance) of Account.
+	EndIf
+
+	If ["Balance Unavailable"]
+		System returns "Balance unavailable" to Customer.
+	Else
+System saves the informations (Date  date, Double  balance, Time  time, String numAccount) of Transaction.
+		System deducts the attributes (Double  balance) of Account.
+		System returns "Booty successfully performed" to Customer.
+	EndIf
+
+Alternate Flow 03: MakeTransfer.
+	Customer selects " MakeTransfer" on MainForm.
+Customer enters the informations (Account CreditAccount, Account DebitAccount, Double Value) of Transfer on MainForm.
+	Customer informs the attributes (Password) of Account.
+	System retrieves the informations of Account.
+	System validates the attributes (Password) of Account.
+	
+	If ["Invalid Password"]
+		System returns "Invalid password" to Customer.
+	EndIf
+	
+	If ["Balance Unavailable"]
+		System returns "Balance unavailable" to Customer.
+	Else
+		System displays the informations of Transfer on MainForm.
+	EndIf
+
+	Customer selects "confirmAction" on MainForm.
+	System deducts the attributes (Value) of Account.
+	System credits the attributes (Value) of Account.
+	System saves the informations (Account CreditAccount, Conta DebitAccount, Time  time, Date  date, String agency, Double value) of Transfer.
+	System returns "Was successful transfer" to Customer.
+
+Key Scenario
+	Key Scenario 01: AddAccount.
+	Key Scenario 02: DeleteAccount.
+Pre Conditions 
+	"Before this use case begins the Baking has logged onto the system".
+Pos Conditions 
+	"There are no post conditions associated with this use case".
+Special Requirements 
+	"There are no special requirements associated with this use case".
+Extension Points
+     "There are no extension points associated with this use case".

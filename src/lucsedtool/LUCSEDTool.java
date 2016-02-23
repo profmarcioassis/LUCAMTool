@@ -23,14 +23,14 @@ public class LUCSEDTool {
     public static void main(String[] args) {
         // TODO code application logic here
         
-       /*
-        LexicalAnalyzer lexical = new LexicalAnalyzer("D:\\Documents\\NetBeansProjects\\LUCSEDTool\\CasosDeTeste\\Diagramas\\RegisterForCourses\\RegisterForCourses.txt");
-        for (int i = 0; i < 900; i++) {
+        /*
+        LexicalAnalyzer lexical = new LexicalAnalyzer("D:\\FORMATAR\\NetBeans Project\\LUCSEDTool\\CasosDeTeste\\Diagramas\\Banco\\CRUDBankAccount.txt");
+        for (int i = 0; i < 1000; i++) {
             System.out.println("Lexical: "+lexical.getToken().getLexema());
         
         }*/
         
-      //Parser parser = new Parser("D:\\Documents\\NetBeansProjects\\LUCSEDTool\\CasosDeTeste\\Diagramas\\StudentEnrollment\\StudentEnrollment.txt");
+      //Parser parser = new Parser("D:\\FORMATAR\\NetBeans Project\\LUCSEDTool\\CasosDeTeste\\Diagramas\\Banco\\CRUDBankAccount.txt");
       
         
         LUCSEDToolFormulario lucsedFormulario = new LUCSEDToolFormulario();

@@ -1,0 +1,56 @@
+Use Case: StudentEnrollment.
+Brief Description 
+"Allows the inclusion, editing, deleting and searching a enrolment".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Secretary.
+Secondary Actors: Student.
+Main Flow: MakeEnrollment.
+Secretary starts Use Case.
+
+Secretary selects "SearchesCourse" on MainForm.
+System searches the informations of Course.
+System displays attributes (String name, String  description) of Course on MainForm.
+
+Secretary appears the informations of Couse for the Student.
+
+If ["Student Interest"]
+	Secretary selects " SearchesClass" on MainForm.
+EndIf
+
+System searches the informations of Class.
+System displays the informations (String name, Time hour, int  	numberVacancies) of Class on MainForm.
+Secretary appears the informations of Class for the Student.	
+
+If ["Student Interest"]
+	Secretary enters the attributes (CPF) of Student on MainForm.
+	System retrieves the informations of Student.
+	
+	If ["Student Non Registered"]
+		System displays "Student non registered" on MainForm.
+		Secretary selects "Insert Student" on MainForm.
+		System saves the informations (String name, Date  birthDate, String CPF) of Student.
+		System returns "Student registered successfully" to Secretary.
+	Else
+		System displays the informations of Student on MainForm.	
+		Secretary selects "MakeEnrollment" on MainForm.
+		System saves the informations (Student Student, Date  date, Double amountPaid) of Enrollment.
+		System returns "Enrollment registered successfully" to Secretary.
+	EndIf
+EndIf
+
+
+Secretary finishes Use Case.
+
+Key Scenario
+Key Scenario 01: MakeEnrollment
+Key Scenario 02: Check Dependencies from Previous Semesters
+
+Pre Conditions 
+	"Before this use case begins the Secretary has logged onto the system".
+Pos Conditions 
+	"There are no post conditions associated with this use case".
+Special Requirements 
+	"There are no special requirements associated with this use case".
+Extension Points 
+	"There are no extension points associated with this use case".

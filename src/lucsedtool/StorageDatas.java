@@ -94,6 +94,9 @@ public class StorageDatas {
      * @return the classesActors
      */
     public List<Classe> getClassesActors() {
+       // List<Classe> listReturn = new ArrayList<>();
+        //listReturn.addAll(classesActors);
+       // listReturn.addAll(classesActorsPrimario);
         return classesActors;
     }
 

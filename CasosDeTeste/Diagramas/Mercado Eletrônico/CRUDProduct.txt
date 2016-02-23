@@ -1,0 +1,53 @@
+Use Case: CRUDProduct.
+Brief Description 
+"This use case allows the publication of interest in selling a particular product".
+System: System.
+Primary and Secondary Actors
+Primary Actors: User.
+Main Flow: PublishProduct.
+User starts Use Case.
+	
+	User selects "publish product" on MainForm.
+	System requests the attributes (email, password) of User on MainForm. 
+	User informs the attributes  on MainForm.
+	User selects "logon" on MainForm.
+	
+	system retrieves the informations of User.
+	
+	If ['registered user']
+		System displays the informations of User on MainForm.
+		User updates the informations  on MainForm.	
+		User selects "Save editions" on MainForm.
+		System updates the informations of User.
+		
+	Else
+	
+		User informs the informations (name, cpf, phone, email, password) of User on MainForm.
+		System validates the informations of User.
+		
+		If ["invalid data"]	
+			System returns "Invalid Data" to User.
+			System requests the informations to User.
+		Else
+			 System saves the informations of User.
+			 System returns "Registration successfully Complete" to User.
+		EndIf
+	EndIf
+	
+	User informs the attributes (name, availableQuantity, price) of Product.
+	System saves the informations of Product.
+	System returns "successfully published product" to User.
+
+User finishes Use Case.
+
+
+Key Scenario
+	Key Scenario 01: PublishProduct.
+Pre Conditions 
+	"no preconditions".
+Pos Conditions 
+	"no preconditions".
+Special Requirements 
+	"no special requirements".
+Extension Points
+     "no extension points".
