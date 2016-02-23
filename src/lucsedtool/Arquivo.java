@@ -18,7 +18,7 @@ public class Arquivo {
     
     /* Construtor Padrão - Recebe o nome do arquivo e
      * cria uma instância de FileInputStream
-     */
+     */ //testando clone
     public Arquivo(String nome) {
         this.nome = nome;
         try {
