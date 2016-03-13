@@ -38,34 +38,34 @@ public class Parser {
 
     public void start() {
         
-        cabecalho();
+        header();
         primaryAndSecondaryActors();
         mainFlow();
     }
 
-    public void cabecalho() {
+    public void header() {
 
         getToken(); //USE
         getToken(); //CASE
         //getToken(); //HYPHEN
         getToken(); //Nome da classe controller
 
-        String nomeClasseController = token.getLexema();
-        String tipo = "control";
-        Classe classe = new Classe();
-        classe.setNome(nomeClasseController);
-        classe.setTipo(tipo);
+        String nameControllerClass = token.getLexema();
+        String type = "control";
+        StorageClass classStorage = new StorageClass();
+        classStorage.setName(nameControllerClass);
+        classStorage.setType(type);
 
-        storageDatas.setClasseController(classe);
-        storageDatas.setNameArquivo(token.getLexema());
+        storageDatas.setControllerClass(classStorage);
+        storageDatas.setArchiveName(token.getLexema());
         getToken(); //PONTO
     }
 
-    public void identificaBriefDescription(){
+    public void identifiesBriefDescription(){
         getToken(); //Brief
         getToken(); //Description
         getToken(); //Abre Aspas
-        getToken(); //Inicio da breve descrição
+        getToken(); //Inicio da breve descriï¿½ï¿½o
         
         String briefDescription = "";
         do{
@@ -75,7 +75,7 @@ public class Parser {
         getToken(); //PONTO
     }
     public void primaryAndSecondaryActors() {
-        identificaBriefDescription();
+        identifiesBriefDescription();
         
         getToken(); //System
         //getToken(); //Dois PONTOS
@@ -96,10 +96,10 @@ public class Parser {
 
         getToken(); //Nome do Ator PrimÃ¡rio
 
-        Classe classeActors = new Classe();
-        classeActors.setNome(token.getLexema());
-        classeActors.setTipo("actor");
-        storageDatas.addClasseActor(classeActors);
+        StorageClass classeActors = new StorageClass();
+        classeActors.setName(token.getLexema());
+        classeActors.setType("actor");
+        storageDatas.addActorClass(classeActors);
         storageDatas.addActorsPrimario(classeActors);
         symbolTab.insertSimb(token.getLexema(), SymbolTab.ACTORS);
 
@@ -111,10 +111,10 @@ public class Parser {
             //getToken(); //HYPHEN
             getToken(); //Nome do atores secundÃ¡rios:
 
-            classeActors = new Classe();
-            classeActors.setNome(token.getLexema());
-            classeActors.setTipo("actor");
-            storageDatas.addClasseActor(classeActors);
+            classeActors = new StorageClass();
+            classeActors.setName(token.getLexema());
+            classeActors.setType("actor");
+            storageDatas.addActorClass(classeActors);
             symbolTab.insertSimb(token.getLexema(), SymbolTab.ACTORS);
 
             getToken();//POINT
@@ -138,35 +138,35 @@ public class Parser {
 
     }
 
-    int sair = -1;
+    int exit = -1;
     //String situacaoCondicao="";
     public void useCases() {
 
-        while (sair == -1){
+        while (exit == -1){
             getToken(); //AtorSystem ou If ou Else Ou LOOP Ou Alternative
 
             if (token.getLexema().equals("If")) {
-                identificaIf();
+                identifiesIf();
             } else if (token.getLexema().equals("Else")) {
-                identificaElse();
+                identifiesElse();
             } else if (token.getLexema().equals("EndIf")){
-                identificaEndIf();
+                identifiesEndIf();
             } else if (token.getLexema().equals("Loop")) {
-                identificaLoop();
+                identifiesLoop();
             } else if (token.getLexema().equals("EndLoop")){
-                identificaEndLoop();
+                identifiesEndLoop();
             }else if (token.getLexema().equals("Alternate")){
-                identificaFluxosAlternativo();
+                identifiesAlternatesFlows();
             }else if (token.getLexema().equals("Key")){
-                sair = 1;
+                exit = 1;
             }else {
-                identificaOracoes();
+                identifiesOrations();
             }
             
         }
     }
     
-    public void identificaFluxosAlternativo(){
+    public void identifiesAlternatesFlows(){
         
         getToken(); //Flows ou Flow
         if(token.getLexema().equals("Flows")){
@@ -178,7 +178,7 @@ public class Parser {
     }
     
     public void identificaFluxoAlternativo(){
-        storageDatas.addEstado("Alternative");
+        storageDatas.addState("Alternative");
         
         getToken(); //Numero
         //getToken(); //- HYPHEN
@@ -187,23 +187,23 @@ public class Parser {
         getToken(); //PONTO
     }
     
-    public void ignoraOracao(){
+    public void ignoreOration(){
         getToken(); //Use
         getToken(); //Case
         getToken(); //.
     }
 
     //1 - Sair por Usuario Finishes user case
-    public void identificaOracoes() {
+    public void identifiesOrations() {
 
-        List<Atributo> listAtributos;
-        Oracao oracao = new Oracao();
+        List<Attribute> listAttributes;
+        Oration oration = new Oration();
 
-        oracao.setTokenSujeito(token);
-        oracao.setSujeito(token.getLexema());
-        oracao.setVerbo(getToken().getLexema());
-        if (oracao.getVerbo().equals("finishes") ||oracao.getVerbo().equals("starts")) {
-            ignoraOracao();
+        oration.setTokenSubject(token);
+        oration.setSubject(token.getLexema());
+        oration.setVerb(getToken().getLexema());
+        if (oration.getVerb().equals("finishes") ||oration.getVerb().equals("starts")) {
+            ignoreOration();
             //sair = 1;
             return;
         }
@@ -215,12 +215,12 @@ public class Parser {
 
         
         if (tabSubstantives.isContem(token.getLexema())) {
-            oracao.setMetodo("The" + StringUtils.capitalize(token.getLexema()));
+            oration.setMethod("The" + StringUtils.capitalize(token.getLexema()));
             
             getToken(); //Preposicao1 ou (
             if (token.getLexema().equals("(")) {
-                listAtributos = obtemAtributes();
-                oracao.setAtributos(listAtributos);
+                listAttributes = getAtributes();
+                oration.setAttribute(listAttributes);
 
                 getToken(); //Preposicao1
             }
@@ -228,29 +228,29 @@ public class Parser {
 
         if (token.getLexema().equals("\"")) {
             getToken();//Nome do mÃ©todo
-            String nomeMetodo="";
+            String nameMethod="";
             do {
-                nomeMetodo += token.getLexema();
+                nameMethod += token.getLexema();
                 getToken();
             } while (!token.getLexema().equals("\""));
-            oracao.setMetodo(nomeMetodo);
+            oration.setMethod(nameMethod);
 
             getToken(); //Preposicao1
         }
 
         if (token.getLexema().equals("of")) {
-            oracao.setPreposicao1("of");
+            oration.setPreposition1("of");
             getToken(); //Nome Classe Entidade
-            identificaClasses(oracao, token.getLexema());
+            identifiesClasses(oration, token.getLexema());
 
             getToken(); //Ponto ou Preposicao on
         }
 
         if (token.getLexema().equals("to") || token.getLexema().equals("for")) {
             if (token.getLexema().equals("to")){
-                oracao.setPreposicao1("to");
+                oration.setPreposition1("to");
             }else{
-                oracao.setPreposicao1("for");
+                oration.setPreposition1("for");
             }
             
             getToken();
@@ -258,14 +258,14 @@ public class Parser {
                 getToken(); //Ator
             }
             
-            oracao.setAtor(token.getLexema());
+            oration.setActor(token.getLexema());
             getToken(); //Ponto
         }
 
         if (token.getLexema().equals("on")) {
-            oracao.setPreposicao2("on");
+            oration.setPreposition2("on");
             getToken(); //Classe Fronteira
-            identificaClasses(oracao, token.getLexema());
+            identifiesClasses(oration, token.getLexema());
             
             getToken(); //PONTO
         }
@@ -273,368 +273,368 @@ public class Parser {
         if (token.getLexema().equals("by")){
             getToken(); //AbreAspas
             String comunication = "";
-            getToken().getLexema(); //Inicio do nome da comunicação
+            getToken().getLexema(); //Inicio do nome da comunicaï¿½ï¿½o
             do{
                 comunication+= token.getLexema();
                 getToken().getLexema();
             }while(!token.getLexema().equals("\""));
             getToken(); //PONTO
-            oracao.setComunication(comunication);
-            oracao.setPreposicao2("by");
+            oration.setComunication(comunication);
+            oration.setPreposition2("by");
         }
         
-        identificaMensagem(oracao);
-        identificaAtributos(oracao);
+        identifiesMessage(oration);
+        identifiesAttributes(oration);
     }
     
-    public void identificaAtributos(Oracao oracao){
+    public void identifiesAttributes(Oration oracao){
         if (oracao.getAtributtesList().size()>0){
             for (int i = 0; i < oracao.getAtributtesList().size(); i++) {
-                if (oracao.getClasseEntidade() != null){
-                    oracao.getAtributtesList().get(i).setClasse(oracao.getClasseEntidade());
+                if (oracao.getEntityClass() != null){
+                    oracao.getAtributtesList().get(i).setClassStorage(oracao.getEntityClass());
                 }else{
-                    Classe classeEntidade = new Classe();
-                    classeEntidade.setNome(oracao.getSujeito()+"Entity");
-                    classeEntidade.setTipo("entity");
-                    oracao.getAtributtesList().get(i).setClasse(classeEntidade);
+                    StorageClass classeEntidade = new StorageClass();
+                    classeEntidade.setName(oracao.getSubject()+"Entity");
+                    classeEntidade.setType("entity");
+                    oracao.getAtributtesList().get(i).setClassStorage(classeEntidade);
                 }
                 
             }
         }
-        storageDatas.addAtributos(oracao.getAtributtesList());
+        storageDatas.addAttributes(oracao.getAtributtesList());
     }
     
-    public void identificaMensagem(Oracao oracao){
+    public void identifiesMessage(Oration oration){
         
-        Mensagem mensagem = new Mensagem();
+        Message message = new Message();
         
         
-        if (oracao.getTokenSujeito().getIdToken() == SymbolTab.ACTORS){
-            Classe classeOrigem = new Classe();
-            classeOrigem.setNome(oracao.getSujeito());
-            classeOrigem.setTipo("actor");
+        if (oration.getTokenSubject().getIdToken() == SymbolTab.ACTORS){
+            StorageClass sendClass = new StorageClass();
+            sendClass.setName(oration.getSubject());
+            sendClass.setType("actor");
             
-            mensagem.setClasseOrigem(classeOrigem);
-            if (!oracao.getAtor().equals("")){
-                Classe classeDestino = new Classe();
-                classeDestino.setNome(oracao.getAtor());
-                classeDestino.setTipo("actor");
-                mensagem.setClasseDestino(classeDestino);
+            message.setClassSender(sendClass);
+            if (!oration.getActor().equals("")){
+                StorageClass receiverClass = new StorageClass();
+                receiverClass.setName(oration.getActor());
+                receiverClass.setType("actor");
+                message.setClassReceiver(receiverClass);
             }else{
-                if (oracao.getClasseFronteira() == null){
-                    mensagem.setClasseDestino(storageDatas.getClasseFronteira());
+                if (oration.getBoundaryClass() == null){
+                    message.setClassReceiver(storageDatas.getBoundaryClass());
                 }else{
-                    mensagem.setClasseDestino(oracao.getClasseFronteira());
+                    message.setClassReceiver(oration.getBoundaryClass());
                 }
                 TabVerbos tabVerbos = new  TabVerbos();
-                if ((tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosPrecedemMetodos)&&oracao.getAtributtesList().isEmpty()){
-                    storageDatas.addMetodoFronteira(oracao.getMetodo());
+                if ((tabVerbos.getClasseVerbo(oration.getVerb()) == TabVerbos.ClassVerbsAboveMethods)&&oration.getAtributtesList().isEmpty()){
+                    storageDatas.addMethodsBoundary(oration.getMethod());
                 }
             }
             
-            if (oracao.getClasseEntidade() != null){
-                if (oracao.getAtributtesList().size()==1){
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+            if (oration.getEntityClass() != null){
+                if (oration.getAtributtesList().size()==1){
+                    message.setMessage(oration.getVerb()+oration.getMethod()+oration.getAtributtesList().get(0).getDescription()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                 }else{
-                  mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", "")); 
+                  message.setMessage(oration.getVerb()+oration.getMethod()+oration.getEntityClass().getName().replace("Entity", "")); 
                 }
             }else{
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                message.setMessage(oration.getVerb()+oration.getMethod());
             }
             
-            mensagem.setTipo("MD");
+            message.setType("MD");
         }else {
             TabVerbos tabVerbos = new TabVerbos();
             
             
-            if (tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosValidacao){
-                Classe origemDestino;
-                if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("control")){
-                    origemDestino = storageDatas.getClasseController();
+            if (tabVerbos.getClasseVerbo(oration.getVerb()) == TabVerbos.ClassVerbsValidation){
+                StorageClass sendReceiver;
+                if(storageDatas.getLastMessage().getClassReceiver().getType().equals("control")){
+                    sendReceiver = storageDatas.getControllerClass();
 
-                }else if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("entity")){
-                    origemDestino = storageDatas.getUltimaMensagem().getClasseDestino();
+                }else if(storageDatas.getLastMessage().getClassReceiver().getType().equals("entity")){
+                    sendReceiver = storageDatas.getLastMessage().getClassReceiver();
                     
                 }else {
-                    origemDestino = storageDatas.getClasseFronteira();
+                    sendReceiver = storageDatas.getBoundaryClass();
                     
                 }
                 
-                mensagem.setClasseOrigem(origemDestino);
-                mensagem.setClasseDestino(origemDestino);
-                if (oracao.getAtributtesList().size() == 1){
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                message.setClassSender(sendReceiver);
+                message.setClassReceiver(sendReceiver);
+                if (oration.getAtributtesList().size() == 1){
+                    message.setMessage(oration.getVerb()+oration.getMethod()+oration.getAtributtesList().get(0).getDescription()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    message.setMessage(oration.getVerb()+oration.getMethod()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                 }
-                mensagem.setTipo("MA");
-            }else if (tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosEntidadeSemRetorno){
-                if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("control")){
-                    Classe origemDestino = storageDatas.getClasseController();
-                    mensagem.setClasseOrigem(origemDestino);
+                message.setType("MA");
+            }else if (tabVerbos.getClasseVerbo(oration.getVerb()) == TabVerbos.ClassVerbsEntityNoReturn){
+                if(storageDatas.getLastMessage().getClassReceiver().getType().equals("control")){
+                    StorageClass sendReceiver = storageDatas.getControllerClass();
+                    message.setClassSender(sendReceiver);
 
-                }else if(storageDatas.getUltimaMensagem().getClasseDestino().getTipo().equals("entity")){
-                    Classe origemDestino = storageDatas.getClasseController();
-                    mensagem.setClasseOrigem(origemDestino);
+                }else if(storageDatas.getLastMessage().getClassReceiver().getType().equals("entity")){
+                    StorageClass sendReceiver = storageDatas.getControllerClass();
+                    message.setClassSender(sendReceiver);
 
                 }else{
-                    Classe origemDestino = storageDatas.getClasseFronteira();
-                    mensagem.setClasseOrigem(origemDestino);
+                    StorageClass sendReceiver = storageDatas.getBoundaryClass();
+                    message.setClassSender(sendReceiver);
                     
                 }
                 
-                mensagem.setClasseDestino(oracao.getClasseEntidade());
-                if(oracao.getAtributtesList().size()==1){
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                message.setClassReceiver(oration.getEntityClass());
+                if(oration.getAtributtesList().size()==1){
+                    message.setMessage(oration.getVerb()+oration.getMethod()+oration.getAtributtesList().get(0).getDescription()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    message.setMessage(oration.getVerb()+oration.getMethod()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                 }
-                mensagem.setTipo("MD");
-            }else if (oracao.getPreposicao1().equals("to")){ //Verbos de retornos
+                message.setType("MD");
+            }else if (oration.getPreposition1().equals("to")){ //Verbos de retornos
                 
-                mensagem.setClasseOrigem(storageDatas.getClasseController());
+                message.setClassSender(storageDatas.getControllerClass());
                 
                 //Classe classeDestino = new Classe();
                 //classeDestino.setNome(oracao.getAtor());
                 //classeDestino.setTipo("actor");
-                Classe classeDestino = storageDatas.getClasseFronteira();
+                StorageClass receiverClass = storageDatas.getBoundaryClass();
                 
-                mensagem.setClasseDestino(classeDestino);
-                if (oracao.getAtributtesList().size() == 1){
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome());
+                message.setClassReceiver(receiverClass);
+                if (oration.getAtributtesList().size() == 1){
+                    message.setMessage(oration.getVerb()+oration.getMethod()+oration.getAtributtesList().get(0).getDescription()+"Of"+oration.getEntityClass().getName());
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                    message.setMessage(oration.getVerb()+oration.getMethod());
                 }
-                mensagem.setTipo("MD");
-            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosEntidadeComRetorno){
-                mensagem.setClasseOrigem(storageDatas.getUltimaMensagem().getClasseDestino());
-                if(oracao.getClasseEntidade() == null){
-                    Classe classeDestino = new Classe();
-                    classeDestino.setNome(oracao.getAtor()+"Entity");
-                    classeDestino.setTipo("entity");
-                    mensagem.setClasseDestino(classeDestino);
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtor());
+                message.setType("MD");
+            }else if(tabVerbos.getClasseVerbo(oration.getVerb()) == TabVerbos.ClassVerbsEntityReturn){
+                message.setClassSender(storageDatas.getLastMessage().getClassReceiver());
+                if(oration.getEntityClass() == null){
+                    StorageClass receiverClass = new StorageClass();
+                    receiverClass.setName(oration.getActor()+"Entity");
+                    receiverClass.setType("entity");
+                    message.setClassReceiver(receiverClass);
+                    message.setMessage(oration.getVerb()+oration.getMethod()+oration.getActor());
                 }else{
-                    mensagem.setClasseDestino(oracao.getClasseEntidade());
-                    if (oracao.getAtributtesList().size() == 1){
-                        mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                    message.setClassReceiver(oration.getEntityClass());
+                    if (oration.getAtributtesList().size() == 1){
+                        message.setMessage(oration.getVerb()+oration.getMethod()+oration.getAtributtesList().get(0).getDescription()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                     }else{
-                        mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                        message.setMessage(oration.getVerb()+oration.getMethod()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                     }
                 }
                 
-                mensagem.setTipo("MDR");
+                message.setType("MDR");
                 
-            }else if (oracao.getPreposicao2().equals("by")){
-                Classe classeOrigemDestino = storageDatas.getClasseController();
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome()+"By"+oracao.getComunication());
-                mensagem.setClasseOrigem(classeOrigemDestino);
-                mensagem.setClasseDestino(classeOrigemDestino);
-                mensagem.setTipo("MA");
-            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosRetornoNaClasseFronteira){
-                Classe classeOrigem = storageDatas.getClasseController();
-                Classe classeDestino = storageDatas.getClasseFronteira();
+            }else if (oration.getPreposition2().equals("by")){
+                StorageClass sendReceiverClass = storageDatas.getControllerClass();
+                message.setMessage(oration.getVerb()+oration.getMethod()+"Of"+oration.getEntityClass().getName()+"By"+oration.getComunication());
+                message.setClassSender(sendReceiverClass);
+                message.setClassReceiver(sendReceiverClass);
+                message.setType("MA");
+            }else if(tabVerbos.getClasseVerbo(oration.getVerb()) == TabVerbos.ClassVerbsReturnInBoundaryClass){
+                StorageClass sendClass = storageDatas.getControllerClass();
+                StorageClass receiverClass = storageDatas.getBoundaryClass();
                 
-                mensagem.setClasseOrigem(classeOrigem);
-                mensagem.setClasseDestino(classeDestino);
-                if (oracao.getClasseEntidade() != null){
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                message.setClassSender(sendClass);
+                message.setClassReceiver(receiverClass);
+                if (oration.getEntityClass() != null){
+                    message.setMessage(oration.getVerb()+oration.getMethod()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                    message.setMessage(oration.getVerb()+oration.getMethod());
                 }
-                mensagem.setTipo("MD");
-            }else if(tabVerbos.getClasseVerbo(oracao.getVerbo()) == TabVerbos.ClasseVerbosProcessamentoController){
-                Classe classeOrigemDestino = storageDatas.getClasseController();
+                message.setType("MD");
+            }else if(tabVerbos.getClasseVerbo(oration.getVerb()) == TabVerbos.ClassVerbsProcessingController){
+                StorageClass sendReceiverClass = storageDatas.getControllerClass();
                 
-                mensagem.setClasseOrigem(classeOrigemDestino);
-                mensagem.setClasseDestino(classeOrigemDestino);
-                mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", ""));
-                mensagem.setTipo("MD");
+                message.setClassSender(sendReceiverClass);
+                message.setClassReceiver(sendReceiverClass);
+                message.setMessage(oration.getVerb()+oration.getMethod()+"Of"+oration.getEntityClass().getName().replace("Entity", ""));
+                message.setType("MD");
             } else {
-                mensagem.setClasseOrigem(storageDatas.getClasseController());
-                mensagem.setClasseDestino(oracao.getClasseFronteira());
-                if (oracao.getClasseEntidade() != null){
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo()+oracao.getClasseEntidade().getNome().replace("Entity", ""));
+                message.setClassSender(storageDatas.getControllerClass());
+                message.setClassReceiver(oration.getBoundaryClass());
+                if (oration.getEntityClass() != null){
+                    message.setMessage(oration.getVerb()+oration.getMethod()+oration.getEntityClass().getName().replace("Entity", ""));
                 }else{
-                    mensagem.setMensagem(oracao.getVerbo()+oracao.getMetodo());
+                    message.setMessage(oration.getVerb()+oration.getMethod());
                 }
                 
-                mensagem.setTipo("MD");
+                message.setType("MD");
             }
         }
         
-        storageDatas.addMensagem(mensagem);
-        adicionaMensagemCondicao(mensagem);
+        storageDatas.addMessage(message);
+        addConditionMessage(message);
         
-        if (mensagem.getTipo().equals("MDR")){
-            Mensagem mensagemReturn = new Mensagem();
-            mensagemReturn.setClasseOrigem(mensagem.getClasseDestino());
-            mensagemReturn.setClasseDestino(storageDatas.getClasseController());
+        if (message.getType().equals("MDR")){
+            Message messageReturn = new Message();
+            messageReturn.setClassSender(message.getClassReceiver());
+            messageReturn.setClassReceiver(storageDatas.getControllerClass());
                 
-            if (oracao.getClasseEntidade() != null){
-                if (oracao.getAtributtesList().size() == 1){
-                    mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getAtributtesList().get(0).getDescricao()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", "")));
+            if (oration.getEntityClass() != null){
+                if (oration.getAtributtesList().size() == 1){
+                    messageReturn.setMessage("returns"+(oration.getMethod()+oration.getAtributtesList().get(0).getDescription()+"Of"+oration.getEntityClass().getName().replace("Entity", "")));
                 }else{
-                    mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+"Of"+oracao.getClasseEntidade().getNome().replace("Entity", "")));
+                    messageReturn.setMessage("returns"+(oration.getMethod()+"Of"+oration.getEntityClass().getName().replace("Entity", "")));
                 }
 
             }else{
-                mensagemReturn.setMensagem("returns"+(oracao.getMetodo()+oracao.getAtor()));
+                messageReturn.setMessage("returns"+(oration.getMethod()+oration.getActor()));
             }
-            mensagemReturn.setTipo("MR");
+            messageReturn.setType("MR");
             
-            storageDatas.addMensagem(mensagemReturn);
-            adicionaMensagemCondicao(mensagemReturn);
+            storageDatas.addMessage(messageReturn);
+            addConditionMessage(messageReturn);
         }
         
     }
     
     
-    public void identificaClasses(Oracao oracao, String nomeClasse){
-        if (oracao.getPreposicao2().equals("on")){
-            Classe classeFronteira = new Classe();
-            classeFronteira.setNome(nomeClasse);
-            classeFronteira.setTipo("boundary");
+    public void identifiesClasses(Oration oration, String nameClass){
+        if (oration.getPreposition2().equals("on")){
+            StorageClass boundaryClass = new StorageClass();
+            boundaryClass.setName(nameClass);
+            boundaryClass.setType("boundary");
             
-            oracao.setClasseFronteira(classeFronteira);
-            storageDatas.addClasseFronteira(classeFronteira);
-        }else if(oracao.getPreposicao1().equals("of")){
-            Classe classeEntidade = new Classe();
-            classeEntidade.setNome(nomeClasse+"Entity");
-            classeEntidade.setTipo("entity");
-            oracao.setClasseEntidade(classeEntidade);
+            oration.setBoundaryClass(boundaryClass);
+            storageDatas.addBoundaryClass(boundaryClass);
+        }else if(oration.getPreposition1().equals("of")){
+            StorageClass entityClass = new StorageClass();
+            entityClass.setName(nameClass+"Entity");
+            entityClass.setType("entity");
+            oration.setEntityClass(entityClass);
             
             /*
             Classe classeEnt = new Classe();
             classeEnt.setNome(classeEntidade.getNome()+"Entity");
             classeEnt.setTipo(classeEntidade.getTipo());*/
-            storageDatas.addClasseEntidade(classeEntidade);
+            storageDatas.addEntityClass(entityClass);
         }
         
         
     }
 
-    List<Condicao> listCondicoes = new ArrayList<>();
-    public void identificaIf() {
+    List<Condition> listConditions = new ArrayList<>();
+    public void identifiesIf() {
         //situacaoCondicao = "If";
-        storageDatas.addEstado("If");
+        storageDatas.addState("If");
         getToken(); //" Abre aspas
         getToken(); //Inicio da condicao
 
-        String condicao = "";
+        String condition = "";
         do {
-            condicao += token.getLexema();
+            condition += token.getLexema();
             getToken();
         } while (!token.getLexema().equals("\""));
 
-        Condicao condicaoIf = new Condicao();
-        condicaoIf.setDescricao(condicao);
+        Condition conditionIf = new Condition();
+        conditionIf.setDescription(condition);
 
-        listCondicoes.add(condicaoIf);
+        listConditions.add(conditionIf);
     }
     
     List<Loop> listLoop = new ArrayList<>();
-    public void identificaLoop() {
+    public void identifiesLoop() {
         //situacaoCondicao = "If";
-        storageDatas.addEstado("Loop");
+        storageDatas.addState("Loop");
         getToken(); //" Abre aspas
         getToken(); //Inicio da condicao
 
-        String condicao = "";
+        String condition = "";
         do {
-            condicao += token.getLexema();
+            condition += token.getLexema();
             getToken();
         } while (!token.getLexema().equals("\""));
 
-        Loop condicaoLoop = new Loop();
-        condicaoLoop.setDescricao(condicao);
+        Loop condionLoop = new Loop();
+        condionLoop.setDescription(condition);
 
-        listLoop.add(condicaoLoop);
+        listLoop.add(condionLoop);
     }
     
-    public void identificaEndLoop(){
+    public void identifiesEndLoop(){
         storageDatas.addLoop(listLoop.get(listLoop.size()-1));
         listLoop = new ArrayList<>();
     }
     
-    public void identificaElse(){
+    public void identifiesElse(){
         //situacaoCondicao = "Else";
-        listCondicoes.get(listCondicoes.size()-1).setContemElse(true);
+        listConditions.get(listConditions.size()-1).setContainsElse(true);
     }
     
-    List<Condicao> listCondicoesProvisoria = new ArrayList<>();
-    public void identificaEndIf(){
+    List<Condition> listConditionsProvisional = new ArrayList<>();
+    public void identifiesEndIf(){
        // situacaoCondicao="";
-        if(listCondicoes.size()>1){
+        if(listConditions.size()>1){
             
             
-            if(listCondicoes.get(listCondicoes.size()-2).isContemElse()){
-                listCondicoes.get(listCondicoes.size()-2).addMensagemElse(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensIf());
-                listCondicoes.get(listCondicoes.size()-2).addMensagemElse(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensElse());                
+            if(listConditions.get(listConditions.size()-2).isContainsElse()){
+                listConditions.get(listConditions.size()-2).addMensagemElse(listConditions.get(listConditions.size()-1).getTypesMessagesIf());
+                listConditions.get(listConditions.size()-2).addMensagemElse(listConditions.get(listConditions.size()-1).getTypesMessagesElse());                
             
             }else{
-                listCondicoes.get(listCondicoes.size()-2).addMensagemIf(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensIf());
-                listCondicoes.get(listCondicoes.size()-2).addMensagemIf(listCondicoes.get(listCondicoes.size()-1).getTiposMensagensElse());
+                listConditions.get(listConditions.size()-2).addMensagemIf(listConditions.get(listConditions.size()-1).getTypesMessagesIf());
+                listConditions.get(listConditions.size()-2).addMensagemIf(listConditions.get(listConditions.size()-1).getTypesMessagesElse());
             }
             
             
             // Inicio Parte do cÃ³digo que Ã© importante para o gerador de artefatos calcular o tamanho do bloco
-            int numIfCobertoPeloIf = listCondicoes.get(listCondicoes.size()-1).getNumIfCobertoPeloIf();
-            int numElseCobertoPeloIf = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloIf();
-            int numIfCobertoPeloElse=0, numElseCobertoPeloElse=0;
+            int numIfCoveredByIf = listConditions.get(listConditions.size()-1).getNumberIfCoveredByIf();
+            int numElseCoveredByIf = listConditions.get(listConditions.size()-1).getNumberElseCoveredByIf();
+            int numIfCoveredByElse=0, numElseCobertoPeloElse=0;
             
-            int numIfCobertoPeloIf2     = listCondicoes.get(listCondicoes.size()-2).getNumIfCobertoPeloIf();
-            int numElseCobertoPeloIf2   = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloIf();
-            int numIfCobertoPeloElse2   = listCondicoes.get(listCondicoes.size()-1).getNumIfCobertoPeloElse();
-            int numElseCobertoPeloElse2 = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloElse();
+            int numIfCoveredByIf2     = listConditions.get(listConditions.size()-2).getNumberIfCoveredByIf();
+            int numElseCoveredByIf2   = listConditions.get(listConditions.size()-1).getNumberElseCoveredByIf();
+            int numIfCoveredByElse2   = listConditions.get(listConditions.size()-1).getNumberIfCoveredByElse();
+            int numElseCoveredByElse2 = listConditions.get(listConditions.size()-1).getNumberElseCoveredByElse();
             
-            int contemElse=0;
-            if (listCondicoes.get(listCondicoes.size()-1).isContemElse()){
-                numIfCobertoPeloElse = listCondicoes.get(listCondicoes.size()-1).getNumIfCobertoPeloElse();
-                numElseCobertoPeloElse = listCondicoes.get(listCondicoes.size()-1).getNumElseCobertoPeloElse();
-                contemElse = 1;
+            int containsElse=0;
+            if (listConditions.get(listConditions.size()-1).isContainsElse()){
+                numIfCoveredByElse = listConditions.get(listConditions.size()-1).getNumberIfCoveredByElse();
+                numElseCobertoPeloElse = listConditions.get(listConditions.size()-1).getNumberElseCoveredByElse();
+                containsElse = 1;
                 
             }
             
-            if(listCondicoes.get(listCondicoes.size()-2).isContemElse()){
-                listCondicoes.get(listCondicoes.size()-2).setNumIfCobertoPeloElse(numIfCobertoPeloElse2+numIfCobertoPeloIf+numIfCobertoPeloElse+1);
-                listCondicoes.get(listCondicoes.size()-2).setNumElseCobertoPeloElse(numElseCobertoPeloElse2 + numElseCobertoPeloElse + numElseCobertoPeloIf +contemElse);
+            if(listConditions.get(listConditions.size()-2).isContainsElse()){
+                listConditions.get(listConditions.size()-2).setNumberIfCoveredByElse(numIfCoveredByElse2+numIfCoveredByIf+numIfCoveredByElse+1);
+                listConditions.get(listConditions.size()-2).setNumberElseCoveredByElse(numElseCoveredByElse2 + numElseCobertoPeloElse + numElseCoveredByIf +containsElse);
             }else{
-                listCondicoes.get(listCondicoes.size()-2).setNumIfCobertoPeloIf(numIfCobertoPeloIf2+numIfCobertoPeloIf+numIfCobertoPeloElse+1);
-                listCondicoes.get(listCondicoes.size()-2).setNumElseCobertoPeloIf(numElseCobertoPeloIf2 + numElseCobertoPeloElse + numElseCobertoPeloIf  + contemElse);
+                listConditions.get(listConditions.size()-2).setNumberIfCoveredByIf(numIfCoveredByIf2+numIfCoveredByIf+numIfCoveredByElse+1);
+                listConditions.get(listConditions.size()-2).setNumberElseCoveredByIf(numElseCoveredByIf2 + numElseCobertoPeloElse + numElseCoveredByIf  + containsElse);
             }
             // FIM calcular o tamanho do bloco
             
-            int numCondicoesCobertas = listCondicoes.get(listCondicoes.size()-2).getNumCondicoesCobertas();
-            listCondicoes.get(listCondicoes.size()-2).setNumCondicoesCobertas(numCondicoesCobertas+1);
+            int numCoveredConditions = listConditions.get(listConditions.size()-2).getNumberConditionsCovered();
+            listConditions.get(listConditions.size()-2).setNumberConditionsCovered(numCoveredConditions+1);
                     
-            listCondicoesProvisoria.add(listCondicoes.get(listCondicoes.size()-1));
-            listCondicoes.remove(listCondicoes.size()-1);
+            listConditionsProvisional.add(listConditions.get(listConditions.size()-1));
+            listConditions.remove(listConditions.size()-1);
         }else {
-            listCondicoesProvisoria.add(listCondicoes.get(listCondicoes.size()-1));
-            listCondicoes.remove(listCondicoes.size()-1);
+            listConditionsProvisional.add(listConditions.get(listConditions.size()-1));
+            listConditions.remove(listConditions.size()-1);
             
-            for (int i = listCondicoesProvisoria.size()-1; i >= 0; i--) {
-                storageDatas.addCondicao(listCondicoesProvisoria.get(i));
+            for (int i = listConditionsProvisional.size()-1; i >= 0; i--) {
+                storageDatas.addCondition(listConditionsProvisional.get(i));
             }
             
-            listCondicoesProvisoria = new ArrayList<>();
-            listCondicoes = new ArrayList<>();
+            listConditionsProvisional = new ArrayList<>();
+            listConditions = new ArrayList<>();
         }
     }
     
     
-    public void adicionaMensagemCondicao(Mensagem mensagem){
-        if (listCondicoes.size()>0){
-            if(listCondicoes.get(listCondicoes.size()-1).isContemElse()){
-                listCondicoes.get(listCondicoes.size()-1).addMensagemElse(mensagem);
+    public void addConditionMessage(Message mensagem){
+        if (listConditions.size()>0){
+            if(listConditions.get(listConditions.size()-1).isContainsElse()){
+                listConditions.get(listConditions.size()-1).addMensagemElse(mensagem);
             }else{
-                listCondicoes.get(listCondicoes.size()-1).addMensagemIf(mensagem);
+                listConditions.get(listConditions.size()-1).addMensagemIf(mensagem);
             }
         }
         
         if (listLoop.size()>0){
-            listLoop.get(listLoop.size()-1).addMensagemLoop(mensagem);
+            listLoop.get(listLoop.size()-1).addMessageLoop(mensagem);
         }
     }
 
@@ -645,34 +645,27 @@ public class Parser {
         return token;
     }
 
-    private boolean casa(int token_) {
-        if (token.getIdToken() == token_) {
-            return true;
-        }
-        return false;
-    }
-
-    public List<Atributo> obtemAtributes() {
-        List<Atributo> listAtributes = new ArrayList<>();
+    public List<Attribute> getAtributes() {
+        List<Attribute> listAtributes = new ArrayList<>();
         do {
             token = lexical.getToken();
 
             if (!token.getLexema().equals(")")) {
-                Atributo attribute = new Atributo();
-                String tipoAttribute = token.getLexema();
+                Attribute attribute = new Attribute();
+                String typeAttribute = token.getLexema();
 
                 token = lexical.getToken();
                 if (!token.getLexema().equals(")") && !token.getLexema().equals(",")) {
-                    attribute.setTipo(tipoAttribute);
-                    attribute.setDescricao(token.getLexema());
+                    attribute.setType(typeAttribute);
+                    attribute.setDescription(token.getLexema());
                     token = lexical.getToken(); //VÃ­rgula
                 } else {
-                    attribute.setDescricao(tipoAttribute);
-                    attribute.setTipo("String");
+                    attribute.setDescription(typeAttribute);
+                    attribute.setType("String");
                 }
                 
 
-                attribute.setDescricao(attribute.getDescricao().trim());
+                attribute.setDescription(attribute.getDescription().trim());
                 listAtributes.add(attribute);
             }
 

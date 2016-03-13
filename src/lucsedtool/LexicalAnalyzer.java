@@ -5,11 +5,11 @@
 package lucsedtool;
 
 public class LexicalAnalyzer {
-    //Quando insere Ponto (.) no final da descrição da Brief Description da erro.
+    //Quando insere Ponto (.) no final da descriï¿½ï¿½o da Brief Description da erro.
     
     private static SymbolTab symbolTab;
     //private static Token token;
-    public static Arquivo arq; 
+    public static Archive arq; 
     public static String stack;
     public static String buffer;  //memoria auxiliar
     int byt;
@@ -20,7 +20,7 @@ public class LexicalAnalyzer {
     public LexicalAnalyzer (String nomeArq){
         symbolTab = new SymbolTab();
         symbolTab.initialize();
-        arq = new Arquivo (nomeArq); //carrega arquivo para memoria        
+        arq = new Archive (nomeArq); //carrega arquivo para memoria        
         stack = "";
         buffer = "";
         byt=0;

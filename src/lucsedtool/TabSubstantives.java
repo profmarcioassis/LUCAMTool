@@ -14,24 +14,24 @@ import java.util.List;
  */
 public class TabSubstantives {
     
-    private List<String> listSubstantivos = new ArrayList<>();
+    private List<String> listSubstantives = new ArrayList<>();
 
     public TabSubstantives() {
-        listSubstantivos.add("message");
-        listSubstantivos.add("attributes");
-        listSubstantivos.add("dependencies");
-        listSubstantivos.add("informations");
-        listSubstantivos.add("request");
-        listSubstantivos.add("response");
-        listSubstantivos.add("list");
-        listSubstantivos.add("schedule");
-        listSubstantivos.add("prerequisites");
-        listSubstantivos.add("response");
+        listSubstantives.add("message");
+        listSubstantives.add("attributes");
+        listSubstantives.add("dependencies");
+        listSubstantives.add("informations");
+        listSubstantives.add("request");
+        listSubstantives.add("response");
+        listSubstantives.add("list");
+        listSubstantives.add("schedule");
+        listSubstantives.add("prerequisites");
+        listSubstantives.add("response");
     }
  
     public boolean isContem(String substantive){
-        for (int i = 0; i < listSubstantivos.size(); i++) {
-            if (listSubstantivos.get(i).equalsIgnoreCase(substantive)){
+        for (int i = 0; i < listSubstantives.size(); i++) {
+            if (listSubstantives.get(i).equalsIgnoreCase(substantive)){
                 return true;
             }
         }

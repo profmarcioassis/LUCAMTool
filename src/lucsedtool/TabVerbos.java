@@ -13,15 +13,15 @@ import java.util.List;
  * @author Marcos
  */
 public class TabVerbos {
-    public static final int ClasseVerbosEntidadeSemRetorno = 1;
-    public static final int ClasseVerbosEntidadeComRetorno = 2;
-    public static final int ClasseVerbosValidacao = 3;
-    public static final int ClasseVerbosPrecedemMetodos = 4;
-    public static final int ClasseVerbosRetornoNaClasseFronteira = 5;
-    public static final int ClasseVerbosProcessamentoController = 6;
+    public static final int ClassVerbsEntityNoReturn = 1;
+    public static final int ClassVerbsEntityReturn = 2;
+    public static final int ClassVerbsValidation = 3;
+    public static final int ClassVerbsAboveMethods = 4;
+    public static final int ClassVerbsReturnInBoundaryClass = 5;
+    public static final int ClassVerbsProcessingController = 6;
     
     
-    private  List<Verbo> verbList = new ArrayList<>();
+    private  List<Verb> verbList = new ArrayList<>();
 
     public TabVerbos() {
         initialize();
@@ -30,38 +30,38 @@ public class TabVerbos {
     
     
     public final void initialize() {
-        verbList.add(new Verbo("validates",ClasseVerbosValidacao));
-        verbList.add(new Verbo("saves",ClasseVerbosEntidadeSemRetorno));
-        verbList.add(new Verbo("deletes",ClasseVerbosEntidadeSemRetorno));
-        verbList.add(new Verbo("updates",ClasseVerbosEntidadeSemRetorno));
-        verbList.add(new Verbo("modifies",ClasseVerbosEntidadeSemRetorno));
-        verbList.add(new Verbo("deducts",ClasseVerbosEntidadeSemRetorno));
-        verbList.add(new Verbo("credits",ClasseVerbosEntidadeSemRetorno));
-        verbList.add(new Verbo("retrieves",ClasseVerbosEntidadeComRetorno));
-        verbList.add(new Verbo("searches",ClasseVerbosEntidadeComRetorno));
-        verbList.add(new Verbo("selects",ClasseVerbosPrecedemMetodos));
-        verbList.add(new Verbo("displays",ClasseVerbosRetornoNaClasseFronteira));
-        verbList.add(new Verbo("requests",ClasseVerbosRetornoNaClasseFronteira));
-        verbList.add(new Verbo("verifies",ClasseVerbosProcessamentoController));
-        verbList.add(new Verbo("generates",ClasseVerbosProcessamentoController));
+        verbList.add(new Verb("validates",ClassVerbsValidation));
+        verbList.add(new Verb("saves",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("deletes",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("updates",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("modifies",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("deducts",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("credits",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("retrieves",ClassVerbsEntityReturn));
+        verbList.add(new Verb("searches",ClassVerbsEntityReturn));
+        verbList.add(new Verb("selects",ClassVerbsAboveMethods));
+        verbList.add(new Verb("displays",ClassVerbsReturnInBoundaryClass));
+        verbList.add(new Verb("requests",ClassVerbsReturnInBoundaryClass));
+        verbList.add(new Verb("verifies",ClassVerbsProcessingController));
+        verbList.add(new Verb("generates",ClassVerbsProcessingController));
                 
         //Analisar se os verbos sem retorno precisam ser especificados
-        //Se ele não pertence a classe de verbos de validação ou verbos que exigem retorno, consquentemente
-        //A sua respectivia classe seria as dos verbos que manipulam entidades e não necessitam de retorno.
+        //Se ele nï¿½o pertence a classe de verbos de validaï¿½ï¿½o ou verbos que exigem retorno, consquentemente
+        //A sua respectivia classe seria as dos verbos que manipulam entidades e nï¿½o necessitam de retorno.
         
         //Verbos que precedem metodos nÃ£o precisam ser identificados, pois metodos vem entre aspas
     }
     
     public int getClasseVerbo(String verbo){
         for (int i = 0; i < verbList.size(); i++) {
-            if(verbList.get(i).getVerbo().equals(verbo)){
-                return verbList.get(i).getClasse();
+            if(verbList.get(i).getVerb().equals(verbo)){
+                return verbList.get(i).getEquivalenceClass();
             }
         }
         return -1;
     }
     
-    public List<Verbo> getVerbList(){
+    public List<Verb> getVerbList(){
         return verbList;
     }
 }

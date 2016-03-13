@@ -15,9 +15,9 @@ public class LUCSEDTool {
      * @param args the command line arguments
      */
     
-    private static String diretorio="";
-    public String getDiretorio(){
-        return diretorio; 
+    private static String directory="";
+    public String getDirectory(){
+        return directory; 
     }
     
     public static void main(String[] args) {
@@ -33,7 +33,7 @@ public class LUCSEDTool {
       //Parser parser = new Parser("D:\\FORMATAR\\NetBeans Project\\LUCSEDTool\\CasosDeTeste\\Diagramas\\Banco\\CRUDBankAccount.txt");
       
         
-        LUCSEDToolFormulario lucsedFormulario = new LUCSEDToolFormulario();
+        LUCSEDToolForm lucsedFormulario = new LUCSEDToolForm();
         lucsedFormulario.setVisible(true);
     }
     
