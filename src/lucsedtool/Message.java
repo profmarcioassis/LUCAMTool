@@ -5,7 +5,8 @@
  */
 package lucsedtool;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+//import com.sun.xml.internal.ws.util.StringUtils;
+import com.sun.xml.ws.util.StringUtils;
 
 /**
  *
