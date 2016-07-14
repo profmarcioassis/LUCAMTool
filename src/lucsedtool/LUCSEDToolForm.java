@@ -165,6 +165,7 @@ public class LUCSEDToolForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         Thread t = new Thread(new Runnable() {
+            
             @Override
             public void run() {
                 jbLocalDiagramaGerado.setEnabled(false);
@@ -172,10 +173,15 @@ public class LUCSEDToolForm extends javax.swing.JFrame {
                 
                 progressoGenerate.setValue(10);
                 jlSituacaoGenerate.setText("Generating diagram...");
-                
-                Parser parser = new Parser(arq.getAbsolutePath());
+                //storage.clean();
+                try {
+                    Parser parser = new Parser(arq.getAbsolutePath());
+                } catch (IOException ex) {
+                    Logger.getLogger(LUCSEDToolForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 progressoGenerate.setValue(50);
                 
+                //SEM ESSA LINHA NÃO FUNCIONA
                 GenerateArtifacts generate = new GenerateArtifacts();
                 progressoGenerate.setValue(100);
                 

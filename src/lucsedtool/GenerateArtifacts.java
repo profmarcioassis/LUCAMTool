@@ -81,6 +81,8 @@ public class GenerateArtifacts {
     SequenceDiagramEditor diagramEditor;
 
     List<INodePresentation> listNode;
+    IPackage packSequenceDiagram;
+    
 
     private ILinkPresentation linkPresentationAtual;
 
@@ -88,7 +90,7 @@ public class GenerateArtifacts {
 
     public void exec(String name) throws ClassNotFoundException, LicenseNotFoundException,
             ProjectNotFoundException, IOException, ProjectLockedException, com.change_vision.jude.api.inf.exception.ProjectNotFoundException, InvalidEditingException, com.change_vision.jude.api.inf.exception.ProjectLockedException {
-
+//storageDatas.getListConditions();
         projectAccessor = AstahAPI.getAstahAPI().getProjectAccessor();
         try {
             projectAccessor.create(name);
@@ -118,6 +120,7 @@ public class GenerateArtifacts {
 
     }
 
+    ISequenceDiagram iSequenceDiagram=null;
     private void createSequenceDiagram() throws com.change_vision.jude.api.inf.exception.ProjectNotFoundException, ClassNotFoundException, InvalidEditingException, InvalidUsingException {
         projectAccessor = ProjectAccessorFactory.getProjectAccessor();
         IModel project = projectAccessor.getProject();
@@ -128,7 +131,7 @@ public class GenerateArtifacts {
 
         UseCaseDiagramEditor ucde = projectAccessor.getDiagramEditorFactory().getUseCaseDiagramEditor();
         IPackage packUseCase = bme.createPackage(project, "Use Case");
-        IPackage packSequenceDiagram = bme.createPackage(project, "Sequence Diagram");
+        packSequenceDiagram = bme.createPackage(project, "Sequence Diagram");
         IPackage packClassDiagram = bme.createPackage(project, "Class Diagram");
 
         IDiagram iClassDiagram = cde.createClassDiagram(packClassDiagram, "ClassDiagram");
@@ -285,7 +288,8 @@ public class GenerateArtifacts {
         List<String> listStates = storageDatas.getListStatesDiagram();
         int countStates = 0;
         for (int i = 0; i < sequenceDiagramList.size(); i++) {
-            diagramEditor.createSequenceDiagram(packSequenceDiagram, (i + 1) + "_" + sequenceDiagramList.get(i).getName());
+            iSequenceDiagram =diagramEditor.createSequenceDiagram(packSequenceDiagram, (i + 1) + "_" + sequenceDiagramList.get(i).getName());
+            
             List<StorageClass> listCoveredClasses = sequenceDiagramList.get(i).getListCoveredClass();
             listNode = new ArrayList<>();
 
@@ -330,6 +334,9 @@ public class GenerateArtifacts {
                     case "Loop":
                         createBlockLoop();
                         break;
+                    case "INTERACTION":
+                        createInteractionUse();
+                        break;
 
                     case "Alternative":
                         exit = true;
@@ -353,6 +360,29 @@ public class GenerateArtifacts {
         countMessages++;
         return listMessages.get(countMessages);
     }
+    
+    List<InteractionUse> interactionList = storageDatas.getListInteractionUse();
+    public void createInteractionUse() throws InvalidEditingException, InvalidUsingException{
+
+        //SequenceDiagramEditor diagramEditor2;
+        //diagramEditor2 = projectAccessor.getDiagramEditorFactory().getSequenceDiagramEditor();
+        
+        //diagramEditor2 = diagramEditor;
+        
+        //diagramEditor.createSequenceDiagram(packSequenceDiagram, 10 + "_" + "Teste");
+        //diagramEditor.createInteractionUse("Teste1", "Teste2",null , new Point2D.Double(500,position-20), 100, 250);
+        //position+=30;
+        //diagramEditor = diagramEditor2;
+        
+        //DICA: Criar todos os diagramas que são referenciados primeiro.
+        //Quebrar cada interação em uma nova
+        //int pos = interactionList.size()-1;
+        
+        diagramEditor.createNote("ref\n\n"+interactionList.get(0).getInteractionDescricao(), new Point2D.Double(500,position-20));
+        interactionList.remove(0);
+        
+        position+=90;
+    }
 
     public void createReturnMessage() throws InvalidEditingException {
 
@@ -363,6 +393,7 @@ public class GenerateArtifacts {
 
         try {
             linkPresentationAtual = diagramEditor.createReturnMessage(mensagem.getMessage(), linkPresentationAtual);
+            
         } catch (Exception e) {
 
             INodePresentation obj1 = FindNodeByLabel(mensagem.getClassSender().getName());
@@ -389,6 +420,7 @@ public class GenerateArtifacts {
             INodePresentation obj3 = FindNodeByLabel(storageDatas.getControllerClass().getName());
             linkPresentationAtual = diagramEditor.createMessage(message.getMessage(), obj1, obj3, position);
             //posicao += 50;
+            
 
             linkPresentationAtual = diagramEditor.createMessage(message.getMessage(), linkPresentationAtual.getTarget(), obj2, position);
             position += 10;
@@ -397,6 +429,7 @@ public class GenerateArtifacts {
             linkPresentationAtual = diagramEditor.createMessage(message.getMessage(), obj1, obj3, position);
             //linkPresentationAtual = diagramEditor.createMessage(mensagem.getMensagem(), linkPresentationAtual.getTarget(), obj2, posicao);
         } else {
+            //System.err.println(message.getMessage());
             linkPresentationAtual = diagramEditor.createMessage(message.getMessage(), obj1, obj2, position);
         }
 
@@ -430,6 +463,8 @@ public class GenerateArtifacts {
         }
 
         sizeLoop += MeasureSpaceLoop;
+        sizeLoop+= loop.getNumberElseCoverage()*MeasureSpaceAfterElse;
+        sizeLoop+= loop.getNumberIfCoverage()*MeasureSpaceAfterIf;
 
         loop.setMeasureLoopBlock(sizeLoop);
 
@@ -455,6 +490,7 @@ public class GenerateArtifacts {
 
         sizeIf += MeasureSpaceAfterIf;
         sizeIf += condition.getNumberIfCoveredByIf() * MeasureSpaceAfterIf + condition.getNumberElseCoveredByIf() * MeasureSpaceAfterElse;
+        sizeIf += condition.getNumberLoopCoveredByIf()*MeasureSpaceLoop;
         sizeIf += condition.getNumberIfCoveredByIf() * 10;
 
         if (condition.isContainsElse()) {
@@ -471,7 +507,8 @@ public class GenerateArtifacts {
             }
 
             sizeElse += condition.getNumberIfCoveredByElse() * MeasureSpaceAfterIf + condition.getNumberElseCoveredByElse() * MeasureSpaceAfterElse;
-
+            sizeElse+= condition.getNumberLoopCoveredByElse()*MeasureSpaceLoop;
+            
             condition.setMeasureBlockElse(sizeElse);
         }
 
@@ -494,6 +531,10 @@ public class GenerateArtifacts {
                 sizeMessage = MeasureAutoMessage + MeasureSpaceBetweenPosts;
                 containsAutoMessage = true;
                 break;
+            //default:
+             //   sizeMessage = MeasureDirectMessage + MeasureSpaceBetweenPosts;
+             ///   break;
+            
         };
         return sizeMessage;
     }
@@ -532,6 +573,10 @@ public class GenerateArtifacts {
                 }
             }
         }
+        
+        if (posf < poso){
+            posf=-1;
+        }
 
         List<Integer> listReturn = new ArrayList<>();
         listReturn.add(poso);
@@ -551,6 +596,9 @@ public class GenerateArtifacts {
         if (loop.isContainsAutoMessage()) {
             loop.setMeasureEndPosition(loop.getMeasureEndPosition() + 80);
         }
+        
+        loop.setMeasureStartPosition(loop.getMeasureStartPosition()- loop.getNumberIfCoverage()*10);
+        loop.setMeasureEndPosition(loop.getMeasureEndPosition()+ loop.getNumberIfCoverage()*10);
     }
 
     public void calculateStartEndPositionConditionalBlock(Condition conditions) {
@@ -559,8 +607,13 @@ public class GenerateArtifacts {
         int poso = listPosicoes.get(0);
         int posf = listPosicoes.get(1);
 
-        conditions.setMeasureStartingPosition((poso * MeasureSpaceBetweenLifeLines) - (conditions.getNumberConditionsCovered() * 10));
-        conditions.setMeasureEndPosition(((posf - poso) * MeasureSpaceBetweenLifeLines + 80) + (conditions.getNumberConditionsCovered() * 20));
+        conditions.setMeasureStartingPosition((poso * MeasureSpaceBetweenLifeLines) - ((conditions.getNumberConditionsCovered()+conditions.getNumberLoopCoveredByElse()+conditions.getNumberLoopCoveredByIf()) * 10));
+        if (posf!=-1){
+        conditions.setMeasureEndPosition(((posf - poso) * MeasureSpaceBetweenLifeLines + 80) + (conditions.getNumberConditionsCovered()+conditions.getNumberLoopCoveredByElse()+conditions.getNumberLoopCoveredByIf()) * 20);    
+        }else{
+        conditions.setMeasureEndPosition(((poso) * MeasureSpaceBetweenLifeLines +20) + (conditions.getNumberConditionsCovered()+conditions.getNumberLoopCoveredByElse()+conditions.getNumberLoopCoveredByIf()) * 20);    
+        }
+        
 
         if (conditions.isContainsAutoMessage()) {
             conditions.setMeasureEndPosition(conditions.getMeasureEndPosition() + 40);

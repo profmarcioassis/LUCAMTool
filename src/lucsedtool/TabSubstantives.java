@@ -26,7 +26,17 @@ public class TabSubstantives {
         listSubstantives.add("list");
         listSubstantives.add("schedule");
         listSubstantives.add("prerequisites");
-        listSubstantives.add("response");
+        listSubstantives.add("record");
+        listSubstantives.add("notification");
+        listSubstantives.add("file");
+        listSubstantives.add("files");
+        listSubstantives.add("justification");
+        listSubstantives.add("privileges");
+        listSubstantives.add("permission");
+        listSubstantives.add("UI");
+        listSubstantives.add("interface");
+        listSubstantives.add("operation");
+       
     }
  
     public boolean isContem(String substantive){

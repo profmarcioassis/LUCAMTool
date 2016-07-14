@@ -33,7 +33,9 @@ public class TabVerbos {
         verbList.add(new Verb("validates",ClassVerbsValidation));
         verbList.add(new Verb("saves",ClassVerbsEntityNoReturn));
         verbList.add(new Verb("deletes",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("disables",ClassVerbsEntityNoReturn));
         verbList.add(new Verb("updates",ClassVerbsEntityNoReturn));
+        verbList.add(new Verb("includes",ClassVerbsEntityNoReturn));
         verbList.add(new Verb("modifies",ClassVerbsEntityNoReturn));
         verbList.add(new Verb("deducts",ClassVerbsEntityNoReturn));
         verbList.add(new Verb("credits",ClassVerbsEntityNoReturn));
@@ -46,10 +48,10 @@ public class TabVerbos {
         verbList.add(new Verb("generates",ClassVerbsProcessingController));
                 
         //Analisar se os verbos sem retorno precisam ser especificados
-        //Se ele nï¿½o pertence a classe de verbos de validaï¿½ï¿½o ou verbos que exigem retorno, consquentemente
-        //A sua respectivia classe seria as dos verbos que manipulam entidades e nï¿½o necessitam de retorno.
+        //Se ele não pertence a classe de verbos de validaïção ou verbos que exigem retorno, consquentemente
+        //A sua respectivia classe seria as dos verbos que manipulam entidades e não necessitam de retorno.
         
-        //Verbos que precedem metodos nÃ£o precisam ser identificados, pois metodos vem entre aspas
+        //Verbos que precedem metodos não precisam ser identificados, pois metodos vem entre aspas
     }
     
     public int getClasseVerbo(String verbo){

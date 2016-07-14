@@ -1,225 +1,217 @@
-/**
- * @author thiago
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-
 package lucsedtool;
 
+//import com.sun.xml.internal.ws.util.StringUtils;
+
+import com.sun.xml.ws.util.StringUtils;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import lucsedtool.SymbolTab;
+import lucsedtool.Token;
+
+/**
+ *
+ * @author Marcos
+ */
 public class LexicalAnalyzer {
-    //Quando insere Ponto (.) no final da descriï¿½ï¿½o da Brief Description da erro.
+
     
+    private File file;
+    private static List<Token> tokenList = new ArrayList<>();
+    private static List<Token> tokenListReturn = new ArrayList<>();
     private static SymbolTab symbolTab;
-    //private static Token token;
-    public static Archive arq; 
-    public static String stack;
-    public static String buffer;  //memoria auxiliar
-    int byt;
-    /**
-     * construtor
-     * @param nomeArq: nome do arquivo
-     */
-    public LexicalAnalyzer (String nomeArq){
+    private static int proxId;
+    
+    public LexicalAnalyzer(String nomeArq) throws IOException {
         symbolTab = new SymbolTab();
         symbolTab.initialize();
-        arq = new Archive (nomeArq); //carrega arquivo para memoria        
-        stack = "";
-        buffer = "";
-        byt=0;
         
+        tokenList = new ArrayList<>();
+        tokenListReturn = new ArrayList<>();
+        proxId=0;
+        exec(nomeArq);
         
-    }//end construtor
+    }
+      
     
     
-    /**
-     * Metodo que le char a char do arquivo ate completar um lexema;
-     * Depois, insere esse lexema na SymbolTab caso possÃ­vel.
-     * @return: Token
-     */
-    public Token getToken (){        
-        Token token = new Token ();                     
-        String lexema = obterLexema();         
-                                                        
-        if (isId(lexema)){                  //is identificador?
-            token = addOnTable(lexema); 
-        }//
-        else if (isNumber(lexema)){         //is number?
-                token = addOnTable (lexema); 
-             }
-        else if (isQuoteMark(lexema.charAt(0))){ //is aspas?
-                token = addOnTable (lexema);                
-             }
-        else if (isSignLess(lexema.charAt(0))){ //is sinal menor < ?
-                token = addOnTable (lexema);
-             }
-        else if (isText(lexema)){ //is texto?
-                token = addOnTable (lexema);
-            }
-        else if (isSignLarge(lexema.charAt(0))){ //is sinal maior > ?
-                token = addOnTable (lexema);
-            }
-        else if (isLparenthese(lexema.charAt(0))){ //is abre parentese ?
-                token = addOnTable (lexema);
-            }
-        else if (isRparenthese(lexema.charAt(0))){ //is fecha parentese ?
-                token = addOnTable (lexema);
-            }
-        else if (isComma(lexema.charAt(0))){ //is virgula ?
-                token = addOnTable (lexema);
-            }                       
-            //else //"deve haver um tratamento de erro aki"
-              // System.out.println("deve haver um tratamento de erro aqui");
-        
-        return token;
-    }// end getToken
-    
-    
-    /**
-     * Metodo que ler proximo lexema 
-     * @return: retorna o lexema
-     */
-    private String obterLexema (){
-        String lexema = "";               
-        int controle = 0;
-        //byt = 0;
-        
-        if (buffer == ""){           //se "memoria" vazia
-            byt = arq.readByte();    //ler proximo caracter
-            
-            //System.out.println("Byte: "+byt);
-        
-            //32 = espaÃ§o em branco
-            while ( (byt != 32 ||(lexema.equals("")||stack!=""))  && (controle != 1) && ((byt != 13)||lexema.equals(""))){ //espaco branco e quebra linha            
-            //System.out.println("Byte: "+byt);
-                while (byt == 10 || (byt == 13) || (byt == 32) || (byt == 9)){
-                    byt = arq.readByte(); 
-                }
-                if ( isQuoteMark((char)byt) ){ //is aspas?
-                    if (stack == ""){  //pilha vazia?
-                        lexema = "\"";
-                        controle = 1;   //sair do while
-                        stack = stack + '\"';
-                    }else{  //se pilha nao tiver vazio
-                        stack = "";  //esvaziar stack
-                        buffer = "\"";  //guardando proximo token
-                        controle = 1;  //sair do while
-                        //lexema = "\"";
-                    }//end if
-                }
-                else if(isSignLess((char)byt)){ //is sinal de menor
-                        if (stack == ""){
-                            lexema = "<";
-                            controle = 1; //sair do while
-                            buffer = "<";
-                        }//end if
-                    }
-                else if (isLparenthese((char)byt)){ //is abre parentese?
-                        if (stack == ""){
-                            lexema = "(";
-                            controle = 1; //sair do while
-                            buffer = "(";
-                        }//end if
-                    }
-                else if(byt == '.'){
-                    if (stack != ""){
-                        lexema+=".";
-                        byt = arq.readByte(); 
-                    }else if (lexema.equals("")){
-                        lexema=".";
-                        controle = 1;
-                    }else{
-                        buffer=".";
-                        controle = 1;
-                    }
-                    
-                }else if (byt == ':'){
-                    buffer="";
-                    controle = 1; 
-                    lexema+= ":";
-                }
-                else{
-                    lexema = lexema + (char)byt;
-                    byt = arq.readByte();   //ler proximo caracter
-                    //System.out.println("BYTE: "+byt);
-                }
-            }//end while                                        
+    public static enum TokenType {
+
+        COMENTSBLOCK("/\\*(.)*(.)*\\*/"), COMENTSBLOCK1("/\\*(.)*"),COMENTSBLOCK2("(.)*\\*/"), COMMENTSLINE("(#|//).*$"),  PARENTESES("(\\(|\\)|\\[|\\]|\\{|\\}|;)"), PONTOVIRGULA("(\\,|\\.)"), ASPASSIMPLES("'"), ASPASDUPLAS("\""),PALAVRA("[\\w|\\d|ç|à-ú|À-Ú|_]+"),
+            SYMBOLS("(: | - )");
+        public final String pattern;
+
+        private TokenType(String pattern) {
+            this.pattern = pattern;
         }
-        else if (buffer == "\""){ //is aspas?
-                lexema = buffer;  //passar buffer para lexema
-                buffer = ""; //esvaziar "memoria"
-                byt = arq.readByte(); //lendo espaco em branco
-                if(byt == '.'){
-                    buffer = ".";
-                }
-            }//end if
-        else if (buffer == "<"){  //is sinal de menor?
-                byt = arq.readByte(); //ler proximo caracter                 
-                while ( !(isSignLarge( (char)byt ) ) ){ //enquanto nao aparece sinal de maior >
-                    lexema = lexema + (char)byt;
-                    byt = arq.readByte(); //ler proximo caracter
-                }//end while            
+    }
+    
+    public static ArrayList<Token> lex(String input, int linha) {
+        // The tokens to return
+        ArrayList<Token> tokens = new ArrayList<Token>();
+
+        // Lexer logic begins here
+        StringBuffer tokenPatternsBuffer = new StringBuffer();
+        for (TokenType tokenType : TokenType.values()) {
+            tokenPatternsBuffer.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
+        }
+        Pattern tokenPatterns = Pattern.compile(new String(tokenPatternsBuffer.substring(1)));
+
+        // Begin matching tokens
+        Matcher matcher = tokenPatterns.matcher(input);
+        while (matcher.find()) {
+
+            if (matcher.group(TokenType.COMENTSBLOCK1.name()) != null) {
+                Token token = new Token();
+                token.setLexema("/*");
+                tokens.add(token);
+                continue;
+            }else if (matcher.group(TokenType.COMENTSBLOCK2.name()) != null) {
+                Token token = new Token();
+                token.setLexema("*/");
+                tokens.add(token);
+                continue;
+            } else if (matcher.group(TokenType.PALAVRA.name()) != null) {
+                Token token = new Token();
+                token.setLexema(matcher.group(TokenType.PALAVRA.name()));
+                tokens.add(token);
+                continue;
+            } else if (matcher.group(TokenType.PARENTESES.name()) != null) {
+                Token token = new Token();
+                token.setLexema(matcher.group(TokenType.PARENTESES.name()));
+                tokens.add(token);
+                continue;
+            } else if (matcher.group(TokenType.PONTOVIRGULA.name()) != null) {
+                Token token = new Token();
+                token.setLexema(matcher.group(TokenType.PONTOVIRGULA.name()));
+                tokens.add(token);
+                continue;
                 
-                buffer = ">"; 
-            }
-        else if (buffer == ">"){ //is sinal de maior?
-                lexema = buffer;  //passar buffer para lexema
-                buffer = "";  //esvaziar "memoria"
-                byt = arq.readByte(); //ler espaco em branco
-            }//end if
-        else if (buffer == "("){ //is abre parenteses
-                byt = arq.readByte(); //ler proximo caracter
-                int cont = 0; //controle
-                
-                if (stack == ""){ //pilha vazia?
-                    while ( !(isRparenthese((char)byt)) && (cont ==0) ){ //enquanto nao aparece fecha parenteses
-                    
-                        if ((char)byt != ','){                    
-                            lexema = lexema + (char)byt;
-                            byt = arq.readByte(); //ler proximo caracter  
-                            if ((byt == 32) ){ //32 = espaÃ§o em branco
-                                return lexema;
-                            }//Teste
-                            if ((char)byt == ')'){  //is fecha parenteses?
-                                cont = 1; //sair do while
-                                buffer = ")";
-                            }//end if
-                        }
-                        else {
-                            stack = ",";
-                            cont = 1; //sair do while
-                        }//end if                    
-                       
-                    }//end while
-                }//
-                else if (stack == ","){
-                        lexema = stack;
-                        stack = "";    //esvaziar pilha                     
-                    }//end if                                            
-            }//end if
-        else if (buffer == ")"){ //is fecha parenteses
-                lexema = buffer;  //passar buffer para lexema
-                buffer = "";  //esvaziar buffer
-                byt = arq.readByte(); //ler espaco em branco
-            }//end if
-        else if(buffer == "."){
-            lexema = ".";
-            buffer="";
-            //byt = arq.readByte();
-        }else if(buffer == ":"){
-            lexema = ":";
-            buffer="";
-            byt = arq.readByte();
+            } else if (matcher.group(TokenType.ASPASSIMPLES.name()) != null) {
+                Token token = new Token();
+                token.setLexema(matcher.group(TokenType.ASPASSIMPLES.name()));
+                tokens.add(token);
+                continue;
+            } else if (matcher.group(TokenType.ASPASDUPLAS.name()) != null) {
+                Token token = new Token();
+                token.setLexema(matcher.group(TokenType.ASPASDUPLAS.name()).trim());
+                tokens.add(token);
+                continue;
+            } else if (matcher.group(TokenType.SYMBOLS.name()) != null) {
+                Token token = new Token();
+                token.setLexema(matcher.group(TokenType.SYMBOLS.name()).trim());
+                tokens.add(token);
+                continue;
+            } 
+
         }
 
-        controle = 0;   
-        return lexema;
-    }//end obterLexema 
+        return tokens;
+    }
     
     
-    /**
-     * metodo que insere "Token" na tabela de simbolos
-     * @param lexema: lexema a ser inserido na tabela de simbolos
-     * @return: retorna o Token que foi inserido na tabela de simbolos
-     */
-    private Token addOnTable (String lexema){
+    private void exec(String nomeArq) throws FileNotFoundException, IOException {
+
+        file = new File(nomeArq);
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+
+        String lineInput = reader.readLine();
+        int i = 1;
+
+        do {
+
+            ArrayList<Token> tokens = lex(lineInput, i);
+
+            for (Token token : tokens) {
+
+                tokenList.add(token);
+                
+            }
+
+            lineInput = reader.readLine();
+            i++;
+        } while (lineInput != null);
+
+        
+        
+        
+        
+        for (int j = 0; j < tokenList.size(); j++) {
+            if (tokenList.get(j).getLexema().equalsIgnoreCase("/*")){
+                do{
+                    j++;
+                }while (!tokenList.get(j).getLexema().equalsIgnoreCase("*/")); 
+                    //j++;
+            }else{
+                if (tokenList.get(j).getLexema().equalsIgnoreCase("\"")){
+                    tokenListReturn.add(tokenList.get(j));
+
+                    j++;
+                    Token t = tokenList.get(j);
+                    String tok = "";
+                    while(!t.getLexema().equalsIgnoreCase("\"")){
+                        //tokenList.add(t);
+                        tok+=StringUtils.capitalize(t.getLexema());
+                        j++;
+                        t = tokenList.get(j);
+                    }
+                    t = new Token();
+                    t.setLexema(tok);
+                    tokenListReturn.add(t);
+
+                    tokenListReturn.add(tokenList.get(j));
+
+                }else if(tokenList.get(j).getLexema().equalsIgnoreCase("\'")){
+
+                    tokenListReturn.add(tokenList.get(j));
+
+                    j++;
+                    Token t = tokenList.get(j);
+                    String tok = "";
+                    while(!t.getLexema().equalsIgnoreCase("'")){
+                        //tokenList.add(t);
+                        tok+=StringUtils.capitalize(t.getLexema());
+                        j++;
+                        t = tokenList.get(j);
+                    }
+                    t = new Token();
+                    t.setLexema(tok);
+                    tokenListReturn.add(t);
+
+                    tokenListReturn.add(tokenList.get(j));
+
+                }else{
+                    tokenListReturn.add(tokenList.get(j));
+                } 
+            }
+            
+        }
+        
+    }
+    
+    
+    
+    public Token getToken(){
+        Token t = tokenListReturn.get(proxId);
+        proxId++;
+        
+        return addOnTable(t.getLexema());
+    }
+    
+    private static Token addOnTable (String lexema){
         Token tok = new Token ();             
         byte idprox;  //proximo token a ser inserido na SymbolTab
         
@@ -236,106 +228,5 @@ public class LexicalAnalyzer {
         
         
         return tok;
-    }//end addOnTable
-    
-    
-    /**
-      *Funcao que verifica se um caracter e numero
-      *@param numero: string a ser testado
-      *@return : true para sim ou false para nao
-    */
-    private boolean isNumber ( String num ){
-        boolean resp = true;
-        for (int i=0; i < num.length(); i++){
-            if (!(num.charAt(i) >= '0' && num.charAt(i) <= '9'))
-                resp = false;
-        }//end for        
-        return resp;    
-    }//end isNumber
-    
-    
-    /**
-     * Funcao que verifica se um caracter e letra
-     * @param id: string a ser testada
-     * @return: true para sim ou false para nao
-     */
-    private boolean isId (String id){
-        boolean resp = true;
-        
-        if ( (id.charAt(0) >= 'a' && id.charAt(0) <= 'z') ||
-             (id.charAt(0) >= 'A' && id.charAt(0) <= 'Z') ){  //se comeca com letra
-        
-            for (int i = 1; i < id.length(); i++){
-                if ( !((id.charAt(i) >= 'a' && id.charAt(i) <= 'z') ||
-                       (id.charAt(i) >= 'A' && id.charAt(i) <= 'Z') ||
-                       (id.charAt(i) >= '0' && id.charAt(i) <= '9')) )
-                    resp = false;
-            }//end for                       
-        }
-        else 
-            resp = false;//end if
-        
-        return resp;
-    }//end isId
-    
-    
-    /**
-     * Funcao que verifica se um caracter e aspas
-     */
-    private boolean isQuoteMark (char c){               
-        return ( (c == '\'') || (c == '\"') );
-    }//end isQuoteMark '\"
-    
-    
-    /**
-     * Funcao que verifica se um caracter e abre parenteses
-     */
-    private boolean isLparenthese (char c){
-        return (c == '(');
-    }//end isLbroket
-    
-    
-    /**
-     * Funcao que verifica se um caracter e fecha parenteses
-     */
-    private boolean isRparenthese (char c){
-        return (c == ')');
-    }//end isRparenthese
-    
-    
-    /**
-     * Funcao que verifica se um caracter e virgula
-     */
-    private boolean isComma (char c){
-        return (c == ',');
-    }//end isComma
-    
-    
-    /**
-     * Funcao que verifica se um caracter tem sinal de menor <
-     */
-    private boolean isSignLess (char c){
-        return (c == '<');
-    }//end isSignLess
-    
-    
-    /**
-     * Funcao que verifica se um caracter tem sinal de maior >
-     */
-    private boolean isSignLarge (char c){
-        return (c == '>');
-    }//end isSignLarge
-    
-    
-    /**
-     * Funcao que verifica se uma string Ã© texto
-     */
-    private boolean isText (String text){                            
-        return true;
-    }//end isText       
-    
-}//end class LexicalAnalyzer
-
-/**
- * esta lendo letra a letra
- */
+    }//end addOnTable    
+}

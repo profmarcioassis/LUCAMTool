@@ -21,6 +21,10 @@ public class Loop {
     private int measureEndPosition =0;
     private int measureLoopBlock = 0;
     private boolean containsAutoMessage = false;
+    private int numberIfCoverage = 0;
+    private int numberElseCoverage = 0;
+    
+    
 
     public void addMessageLoop(Message message){
         getListCoveredMessages().add(message);
@@ -138,6 +142,34 @@ public class Loop {
      */
     public void setContainsAutoMessage(boolean containsAutoMessage) {
         this.containsAutoMessage = containsAutoMessage;
+    }
+
+    /**
+     * @return the numberIfCoverage
+     */
+    public int getNumberIfCoverage() {
+        return numberIfCoverage;
+    }
+
+    /**
+     * @param numberIfCoverage the numberIfCoverage to set
+     */
+    public void addNumberIfCoverage() {
+        this.numberIfCoverage++;
+    }
+
+    /**
+     * @return the numberElseCoverage
+     */
+    public int getNumberElseCoverage() {
+        return numberElseCoverage;
+    }
+
+    /**
+     * @param numberElseCoverage the numberElseCoverage to set
+     */
+    public void addNumberElseCoverage() {
+        this.numberElseCoverage++;
     }
     
     

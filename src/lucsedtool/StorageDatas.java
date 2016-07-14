@@ -29,8 +29,10 @@ public class StorageDatas {
     private static List<String> listMethodsBoundaryClass = new ArrayList<>();
     private static List<String> listStatesDiagram = new ArrayList<>();
     private static List<StorageClass> listPrimaryActorsClasses = new ArrayList<>();
+    private static List<InteractionUse> listInteractionUse = new ArrayList<>();
 
     public void clean(){
+        
         ControllerClass = new StorageClass();
         sequenceDiagramList = new ArrayList<>();
         ActorClasses = new ArrayList<>();
@@ -43,27 +45,53 @@ public class StorageDatas {
         listMethodsBoundaryClass = new ArrayList<>();
         listStatesDiagram = new ArrayList<>();
         listPrimaryActorsClasses = new ArrayList<>();
+        listInteractionUse = new ArrayList<>();
     }
-    /**
-     * @return the classesActorsPrimario
-     */
+    
+    public void addInteractionUse(InteractionUse i){
+        listInteractionUse.add(i);
+    }
+    
+    public List<InteractionUse> getListInteractionUse(){
+        return listInteractionUse;
+    }
+ 
     public  List<StorageClass> getListPrimaryActorsClasses() {
         return listPrimaryActorsClasses;
     }
 
     public  void addActorsPrimario(StorageClass classe) {
-        listPrimaryActorsClasses.add(classe);
+        if (!existsActorPrimario(classe)){
+            listPrimaryActorsClasses.add(classe);
+        }
+        
     }
-    /**
-     * @return the listCondicoes
-     */
+    
+    private boolean existsActorPrimario(StorageClass classe){
+        for (int i = 0; i < listPrimaryActorsClasses.size(); i++) {
+            if (listPrimaryActorsClasses.get(i).getName().equalsIgnoreCase(classe.getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Condition> getListConditions() {
+        List<Condition> listConditionsReturn = new ArrayList<Condition>();
+        int cont = listConditions.size();
+        for (int i = 1; cont!=0; i++) {
+            for (int j = 0; j < listConditions.size(); j++) {
+                if(listConditions.get(j).getOrdem() == i){
+                    listConditionsReturn.add(listConditions.get(j));
+                    cont--;
+                    break;
+                }
+            }
+        }
+        listConditions = listConditionsReturn;
         return listConditions;
     }
 
-    /**
-     * @return the listLoop
-     */
     public List<Loop> getListLoop() {
         return listLoop;
     }
@@ -72,16 +100,11 @@ public class StorageDatas {
     public void addLoop(Loop loop){
         listLoop.add(loop);
     }
-    /**
-     * @return the listEstadoDiagram
-     */
+ 
     public List<String> getListStatesDiagram() {
         return listStatesDiagram;
     }
 
-    /**
-     * @return the listMetodosClasseFronteira
-     */
     public List<String> getListMethodsBoundaryClass() {
         return listMethodsBoundaryClass;
     }
@@ -90,9 +113,6 @@ public class StorageDatas {
         getListStatesDiagram().add(estado);
     }
 
-    /**
-     * @return the classesActors
-     */
     public List<StorageClass> getActorClasses() {
        // List<Classe> listReturn = new ArrayList<>();
         //listReturn.addAll(classesActors);
@@ -100,9 +120,6 @@ public class StorageDatas {
         return ActorClasses;
     }
 
-    /**
-     * @return the classesEntidade
-     */
     public List<StorageClass> getEntityClasses() {
         return EntityClasses;
     }
@@ -116,16 +133,10 @@ public class StorageDatas {
         listMethodsBoundaryClass.add(metodo);
     }
 
-    /**
-     * @return the listAtributos
-     */
     public List<Attribute> getListArchives() {
         return listArchives;
     }
 
-    /**
-     * @param aListAtributos the listAtributos to set
-     */
     public void addAttributes(List<Attribute> AttributesList) {
         for (int i = 0; i < AttributesList.size(); i++) {
             boolean igual = false;
@@ -142,16 +153,10 @@ public class StorageDatas {
         }
     }
 
-    /**
-     * @return the nameArquivo
-     */
     public String getArchiveName() {
         return ArchiveName;
     }
 
-    /**
-     * @param aNameArquivo the nameArquivo to set
-     */
     public void setArchiveName(String aNameArquivo) {
         ArchiveName = aNameArquivo;
     }
@@ -165,7 +170,15 @@ public class StorageDatas {
     }
     
     public List<Message> getMessagesList(){
-        return listMessage;
+        List<Message> listMessageReturn;
+        
+        listMessageReturn = listMessage;
+        for (int i = 0; i < listMessageReturn.size(); i++) {
+            if(listMessageReturn.get(i).getType().equalsIgnoreCase("mp")){
+                listMessageReturn.get(i).setType("MD");
+            }
+        }
+        return listMessageReturn;
     }
     
     public Message getLastMessage(){
@@ -178,7 +191,28 @@ public class StorageDatas {
         addCoveredClass(message.getClassSender());
         addCoveredClass(message.getClassReceiver());
         
-        addState(message.getType());
+        if (message.getType().equalsIgnoreCase("mp")){
+            addState("MD");
+        }else{
+            addState(message.getType());
+        }
+    }
+    
+    public void substituirMensagemProvisoria(Message message){
+        for (int i = 0; i < listMessage.size(); i++) {
+            if (listMessage.get(i).getType().equalsIgnoreCase("mp")){
+                listMessage.remove(i);
+                Message m = new Message();
+                
+                m.setMessage(message.getMessage());
+                m.setClassSender(getBoundaryClass());
+                m.setClassReceiver(getControllerClass());
+                m.setType("MD");
+                listMessage.add(i, m);
+                //listMessage.get(i).setClassReceiver(ControllerClass);
+                break;
+            }
+        }
     }
     
     public void addActorClass (StorageClass actorClasse){
@@ -211,16 +245,10 @@ public class StorageDatas {
         return sequenceDiagramList;
     }
 
-    /**
-     * @return the classeController
-     */
     public StorageClass getControllerClass() {
         return ControllerClass;
     }
-
-    /**
-     * @param ControllerClass the classeController to set
-     */
+    
     public void setControllerClass(StorageClass ControllerClass) {
         this.ControllerClass = ControllerClass;
     }
@@ -234,8 +262,7 @@ public class StorageDatas {
         
         sequenceDiagramList.get(sequenceDiagramList.size()-1).addCoveredClass(classe);
     }
-    
-    
+      
     public StorageClass Exist(StorageClass storageClasse) {
 
         for (int i = 0; i < getActorClasses().size(); i++) {

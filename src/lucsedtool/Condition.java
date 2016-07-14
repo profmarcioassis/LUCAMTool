@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class Condition {
     String description;
+    private int ordem=-1; //Ordem em que os blocos foram descobertos;
+    
     private List<Message> messageIf = new ArrayList<>();
     private List<Message> messageElse = new ArrayList<>();
     private boolean containsElse = false;
@@ -24,6 +26,8 @@ public class Condition {
     private int numberElseCoveredByIf=0;
     private int numberIfCoveredByElse=0;
     private int numberElseCoveredByElse=0;
+    private int numberLoopCoveredByElse=0;
+    private int numberLoopCoveredByIf=0;
     private int measureBlockIf;
     private int measureBlockElse;
     private int measureStartingPosition = 0;
@@ -262,5 +266,55 @@ public class Condition {
      */
     public void setNumberConditionsCovered(int numberConditionsCovered) {
         this.numberConditionsCovered = numberConditionsCovered;
+    }
+
+    /**
+     * @return the numberLoopCoveredByElse
+     */
+    public int getNumberLoopCoveredByElse() {
+        return numberLoopCoveredByElse;
+    }
+
+    /**
+     * @param numberLoopCoveredByElse the numberLoopCoveredByElse to set
+     */
+    public void addNumberLoopCoveredByElse() {
+        this.numberLoopCoveredByElse++;
+    }
+
+    /**
+     * @return the numberLoopCoveredByIf
+     */
+    public int getNumberLoopCoveredByIf() {
+        return numberLoopCoveredByIf;
+    }
+
+    /**
+     * @param numberLoopCoveredByIf the numberLoopCoveredByIf to set
+     */
+    public void addNumberLoopCoveredByIf() {
+        this.numberLoopCoveredByIf++;
+    }
+    
+    public void setNumberLoopCoveredByIf(int number) {
+        this.numberLoopCoveredByIf = number;
+    
+    }
+    public void setNumberLoopCoveredByElse(int number) {
+        this.numberLoopCoveredByElse = number;
+    }
+
+    /**
+     * @return the ordem
+     */
+    public int getOrdem() {
+        return ordem;
+    }
+
+    /**
+     * @param ordem the ordem to set
+     */
+    public void setOrdem(int ordem) {
+        this.ordem = ordem;
     }
 }
