@@ -1,0 +1,35 @@
+Use Case: SB_BankAccount.
+Brief Description 
+"Allows the user perform operations such, as insertion and deleting of account data. Withdraw cash and carry out bank transfers.".
+System: System.
+Primary and Secondary Actors
+Primary Actors: Manager.
+Secondary Actors: Customer.
+
+Main Flow: AddAccount.
+Manager starts Use Case.
+	Customer informs the attributes to the Manager.
+	Manager enters attributes (Int ID, String name, String  socialSecurity, Date  birthDate) of Customer on MainForm.
+	Manager enters attributes (String agency, String numAccount) of Account on MainForm.
+	Manager selects "InsertAccount" on MainForm.
+	System validates attributes of Customer.
+	System validates attributes of Account.
+	If ["Inconsistency"]
+		System returns "Incorrect data" to Manager.
+	Else
+		System saves attributes of Customer.
+		System saves attributes of Account.
+		System returns "Account successfully inserted" to Manager.
+	EndIf
+Manager finishes Use Case.
+Key Scenarios
+	Key Scenario 01: AddAccount.
+	Key Scenario 02: DeleteAccount.
+Preconditions 
+	"Before this use case begins the actor has logged onto the system".
+Postconditions 
+	"There are no post conditions associated with this use case".
+Special Requirements 
+	"There are no special requirements associated with this use case".
+Extension Points
+     "There are no extension points associated with this use case".

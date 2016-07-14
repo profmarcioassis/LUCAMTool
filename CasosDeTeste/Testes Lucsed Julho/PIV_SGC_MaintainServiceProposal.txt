@@ -1,0 +1,91 @@
+Use Case: PIV_SGC_MaintainServiceProposal.
+Brief Description 
+"Allows the inclusion, editing, deleting and searching a Proposal".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Administrator.
+Main Flow: AddProposal.
+Administrator starts Use Case.
+	Administrator selects "MaintainProposal" on MainForm.
+	Administrator selects "AddProposal" on MainForm.
+	System returns "Input mode screen" to Administrator.
+	
+	Loop ["Required fields empty"] 
+		Administrator enters attributes (int Id, string Description, data Validate, data ProposedDate, string Status, Customer Customer, Seller Seller) of Proposal.
+		System validates attributes of Proposal.
+	EndLoop
+	
+	System searches for the Proposal.
+
+	If ["Command == Save"]	
+		If ["Is not existent"] 
+			System saves attributes of Proposal.
+			System returns "Successfully saved" to Administrator.		
+		Else
+			System returns the message to Administrator.
+			System displays the attributes of Proposal on MainForm.
+		EndIf
+	Else
+		If ["Command = Cancel"]
+			Administrator selects "ConfirmAction" on MainForm.
+			System returns the message to Administrator. 
+		EndIf
+	EndIf	
+Administrator finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifyProposal.
+	Administrator selects "ModifyProposal" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of Proposal on MainForm.
+	System retrieves the attributes of Proposal.
+	System displays the attributes of Proposal on MainForm.
+	Administrator modifies the attributes (string Desciption, data Validate, data ProposedDate, string Status, Customer Customer, Seller Seller) of Proposal on MainForm.
+	Administrator selects "UpdateProposal" on MainForm.
+	If ["There is no inconsistency"]  
+		System updates the informations of Proposal.
+		System returns "Successfully modified" to Administrator.
+	Else
+		System returns the message to Administrator.
+		System displays the attributes of Proposal on MainForm.
+	EndIf
+	
+Alternate Flow 02: DeleteProposal.
+	Administrator selects "DeleteProposal" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of Proposal on MainForm.
+	System retrieves the attributes of Proposal.
+	If ["Existing Proposal"]
+		System displays the attributes of Proposal on MainForm.
+		Administrator selects "ConfirmAction" on MainForm.
+		If ["There is no inconsistency"] 
+			System deletes the informations of Proposal.	
+			System returns "successfully deleted" to Administrator.
+		Else
+			System returns the message to Administrator.
+		EndIf
+	Else
+		System returns the message to Administrator.
+	EndIf
+Alternate Flow 03: SearchProposal.
+	Administrator selects "SearchProposal" on MainForm.
+	Administrator types the attributes (Id, Name) of Proposal on MainForm.
+	System retrieves attributes of Proposal.
+	If ["Existing Proposal"]
+		System displays the attributes of Proposal on MainForm.
+	Else
+		System returns the message to Administrator.
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddProposal.
+	Key Scenario 02: ModifyProposal.
+	Key Scenario 03: DeleteProposal.
+	Key Scenario 04: SearchProposal.
+Preconditions 
+	"Before this use case begins the Administrator has logged onto the system. 
+	The system is in registration mode.".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

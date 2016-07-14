@@ -1,0 +1,120 @@
+Use Case: CNB_SCOF_Budget.
+Brief Description 
+"Allows the inclusion, edition, complementation, finalize and cancellation a budget.".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Manager.
+Main Flow: AddBudget.
+Manager starts Use Case.
+	Manager selects "MaintainBudget" on MainForm.
+	Manager selects "SearchRequest" on MainForm.
+	Manager types the attributes (int Id, string Description) of Request on MainForm.
+	System retrieves the attributes of Request.
+	If ["Request.Status = Opened"]
+		System displays the attributes of Request on MainForm.
+		Manager selects informations of Request.
+		Manager selects "AddBudget" on MainForm.
+		Manager enters the attributes (int Id, Description, Status, date Date, date ValidateDate, Supplier Supplier, Customer Customer) of Budget on MainForm.
+		Manager selects "SearchSupplier" on MainForm.
+		Manager types the attributes (Id, Name) of Supplier on MainForm.
+		System retrieves the attributes of Supplier.
+		Manager selects the informations of Supplier.
+		If ["There is inconsistency"] 
+			System returns the message to Manager.
+		Else
+			System retrieves the attributes of Supplier.
+			Loop ["AddItems = true"]
+				Manager selects "SearchBudgetItems" on MainForm.
+				Manager types the attributes (int IdItem, string NameItem, int Amount) of BudgetItems on MainForm.
+				System retrieves the attributes of BudgetItems.
+				Manager selects the informations of BudgetItems.
+				If ["There is inconsistency"] 
+					System returns the message to Manager.
+				Else
+					System displays the attributes of BudgetItems on MainForm.
+					Manager selects the informations of BudgetItems. 
+				EndIf
+			EndLoop
+			
+			System returns "Successfully registered" to Manager.
+			System sends the informations of Budget by "e-mail". 
+		EndIf
+	Else
+		System returns the message to Manager.		
+	EndIf
+Manager finishes Use Case.
+
+Alternate Flows
+Alternate Flow 01: ModifyBudget.
+	Manager selects "ModifyBudget" on MainForm.
+	Manager types the attributes (int Id, string Description, string Status) of Budget on MainForm.
+	System retrieves the attributes of Budget.
+	System displays the attributes of Budget on MainForm.
+	Manager modifies the attributes of Budget on MainForm.
+	Manager selects "UpdateBudget" on MainForm.
+	If ["No empty fields"] 
+		System updates the informations of Budget.
+		System returns "Successfully modified" to Manager.
+	Else
+		System returns the message to Manager.
+	EndIf
+
+Alternate Flow 02: CancelBudget.
+	Manager selects "SearchBudget" on MainForm.
+	Manager types the attributes (int Id, string Description, string Status) of Budget on MainForm.
+	System retrieves the attributes of Budget.
+	System displays the attributes of Budget on MainForm.
+	Manager selects "CancelBudget" on MainForm.
+	If ["There is no inconsistency"] 
+		System updates the informations of Budget.
+		System returns "Successfully canceled" to Manager.
+	Else
+		System returns the message to Manager.
+	EndIf
+	
+Alternate Flow 03: FinalizeBudget.
+	Manager selects "SearchBudget" on MainForm.
+	Manager types the attributes (int Id, string Description, string Status) of Budget on MainForm.
+	System retrieves the attributes of Budget.
+	System displays the attributes of Budget on MainForm.
+	Manager selects "FinalizeBudget" on MainForm.
+	If ["Budget.Status != Finalized"]
+		System displays the attributes of Budget on MainForm.
+		Manager selects informations of Budget.
+		Manager selects "EditStatus" on MainForm.
+		If ["There is no inconsistency"] 
+			System updates the informations of Budget.
+			System returns "Successfully finalized" to Manager.
+			System sends the informations of Budget by "e-mail". 
+		Else
+			System displays the attributes of Budget on MainForm.
+		EndIf
+	Else
+		System returns the message to Manager.		
+	EndIf
+
+Alternate Flow 04: SearchBudget.
+	Manager selects "SearchBudget" on MainForm.
+	Manager types the attributes (int Id, string Description, string Status) of Budget on MainForm.
+	System retrieves the attributes of Budget.
+	If ["Existing Budget"] 
+		System displays the attributes of Budget on MainForm.
+	Else
+		System returns the message to Manager.		
+	EndIf
+
+Key Scenarios
+	Key Scenario 01: AddBudget.
+	Key Scenario 02: ModifyBudget.
+	Key Scenario 03: FinalizeBudget.
+	Key Scenario 04: FinalizeBudget.
+	Key Scenario 05: SearchBudget.
+
+Preconditions 
+	"Before this use case begins the Manager has logged onto the system".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

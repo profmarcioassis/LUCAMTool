@@ -1,0 +1,109 @@
+Use Case: PIV_SGC_MaintainCivilWorks.
+Brief Description 
+"Allows the inclusion, editing and research a CivilWorks".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Administrator.
+Main Flow: AddCivilWorks.
+Administrator starts Use Case.
+	Administrator selects "MaintainCivilWorks" on MainForm.
+	Administrator selects "AddCivilWorks" on MainForm.
+	System returns "Input mode screen" to Administrator.
+	
+	Loop ["Required fields empty"] 
+		Administrator enters attributes (int Id, string Description, Customer Customer, Seller Seller, Address Address, string Status) of CivilWorks.
+		System validates attributes of CivilWorks.
+	EndLoop
+		
+	System searches for the CivilWorks.
+	Administrator selects "AddCivilWorksItems" on MainForm.
+	Loop ["AddItems = true"]
+		Administrator selects "SearchCivilWorksItems" on MainForm.
+		Administrator types the attributes (IdItem, NameItem) of CivilWorksItems on MainForm.
+		System retrieves the attributes of CivilWorksItems.
+		Administrator selects the informations of CivilWorksItems.
+		If ["There is inconsistency"] 
+			System returns the message to Administrator.
+		Else
+			System displays the attributes of CivilWorksItems on MainForm.
+			Administrator selects the informations of CivilWorksItems.
+			Administrator enters attributes (int IdItem, string Description, int Amount, real Price) of CivilWorksItems.
+			Administrator selects "SaveWorksItems" on MainForm.
+			System includes the informations of CivilWorksItems. 
+		EndIf
+	EndLoop
+	
+	If ["Command == Save"]	
+		If ["Is not existent"] 
+			System saves attributes of CivilWorks.
+			System returns "Successfully saved" to Administrator.		
+		Else
+			System returns the message to Administrator.
+			System displays the attributes of CivilWorks on MainForm.
+		EndIf
+	Else
+		If ["Command = Cancel"]
+			Administrator selects "ConfirmAction" on MainForm.
+			System returns the message to Administrator. 
+		EndIf
+	EndIf
+		
+Administrator finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifyCivilWorks.
+	Administrator selects "ModifyCivilWorks" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of CivilWorks on MainForm.
+	System retrieves the attributes of CivilWorks.
+	System displays the attributes of CivilWorks on MainForm.
+	Administrator modifies the attributes of CivilWorks on MainForm.
+	Administrator selects "UpdateCivilWorks" on MainForm.
+	If ["There is no inconsistency"]  
+		System updates the informations of CivilWorks.
+		System returns "Successfully modified" to Administrator.
+	Else
+		System returns the message to Administrator.
+		System displays the attributes of CivilWorks on MainForm.
+	EndIf
+	
+Alternate Flow 02: DisabledCivilWorks.
+	Administrator selects "DisabledCivilWorks" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of CivilWorks on MainForm.
+	System retrieves the attributes of CivilWorks.
+	If ["Existing CivilWorks"]
+		System displays the attributes of CivilWorks on MainForm.
+		Administrator selects "ConfirmAction" on MainForm.
+		If ["There is no inconsistency"] 
+			System deletes the informations of CivilWorks.	
+			System returns "successfully disabled" to Administrator.
+		Else
+			System returns the message to Administrator.
+		EndIf
+	Else
+		System returns the message to Administrator.
+	EndIf
+Alternate Flow 03: SearchCivilWorks.
+	Administrator selects "SearchCivilWorks" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of CivilWorks on MainForm.
+	System retrieves attributes of CivilWorks.
+	If ["Existing CivilWorks"]
+		System displays the attributes of CivilWorks on MainForm.
+	Else
+		System returns the message to Administrator.
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddCivilWorks.
+	Key Scenario 02: ModifyCivilWorks.
+	Key Scenario 03: DisabledCivilWorks.
+	Key Scenario 04: SearchCivilWorks.
+Preconditions 
+	"Before this use case begins the Administrator has logged onto the system. 
+	The system is in registration mode.".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".
+

@@ -1,0 +1,108 @@
+Use Case: PIV_SGC_MaintainContract.
+Brief Description 
+"Allows the inclusion, editing and research a contract".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Administrator.
+Main Flow: AddContract.
+Administrator starts Use Case.
+	Administrator selects "MaintainContract" on MainForm.
+	Administrator selects "AddContract" on MainForm.
+	System returns "Input mode screen" to Administrator.
+	
+	Loop ["Required fields empty"] 
+		Administrator enters attributes (int Id, string Desciption, data Validate, data ContractDate, string Status, ContractItems ContractItems, Customer Customer, Seller Seller) of Contract.
+		System validates attributes of Contract.
+	EndLoop
+	
+	System searches for the Contract.
+	Administrator selects "AddContractItems" on MainForm.
+	Loop ["AddItems = true"]
+		Administrator selects "SearchContractItems" on MainForm.
+		Administrator types the attributes (IdItem, NameItem, Amount) of ContractItems on MainForm.
+		System retrieves the attributes of ContractItems.
+		Administrator selects the informations of ContractItems.
+		If ["There is inconsistency"] 
+			System returns the message to Administrator.
+		Else
+			System displays the attributes of ContractItems on MainForm.
+			Administrator selects the informations of ContractItems. 
+		EndIf
+	EndLoop
+	
+	If ["Command == Save"]	
+		If ["Is not existent"] 
+			System saves attributes of Contract.
+			System returns "Successfully saved" to Administrator.		
+		Else
+			System returns the message to Administrator.
+			System displays the attributes of Contract on MainForm.
+		EndIf
+	Else
+		If ["Command = Cancel"]
+			Administrator selects "ConfirmAction" on MainForm.
+			System returns the message to Administrator. 
+		EndIf
+	EndIf
+		
+Administrator finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifyContract.
+	Administrator selects "ModifyContract" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of Contract on MainForm.
+	System retrieves the attributes of Contract.
+	System displays the attributes of Contract on MainForm.
+	Administrator modifies the attributes of Contract on MainForm.
+	Administrator selects "UpdateContract" on MainForm.
+	If ["There is no inconsistency"]  
+		System updates the informations of Contract.
+		System returns "Successfully modified" to Administrator.
+	Else
+		System returns the message to Administrator.
+		System displays the attributes of Contract on MainForm.
+	EndIf
+	
+Alternate Flow 02: DeleteContract.
+	Administrator selects "DeleteContract" on MainForm.
+	Administrator types the attributes (Id, Description, Customer, Status) of Contract on MainForm.
+	System retrieves the attributes of Contract.
+	If ["Existing Contract"]
+		System displays the attributes of Contract on MainForm.
+		Administrator selects "ConfirmAction" on MainForm.
+		If ["There is no inconsistency"] 
+			System deletes the informations of Contract.	
+			System returns "successfully deleted" to Administrator.
+		Else
+			System returns the message to Administrator.
+		EndIf
+	Else
+		System returns the message to Administrator.
+	EndIf
+Alternate Flow 03: SearchContract.
+	Administrator selects "SearchContract" on MainForm.
+	Administrator types the attributes (Id, Name) of Contract on MainForm.
+	System retrieves attributes of Contract.
+	If ["Existing Contract"]
+		System displays the attributes of Contract on MainForm.
+	Else
+		System returns the message to Administrator.
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddContract.
+	Key Scenario 02: ModifyContract.
+	Key Scenario 03: DeleteContract.
+	Key Scenario 04: SearchContract.
+Preconditions 
+	"Before this use case begins the Administrator has logged onto the system. 
+	The system is in registration mode.".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".
+
+
+

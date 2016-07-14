@@ -1,0 +1,80 @@
+Use Case: CNB_SCOF_CRUD_Supplier.
+Brief Description 
+"Allows the inclusion, editing, deleting and searching a Supplier".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Administrator.
+Main Flow: AddSupplier.
+Administrator starts Use Case.
+	Administrator selects "MaintainSupplier" on MainForm.
+	Administrator selects "AddSupplier" on MainForm.
+	System returns "Input mode screen" to Administrator.
+	
+	Loop ["Required fields empty"] 
+		Administrator enters attributes (int Id, string name, string CNPJ, string  InsEstadual, string Email, string Telefone) of Supplier.
+		System validates attributes of Supplier.
+	EndLoop
+	
+	System searches for the Supplier.
+
+	If ["Is not existent"] 
+		System saves attributes of Supplier.
+		System returns "Successfully saved" to Administrator.		
+	Else
+		System displays the attributes of Supplier on MainForm.
+	EndIf
+
+Administrator finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifySupplier.
+	Administrator selects "ModifySupplier" on MainForm.
+	Administrator types the attributes (Id, Name) of Supplier on MainForm.
+	System retrieves the attributes of Supplier.
+	System displays the attributes of Supplier on MainForm.
+	Administrator modifies the attributes (string name, string CNPJ, string  InsEstadual, string Email, string Telefone) of Supplier on MainForm.
+	Administrator selects "UpdateSupplier" on MainForm.
+	
+	If ["No empty fields"] 
+		System updates the informations of Supplier.
+		System returns "Successfully modified" to Administrator.
+	Else
+		System displays the attributes of Supplier on MainForm.
+	EndIf
+	
+Alternate Flow 02: DeleteSupplier.
+	Administrator selects "DeleteSupplier" on MainForm.
+	Administrator types the attributes (Id, Name) of Supplier on MainForm.
+	System retrieves the attributes of Supplier.
+	System displays the attributes of Supplier on MainForm.
+	Administrator selects "ConfirmAction" on MainForm.
+	If ["There is no pending"] 
+		System deletes the informations of Supplier.	
+		System returns "successfully deleted" to Administrator.
+	Else
+		System returns the message to Administrator.
+	EndIf
+
+Alternate Flow 03: ReadSupplier.
+	Administrator selects "ReadSupplier" on MainForm.
+	Administrator types the attributes (Id, Name) of Supplier on MainForm.
+	System retrieves attributes of Supplier.
+	If ["Existing Supplier"]
+		System displays the attributes of Supplier on MainForm.
+	Else
+		System returns the message to Administrator.
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddSupplier.
+	Key Scenario 02: ModifySupplier
+	Key Scenario 03: DeleteSupplier.
+	Key Scenario 04: ReadSupplier.
+Preconditions 
+	"Before this use case begins the Administrator has logged onto the system".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

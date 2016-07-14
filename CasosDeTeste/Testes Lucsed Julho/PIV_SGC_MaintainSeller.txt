@@ -1,0 +1,79 @@
+Use Case: PIV_SGC_MaintainSeller.
+Brief Description 
+"Allows the inclusion, editing, deleting and searching a Seller".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Administrator.
+Main Flow: AddSeller.
+Administrator starts Use Case.
+	Administrator selects "MaintainSeller" on MainForm.
+	Administrator selects "AddSeller" on MainForm.
+	System returns "Input mode screen" to Administrator.
+	
+	Loop ["Required fields empty"] 
+		Administrator enters attributes (int Id, string name, string CPF, data DataNasc, string Email, string Telefone) of Seller.
+		System validates attributes of Seller.
+	EndLoop
+	
+	System searches for the Seller.
+
+	If ["Is not existent"] 
+		System saves attributes of Seller.
+		System returns "Successfully saved" to Administrator.		
+	Else
+		System displays the attributes of Seller on MainForm.
+	EndIf
+Administrator finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifySeller.
+	Administrator selects "ModifySeller" on MainForm.
+	Administrator types the attributes (Id, Name) of Seller on MainForm.
+	System retrieves the attributes of Seller.
+	System displays the attributes of Seller on MainForm.
+	Administrator modifies the attributes (string name, string CPF, data DataNasc, string Email, string Telefone) of Seller on MainForm.
+	Administrator selects "UpdateSeller" on MainForm.
+	If ["There is no inconsistency"] 
+		System updates the informations of Seller.
+		System returns "Successfully modified" to Administrator.
+	Else
+		System displays the attributes of Seller on MainForm.
+	EndIf
+	
+Alternate Flow 02: DeleteSeller.
+	Administrator selects "DeleteSeller" on MainForm.
+	Administrator types the attributes (Id, Name) of Seller on MainForm.
+	System retrieves the attributes of Seller.
+	System displays the attributes of Seller on MainForm.
+	Administrator selects "ConfirmAction" on MainForm.
+	If ["There is no pending"] 
+		System deletes the informations of Seller.	
+		System returns "successfully deleted" to Administrator.
+	Else
+		System returns the message to Administrator.
+	EndIf
+
+Alternate Flow 03: SearchSeller.
+	Administrator selects "SearchSeller" on MainForm.
+	Administrator types the attributes (Id, Name) of Seller on MainForm.
+	System retrieves attributes of Seller.
+	If ["Existing Seller"]
+		System displays the attributes of Seller on MainForm.
+	Else
+		System returns the message to Administrator.
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddSeller.
+	Key Scenario 02: DeleteSeller.
+	Key Scenario 03: ModifySeller.
+	Key Scenario 04: SearchSeller.
+Preconditions 
+	"Before this use case begins the Administrator has logged onto the system. 
+	The system is in registration mode.".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

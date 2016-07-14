@@ -1,0 +1,60 @@
+Use Case: SVO_PublishProduct.
+Brief Description 
+"This use case allows the publication of interest in selling a particular product".
+System: System.
+Primary and Secondary Actors
+Primary Actors: User.
+
+Main Flow: PublishProduct.
+User starts Use Case.
+	User selects "Publish product" on MainForm.
+	If ["Authenticated user"]
+		Loop ["Required fields empty"] 
+			User informs the attributes (string NameProduct, string Description, int availableQuantity, double Price) of Product.
+			System validates attributes of Product.
+		EndLoop
+		System searches for the Product.
+		If ["Is not existent"] 
+			System saves the informations of Product.
+			System returns "Successfully published product" to User.	
+		Else
+			System displays the attributes of Product on MainForm.
+		EndIf
+	Else
+		System displays "RegisterUser" to User.
+	EndIf
+	
+User finishes Use Case.
+Alternate Flows 
+Alternate Flow 01: RegisterUser.
+		System requests the attributes (email, password) of User on MainForm. 
+		User informs the attributes of User on MainForm.
+		User selects "Login" on MainForm.
+		System retrieves the informations of User.
+		If ['Registered user']
+			System displays the informations of User on MainForm.
+			User updates the informations  on MainForm.	
+			User selects "Save editions" on MainForm.
+			System updates the informations of User.
+		Else
+			User informs the informations (string NameUser, string CPF, string Phone, string Email, string Password) of User on MainForm.
+			System validates the informations of User.
+			If ["Invalid data"]	
+				System returns "Invalid Data" to User.
+				System requests the informations to User.
+			Else
+				System saves the informations of User.
+				System returns "Registration successfully complete" to User.
+			EndIf
+		EndIf
+		
+Key Scenarios
+	Key Scenario 01: PublishProduct.
+Preconditions 
+	"User must be logged in".
+Postconditions 
+	"Published product".
+Special Requirements 
+	"No special requirements".
+Extension Points
+     "No extension points".

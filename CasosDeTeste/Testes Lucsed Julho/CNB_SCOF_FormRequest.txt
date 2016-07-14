@@ -1,0 +1,130 @@
+Use Case: CNB_SCOF_FormRequest.
+Brief Description 
+"Allows the inclusion, attach, approve, finalize and cancel a request form.".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Manager.
+Main Flow: AddFormRequest.
+Manager starts Use Case.
+	Manager selects "MaintainFormRequest" on MainForm.
+	Manager selects "AddFormRequest" on MainForm.
+	System returns "Input mode screen" to Manager.
+	
+	Loop ["Required fields empty"] 
+		Manager enters attributes (int Id, string Title, string Apresentation, string Note, string Status) of FormRequest.
+		System validates attributes of FormRequest.
+	EndLoop
+	
+	System searches for the FormRequest.
+
+	If ["Is not existent"] 
+		System saves attributes of FormRequest.
+		System returns "successfully saved" to Manager.		
+	Else
+		System displays the attributes of FormRequest on MainForm.
+	EndIf
+
+Manager finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: AttachStandardizedFile.
+	Manager selects "AttachStandardizedFile" on MainForm.
+	Manager types the attributes (Id, Title, Status) of FormRequest on MainForm.
+	System retrieves the attributes of FormRequest.
+	If ["Request.Status = Opened"]
+		System displays the attributes of FormRequest on MainForm.
+		Manager selects the files of FormRequest.
+		Manager selects "SaveFormRequest" on MainForm.
+	
+		If ["There is no inconsistency"] 
+			System updates the informations of FormRequest.
+			System returns "successfully modified" to Manager.
+		Else
+			System displays the attributes of FormRequest on MainForm.
+		EndIf
+	Else
+		System returns the message to Manager.		
+	EndIf
+
+Alternate Flow 02: ApprovedStandardizedDocument.
+	Manager selects "ApprovedStandardizedDocument" on MainForm.
+	Manager types the attributes (Id, Title, Status) of FormRequest on MainForm.
+	System retrieves the attributes of FormRequest.
+	If ["Request.Status = Opened"]
+		System displays the attributes of FormRequest on MainForm.
+		Manager selects informations of FormRequest.
+		Manager selects "EditStatus" on MainForm.
+		Manager enters the justification of FormRequest on MainForm.
+		If ["There is no inconsistency"] 
+			System updates the informations of FormRequest.
+			System returns "Successfully approved" to Manager.
+			System sends the informations (Title, Status) of FormRequest by "e-mail". 
+		Else
+			System displays the attributes of FormRequest on MainForm.
+		EndIf
+	Else
+		System returns the message to Manager.		
+	EndIf
+	
+Alternate Flow 03: FinalizeRequest.
+	Manager selects "FinalizeRequest" on MainForm.
+	Manager types the attributes (Id, Title, Status) of FormRequest on MainForm.
+	System retrieves the attributes of FormRequest.
+	If ["Request.Status = Approved"]
+		System displays the attributes of FormRequest on MainForm.
+		Manager selects informations of FormRequest.
+		Manager selects "EditStatus" on MainForm.
+		If ["There is no inconsistency"] 
+			System updates the informations of FormRequest.
+			System returns "Successfully finalized" to Manager.
+			System sends the informations (Title, Status) of FormRequest by "e-mail". 
+		Else
+			System displays the attributes of FormRequest on MainForm.
+		EndIf
+	Else
+		System returns the message to Manager.		
+	EndIf
+
+Alternate Flow 04: CancelFormRequest.
+	Manager selects "CancelFormRequest" on MainForm.
+	Manager types the attributes (Id, Title, Status) of FormRequest on MainForm.
+	System retrieves the attributes of FormRequest.
+	If ["Request.Status != canceled"]
+		System displays the attributes of FormRequest on MainForm.
+		Manager selects informations of FormRequest.
+		Manager selects "EditStatus" on MainForm.
+		If ["There is no inconsistency"] 
+			System updates the informations of FormRequest.
+			System returns "Successfully canceled" to Manager.
+			System sends the informations (Title, Status) of FormRequest by "e-mail". 
+		Else
+			System displays the attributes of FormRequest on MainForm.
+		EndIf
+	Else
+		System returns the message to Manager.		
+	EndIf
+	
+Alternate Flow 04: SearchFormRequest.
+	Manager selects "SearchFormRequest" on MainForm.
+	Manager types the attributes (Id, Description, Status) of FormRequest on MainForm.
+	System retrieves the attributes of FormRequest.
+	If ["Existing FormRequest"] 
+		System displays the attributes of FormRequest on MainForm.
+	Else
+		System returns the message to Manager.		
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddFormRequest.
+	Key Scenario 02: AttachStandardizedFile.
+	Key Scenario 03: ApprovedStandardizedFile.
+	Key Scenario 04: FinalizeRequest.
+	Key Scenario 05: CancelFormRequest.
+Preconditions 
+	"Before this use case begins the Manager has logged onto the system".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

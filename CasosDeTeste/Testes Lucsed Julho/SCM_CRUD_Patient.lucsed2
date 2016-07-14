@@ -1,0 +1,77 @@
+Use Case: SCM_CRUD_Patient.
+Brief Description 
+"This use case allows a clerk enter, edit, disable, and search for a clinic patient.".
+System: System.
+Primary and Secondary Actors
+Primary Actors: Clerk.
+Secondary Actors: Patient.
+
+Main Flow: AddPatient.
+Clerk starts Use Case.
+	Clerk selects "MaintainPatient" on MainForm.
+	Clerk selects "AddPatient" on MainForm.
+	System returns "Input mode screen" to Clerk.
+	Loop ["Required fields empty"] 
+		Clerk enters attributes (Int id, String name, String socialSNumber, String gender, Date birthDate, String homePhone, String cellPhone, String email, String status) of Patient.
+		System validates attributes of Patient.
+	EndLoop
+	
+	System searches for the Patient.
+
+	If ["Does not exist"] 
+		System saves attributes of Patient.
+		System returns "Successfully saved" to Clerk.		
+	Else
+		System displays the attributes of Patient on MainForm.
+	EndIf
+Clerk finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifyPatient.
+	Clerk selects "ModifyPatient" on MainForm.
+	Clerk types the attributes (id) of Patient on MainForm.
+	System retrieves the attributes of Patient.
+	System displays the attributes of Patient on MainForm.
+	Loop ["Required fields empty"]
+		Clerk modifies the attributes (name, socialSNumber, gender, birthDate, homePhone, cellPhone, email, status) of Patient on MainForm.
+		System validates attributes of Patient.
+	EndLoop	
+	Clerk selects "SavePatient" on MainForm.
+	System updates the informations of Patient.
+	System returns "Successfully modified" to Clerk.
+
+Alternate Flow 02: DisablePatient.
+	Clerk selects "DisablePatient" on MainForm.
+	Clerk types the attributes (id) of Patient on MainForm.
+	System retrieves the attributes of Patient.
+	System displays the attributes of Patient on MainForm.
+	Clerk selects "ConfirmAction" on MainForm.
+	If ["There is inconsistency"] 
+		System returns "There is inconsistency" to Clerk.		
+	Else
+		System returns "Successfully disabled" to Clerk.
+	EndIf
+	
+Alternate Flow 03: ReadPatient.
+	Clerk selects "ReadPatient" on MainForm.
+	Clerk types the attributes (id, name) of Patient on MainForm.
+	System retrieves attributes of Patient.
+	If ["Does not exist patient"] 
+		System returns "Does not exist patient" to Clerk.		
+	Else
+		System displays the attributes of Patient on MainForm.
+	EndIf
+
+Key Scenarios
+Key Scenario 01: CreatePatient.
+Key Scenario 02: ModifyPatient.
+Key Scenario 03: DisabledPatient.
+
+Preconditions 
+"Before this use case begins the Patient has logged onto the system".
+Postconditions 
+"There are no post conditions associated with this use case".
+Special Requirements 
+"There are no special requirements associated with this use case".
+Extension Points 
+"There are no extension points associated with this use case".

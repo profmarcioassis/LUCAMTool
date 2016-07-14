@@ -1,0 +1,40 @@
+Use Case: EMB_SGE_Login.
+Brief Description 
+"Enable the actor to access the system and allowed the information to their profile.".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Actor.
+Main Flow: Login.
+Actor starts Use Case.
+	Actor selects "Log" on MainForm.
+	System returns "Login screen" to Actor.
+	Actor enters attributes(int Login, string Password) of User.
+	System validates attributes of User.
+	If ["There is no inconsistency"]
+		System verifies informations of User.
+		If ["Profile = Administrator"] 
+			System returns UI to Actor.
+		Else
+			If ["Profile = Participants"] 
+				System returns UI to Actor.
+			Else
+				System returns UI to Actor.
+			EndIf
+		EndIf
+	Else
+		System returns the message to Actor.
+	EndIf
+	
+Actor finishes Use Case.
+
+Key Scenarios
+	Key Scenario 01: Login.
+Preconditions 
+	"Not applicable.".
+Postconditions 
+	"Not applicable.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".
+

@@ -1,0 +1,75 @@
+Use Case: PIV_SGC_WeighingLoadingConcrete.
+Brief Description 
+"Allows insert and cancel the process of weighing and concrete loading.".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Operator.
+Main Flow: MaintainWeighingLoadingConcrete.
+Operator starts Use Case.
+	Operator selects "WeighingLoadingConcrete" on MainForm.
+	Operator selects "AddWeighingLoadingConcrete" on MainForm.
+	System returns "Input mode screen" to the Operator.
+	Operator selects "SearchConcreteMix" on MainForm.
+	Operator enters attributes (int Id, string Desciption, Composition Composition) of ConcreteMix.
+	System retrieves attributes of ConcreteMix.
+	If ["Existing ConcreteMix"]
+		System displays the attributes of ConcreteMix on MainForm.
+	Else
+		System returns the message to the Operator.
+	EndIf
+	If ["there concrete weighing and loading to CivilWorks"]
+		Operator enters attributes(int Id, string Description) of WeighingLoadingConcrete on MainForm.
+		Operator selects "Action" on MainForm.
+		If ["Action==Start"]
+			Operator enters the attributes(int Id, string Description) of WeighingLoadingConcrete.  
+			//attributes = weighing  "enters = performs"
+		Else
+			If ["Action==Finalize"]
+				System saves the informations of WeighingLoadingConcrete.
+				System returns "Successfully saved" to the Operator.
+			Else
+				If ["Action==Delete"]
+						Operator selects "ConfirmAction" on MainForm.
+						System verifies the dependencies of CivilWorks. 
+						If ["Existing dependencies"]
+							System deletes the informations of WeighingLoadingConcrete.
+							System returns "Successfully deleted" to the Operator.
+						Else
+							System returns the message to the Operator.
+						EndIf
+				Else
+					If ["Action==Cancel"]
+						Operator selects "ConfirmAction" on MainForm.
+						System verifies the dependencies of CivilWorks. 
+						If ["Existing dependencies"]
+							System returns "It is not possible to cancel" to the Operator.
+						Else
+							System returns "Successfully canceled" to the Operator.
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+		EndIf
+	Else
+		System returns the message to Operator.
+	EndIf
+	
+	
+Operator finishes Use Case.
+
+
+Key Scenarios
+	Key Scenario 01: MaintainWeighingLoadingConcrete.
+Preconditions 
+	"Before this use case begins the Operator has logged onto the system. 
+	The concrete mix to be pre-registered. The system is in weighing register mode.
+	Civil work must be pre-registered. The customer must be previously registered.".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".
+
+
+

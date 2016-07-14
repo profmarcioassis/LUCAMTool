@@ -1,0 +1,30 @@
+Use Case: PIV_SGC_RelCivilWorks.
+Brief Description 
+"Allows the generation of civil works report.".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Seller.
+Main Flow: IssueReportCivilWorks.
+Seller starts Use Case.
+	Seller selects "ReportCivilWorks" on MainForm.
+	System returns "Parameter screen" to Seller. 
+	Seller enters attributes (int Id, string Description, Customer Customer, date Date) of CivilWorks on MainForm.
+	Seller selects "IssueReportCivilWorks" on MainForm.
+	System searches attributes of CivilWorks. 
+	If ["Existing CivilWorks"] 
+		System displays the attributes of CivilWorks on MainForm.
+	Else
+		System returns the message to the Seller.		
+	EndIf
+Seller finishes Use Case.
+
+Key Scenarios
+	Key Scenario 01: IssueReportCivilWorks.
+Preconditions 
+	"Before this use case begins the Seller has logged onto the system".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

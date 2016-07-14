@@ -1,0 +1,29 @@
+Use Case: CNB_SCOF_RelSupplier.
+Brief Description 
+"Allows the generation of suppliers report.".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Manager.
+Main Flow: IssueReportSupplier.
+Manager starts Use Case.
+	Manager selects "ReportSupplier" on MainForm.
+	Manager enters attributes (int Id, string name, string CNPJ) of Supplier on MainForm.
+	Manager selects "IssueReportSupplier" on MainForm.
+	System searches attributes of Supplier. 
+	If ["Existing Supplier"] 
+		System displays the attributes of Supplier on MainForm.
+	Else
+		System returns the message to Manager.		
+	EndIf
+Manager finishes Use Case.
+
+Key Scenarios
+	Key Scenario 01: IssueReportSupplier.
+Preconditions 
+	"Before this use case begins the Manager has logged onto the system".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".

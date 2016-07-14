@@ -1,0 +1,81 @@
+Use Case: PIV_SGC_MaintainVehicle.
+Brief Description 
+"Allows the inclusion, editing, deleting and searching a Vehicle".
+System: System.
+Primary and Secondary Actors 
+Primary Actors: Administrator.
+Main Flow: AddVehicle.
+Administrator starts Use Case.
+	Administrator selects "MaintainVehicle" on MainForm.
+	Administrator selects "AddVehicle" on MainForm.
+	System returns "Input mode screen" to Administrator.
+	
+	Loop ["Required fields empty"] 
+		Administrator enters attributes (int Id, string name, string CPF, data DataNasc, string Email, string Telefone) of Vehicle.
+		System validates attributes of Vehicle.
+	EndLoop
+	
+	System searches for the Vehicle.
+
+	If ["Is not existent"] 
+		System saves attributes of Vehicle.
+		System returns "Successfully saved" to Administrator.		
+	Else
+		System displays the attributes of Vehicle on MainForm.
+	EndIf
+
+Administrator finishes Use Case.
+
+Alternate Flows 
+Alternate Flow 01: ModifyVehicle.
+	Administrator selects "ModifyVehicle" on MainForm.
+	Administrator types the attributes (Id, Name) of Vehicle on MainForm.
+	System retrieves the attributes of Vehicle.
+	System displays the attributes of Vehicle on MainForm.
+	Administrator modifies the attributes (string name, string CPF, data DataNasc, string Email, string Telefone) of Vehicle on MainForm.
+	Administrator selects "UpdateVehicle" on MainForm.
+	
+	If ["No empty fields"] 
+		System updates the informations of Vehicle.
+		System returns "Successfully modified" to Administrator.
+	Else
+		System displays the attributes of Vehicle on MainForm.
+	EndIf
+	
+Alternate Flow 02: DeleteVehicle.
+	Administrator selects "DeleteVehicle" on MainForm.
+	Administrator types the attributes (Id, Name) of Vehicle on MainForm.
+	System retrieves the attributes of Vehicle.
+	System displays the attributes of Vehicle on MainForm.
+	Administrator selects "ConfirmAction" on MainForm.
+	If ["There is no inconsistency"] 
+		System deletes the informations of Vehicle.	
+		System returns "successfully deleted" to Administrator.
+	Else
+		System returns the message to Administrator.
+	EndIf
+
+Alternate Flow 03: SearchVehicle.
+	Administrator selects "SearchVehicle" on MainForm.
+	Administrator types the attributes (Id, Name) of Vehicle on MainForm.
+	System retrieves attributes of Vehicle.
+	If ["Existing Vehicle"]
+		System displays the attributes of Vehicle on MainForm.
+	Else
+		System returns the message to Administrator.
+	EndIf
+	
+Key Scenarios
+	Key Scenario 01: AddVehicle.
+	Key Scenario 02: ModifyVehicle.
+	Key Scenario 03: DeleteVehicle.
+	Key Scenario 04: SearchVehicle.
+Preconditions 
+	"Before this use case begins the Administrator has logged onto the system. 
+	The system is in registration mode.".
+Postconditions 
+	"There are no post conditions associated with this use case.".
+Special Requirements 
+	"There are no special requirements associated with this use case.".
+Extension Points 
+	"There are no extension points associated with this use case.".
