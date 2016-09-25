@@ -277,8 +277,7 @@ public class Parser {
         oration.setTokenSubject(token);
         oration.setSubject(token.getLexema());
         
-        
-        
+             
         oration.setVerb(getToken().getLexema());
         if (oration.getVerb().equals("finishes") ||oration.getVerb().equals("starts")) {
             //Adiciona Ator Genérico ================================
@@ -435,9 +434,7 @@ public class Parser {
     public void identifiesMessage(Oration oration){
         
         Message message = new Message();
-        
-    
-        
+                
         if (oration.getTokenSubject().getIdToken() == SymbolTab.ACTORS){
             StorageClass sendClass = new StorageClass();
             sendClass.setName(oration.getSubject());

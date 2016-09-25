@@ -61,7 +61,7 @@ public class LUCSEDToolForm extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tw Cen MT Condensed Extra Bold", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel1.setText("LUCSED Tool");
+        jLabel1.setText("LUCAMTool");
 
         jtUseCase.setColumns(20);
         jtUseCase.setRows(5);

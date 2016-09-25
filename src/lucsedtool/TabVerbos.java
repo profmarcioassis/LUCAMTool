@@ -27,8 +27,7 @@ public class TabVerbos {
         initialize();
     }
     
-    
-    
+     
     public final void initialize() {
         verbList.add(new Verb("validates",ClassVerbsValidation));
         verbList.add(new Verb("saves",ClassVerbsEntityNoReturn));
